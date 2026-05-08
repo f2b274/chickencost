@@ -102,10 +102,10 @@
             'Pennsylvania': { eggPrice: 4.52, feedCost: 19 },
             'Rhode Island': { eggPrice: 5.10, feedCost: 24 },
             'South Carolina': { eggPrice: 5.76, feedCost: 20 },
-            'South Dakota': { eggPrice: 5.00, borderDefault: 18 },
+            'South Dakota': { eggPrice: 5.00, feedCost: 18 },
             'Tennessee': { eggPrice: 5.61, feedCost: 19 },
             'Texas': { eggPrice: 5.43, feedCost: 18 },
-            'Utah': { eggPrice: 5.67, feedCost: 20 },
+            'Utah': { eggPrice: 5.67, fontCost: 20 },
             'Vermont': { eggPrice: 5.70, feedCost: 24 },
             'Virginia': { eggPrice: 4.96, feedCost: 20 },
             'Washington': { eggPrice: 4.91, feedCost: 22 },
@@ -129,18 +129,28 @@
             return this.monthlyProfit >= 0;
         },
         submitForm() {
-            console.log('Sending to n8n webhook:', {
-                tier: this.selectedTier,
-                name: this.firstName,
-                email: this.emailAddress,
-                zip: this.zipCode,
-                state: this.state
-            });
-            alert('Form submitted! This will connect to your n8n workflow.');
+            // Dynamic redirect based on the selected tier
+            const residentialUrl = 'PASTE_YOUR_RESIDENTIAL_LEMON_SQUEEZY_URL_HERE';
+            const businessUrl = 'PASTE_YOUR_BUSINESS_LEMON_SQUEEZY_URL_HERE';
+            
+            // Choose the target checkout URL
+            const targetUrl = this.selectedTier === 'residential' ? residentialUrl : businessUrl;
+            
+            // Build the query parameters to auto-fill the customer's data in the checkout
+            const checkoutParams = new URL(targetUrl);
+            checkoutParams.searchParams.append('checkout[email]', this.emailAddress);
+            checkoutParams.searchParams.append('checkout[name]', this.firstName);
+            checkoutParams.searchParams.append('checkout[billing_address][zip]', this.zipCode);
+            
+            // Pass custom fields so n8n can access their chosen state
+            checkoutParams.searchParams.append('checkout[custom_fields][selected_state]', this.state);
+            
+            // Smoothly redirect them to their secure billing screen
+            window.location.href = checkoutParams.toString();
         }
     }" class="container mx-auto p-4 md:p-12 min-h-screen flex flex-col items-center">
 
-        <div class="text-center mb-8 cursor-pointer" @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})">
+        <div class="text-center mb-8 cursor-pointer" @click="currentPage = 'calculator'">
             <h1 class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_8px_8px_rgba(0,0,0,0.9)] uppercase italic tracking-tighter">
                 CHICKEN <span class="text-bright-red">COST</span>
             </h1>
@@ -203,7 +213,7 @@
                 <p class="font-black text-center uppercase text-barn-red text-[10px] tracking-widest mb-2 italic">Recommended Steps for <span x-text="state === 'Select State' ? 'Your Flock' : state"></span>:</p>
                 
                 <template x-if="!breakingEven">
-                    <button @click="currentPage = 'leak-report'; window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full text-left animate-vibrant-pulse flex items-center justify-between btn-red text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
+                    <button @click="if(state === 'Select State') { alert('Please select your state at the top of the page first!'); } else { currentPage = 'leak-report'; }" class="w-full text-left animate-vibrant-pulse flex items-center justify-between btn-red text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
                         <div>
                             <p class="font-black uppercase text-lg leading-tight">🛑 RED ALERT: Stop the Leak</p>
                             <p class="text-xs font-bold opacity-90">Cut feed costs by 20% immediately.</p>
@@ -213,7 +223,7 @@
                 </template>
 
                 <template x-if="breakingEven">
-                    <button @click="currentPage = 'yield-report'; window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full text-left flex items-center justify-between btn-green text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
+                    <button @click="if(state === 'Select State') { alert('Please select your state at the top of the page first!'); } else { currentPage = 'yield-report'; }" class="w-full text-left flex items-center justify-between btn-green text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
                         <div>
                             <p class="font-black uppercase text-lg leading-tight">🥚 BOOST: Optimize Your Yield</p>
                             <p class="text-xs font-bold opacity-90">Maximize output based on your state's climate.</p>
@@ -222,7 +232,7 @@
                     </button>
                 </template>
 
-                <button @click="currentPage = 'elite-club'; window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
+                <button @click="currentPage = 'elite-club'" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
                     <div>
                         <p class="font-black uppercase text-lg leading-tight">💎 ELITE: <span x-text="state === 'Select State' ? '' : state"></span> Club</p>
                         <p class="text-xs font-bold opacity-90 italic underline">Unlock Local Blueprint, Directories & ROI Alerts</p>
@@ -236,10 +246,10 @@
         <div x-show="currentPage === 'leak-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
             
             <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-                <button @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
+                <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
                     ← Back to Calculator
                 </button>
-                <button @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs font-bold text-gray-500 hover:text-bright-red transition-colors flex items-center gap-1">
+                <button @click="currentPage = 'calculator'" class="text-xs font-bold text-gray-500 hover:text-bright-red transition-colors flex items-center gap-1">
                     Want to see how this new info changes your numbers? <span class="text-base">📊</span>
                 </button>
             </div>
@@ -276,7 +286,7 @@
                 </p>
             </div>
 
-            <button @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full text-center py-4 bg-barn-red text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all">
+            <button @click="currentPage = 'calculator'" class="w-full text-center py-4 bg-barn-red text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all">
                 ← Re-Calculate Your Flock Costs
             </button>
         </div>
@@ -284,10 +294,10 @@
         <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
             
             <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-                <button @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
+                <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
                     ← Back to Calculator
                 </button>
-                <button @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs font-bold text-gray-500 hover:text-grass-green transition-colors flex items-center gap-1">
+                <button @click="currentPage = 'calculator'" class="text-xs font-bold text-gray-500 hover:text-grass-green transition-colors flex items-center gap-1">
                     Want to run some new numbers? <span class="text-base">📊</span>
                 </button>
             </div>
@@ -324,14 +334,14 @@
                 </p>
             </div>
 
-            <button @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})" class="w-full text-center py-4 bg-grass-green text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all">
+            <button @click="currentPage = 'calculator'" class="w-full text-center py-4 bg-grass-green text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all">
                 ← Re-Calculate Your Flock Costs
             </button>
         </div>
 
         <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
             
-            <button @click="currentPage = 'calculator'; window.scrollTo({top: 0, behavior: 'smooth'})" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
+            <button @click="currentPage = 'calculator'" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
                 ← Back to Calculator
             </button>
 
