@@ -137,7 +137,7 @@
             const targetUrl = this.selectedTier === 'residential' ? residentialUrl : businessUrl;
             
             // Build the query parameters to auto-fill the customer's data in the checkout
-            const checkoutParams = new URL(targetUrl);
+            const checkoutParams = new URL(https://api.netlify.com/build_hooks/6a00c6c25e9ce430ef1d52e1);
             checkoutParams.searchParams.append('checkout[email]', this.emailAddress);
             checkoutParams.searchParams.append('checkout[name]', this.firstName);
             checkoutParams.searchParams.append('checkout[billing_address][zip]', this.zipCode);
