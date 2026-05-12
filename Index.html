@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chicken Cost & Pricing Calculator</title>
     <style>
-        /* --- Base Setup & Background --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -31,7 +30,6 @@
             align-items: center;
         }
 
-        /* --- Calculator Container Layout --- */
         .container {
             width: 100%;
             max-width: 600px;
@@ -64,7 +62,7 @@
             padding: 10px;
             border: 1px solid #cbd5e0;
             border-radius: 6px;
-            font-size: 16px; /* Fixes mobile zoom bugs */
+            font-size: 16px;
         }
 
         .results {
@@ -76,13 +74,11 @@
             text-align: center;
         }
 
-        /* --- Pricing Section Styles --- */
         .pricing-section {
             width: 100%;
             text-align: center;
         }
 
-        /* Toggle Switch Layout */
         .toggle-container {
             display: flex;
             justify-content: center;
@@ -143,7 +139,6 @@
             transform: translateX(26px);
         }
 
-        /* Pricing Grid Layout */
         .pricing-grid {
             display: flex;
             flex-direction: column;
@@ -160,7 +155,7 @@
             flex: 1;
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             position: relative;
-            min-width: 0; /* Screen overflow protection */
+            min-width: 0;
             transition: transform 0.2s, border-color 0.2s;
         }
 
@@ -226,7 +221,6 @@
             font-weight: bold;
         }
 
-        /* Buttons & Interactive Hover States */
         .cta-button {
             display: block;
             width: 100%;
@@ -246,7 +240,6 @@
             background: #2d3748;
         }
 
-        /* Fix 5: Keyboard Focus Accessibility Outline States */
         .cta-button:focus {
             outline: 3px solid #90cdf4;
             outline-offset: 2px;
@@ -260,7 +253,6 @@
             background: #2b6cb0;
         }
 
-        /* Responsive Desktop Upgrade Layout */
         @media (min-width: 768px) {
             .pricing-grid {
                 flex-direction: row;
@@ -355,19 +347,14 @@
     </main>
 
     <script>
-        // Fix 3: Encapsulate runtime safely inside structural layout loaders
         window.addEventListener('DOMContentLoaded', () => {
-            
-            // Elements
             const birdCountInput = document.getElementById('birdCount');
             const feedPriceInput = document.getElementById('feedPrice');
             const billingToggleInput = document.getElementById('billingToggle');
             const monthlyTotalEl = document.getElementById('monthlyTotal');
 
-            // Fix 8: Maintainable variable explicit definitions
             const monthlyFeedPerBirdLbs = 4;
 
-            // Core Logic Calculations
             function calculateCosts() {
                 const birdCount = Math.max(0, parseFloat(birdCountInput.value) || 0);
                 const feedPrice = Math.max(0, parseFloat(feedPriceInput.value) || 0);
@@ -376,7 +363,6 @@
                 monthlyTotalEl.textContent = '$' + estimatedCost.toFixed(2);
             }
 
-            // Toggle Mechanics
             function togglePricing() {
                 const isYearly = billingToggleInput.checked;
                 const tiers = ['residential', 'business', 'premium'];
@@ -387,7 +373,6 @@
                     
                     if (isYearly) {
                         priceEl.textContent = priceEl.getAttribute('data-yearly');
-                        // Fix 2 & 6: Standardized text strings and explicit annual transparency
                         periodEl.textContent = '/mo billed annually';
                     } else {
                         priceEl.textContent = priceEl.getAttribute('data-monthly');
@@ -396,12 +381,10 @@
                 });
             }
 
-            // Fix 7: Decouple inline logic and attach modern structural event observers
             birdCountInput.addEventListener('input', calculateCosts);
             feedPriceInput.addEventListener('input', calculateCosts);
             billingToggleInput.addEventListener('change', togglePricing);
 
-            // Run initialization order sequentially on load execution
             calculateCosts();
             togglePricing();
         });
