@@ -54,7 +54,7 @@
             padding: 35px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(16, 42, 67, 0.08);
-            margin-bottom: 50px;
+            margin-bottom: 35px;
             border: 1px solid #bcccdc;
         }
 
@@ -151,6 +151,78 @@
             font-size: 1.8rem;
             font-weight: 900;
             color: #102a43;
+        }
+
+        /* --- Dynamic Profit Intelligence Feed Boxes --- */
+        .intelligence-box {
+            width: 100%;
+            max-width: 750px;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            display: none; /* Controlled dynamically via JS */
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-direction: column;
+            text-align: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 600px) {
+            .intelligence-box {
+                flex-direction: row;
+                text-align: left;
+            }
+        }
+
+        .intelligence-box.leak {
+            background-color: #ffe3e3;
+            border: 2px solid #ff8080;
+            color: #660000;
+        }
+
+        .intelligence-box.profit {
+            background-color: #e3faf1;
+            border: 2px solid #23db93;
+            color: #004d26;
+        }
+
+        .intelligence-text h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .intelligence-text p {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            opacity: 0.9;
+        }
+
+        .intelligence-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        .intelligence-btn:hover {
+            opacity: 0.9;
+        }
+
+        .leak .intelligence-btn {
+            background-color: #cc0000;
+            color: white;
+        }
+
+        .profit .intelligence-btn {
+            background-color: #008040;
+            color: white;
         }
 
         /* --- Pricing Tiers Section --- */
@@ -385,6 +457,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="marketValue">Market Price (Per Dozen Eggs)</label>
+                    <input type="number" id="marketValue" value="4.50" step="0.25" min="0" oninput="calculateFlockIntelligence()">
+                </div>
+                
+                <div class="form-group" style="grid-column: span 1;">
                     <label for="miscCosts">Coop Upkeep & Misc Fees (Monthly)</label>
                     <input type="number" id="miscCosts" value="15.00" step="0.50" min="0" oninput="calculateFlockIntelligence()">
                 </div>
@@ -402,7 +479,23 @@
             </div>
         </section>
 
-        <section class="pricing-section">
+        <div id="leakBox" class="intelligence-box leak">
+            <div class="intelligence-text">
+                <h3>⚠️ You are leaking money!</h3>
+                <p>Your monthly maintenance costs are currently outstripping your egg output value. This is how you fix it.</p>
+            </div>
+            <button class="intelligence-btn" onclick="scrollToPricing()">Fix My Margins</button>
+        </div>
+
+        <div id="profitBox" class="intelligence-box profit">
+            <div class="intelligence-text">
+                <h3>📈 Your flock is profitable!</h3>
+                <p>Great job! If you'd like to increase your profits even further and optimize production, try this.</p>
+            </div>
+            <button class="intelligence-btn" onclick="scrollToPricing()">Maximize Profits</button>
+        </div>
+
+        <section id="pricingSection" class="pricing-section">
             <h2>SaaS Account Licensing</h2>
             
             <div class="toggle-container">
@@ -462,7 +555,7 @@
                         <div class="tier-name">Premium</div>
                         <div class="price-container">
                             <div>
-                                <span class="price" id="premiumPrice" data-monthly="$99" data-yearly="$79">$99</span>
+                                * <span class="price" id="premiumPrice" data-monthly="$99" data-yearly="$79">$99</span>
                                 <span class="period">/mo</span>
                             </div>
                             <span class="annual-breakdown" id="premiumAnnual"></span>
@@ -487,6 +580,7 @@
             const birdCount = Math.max(0, parseFloat(document.getElementById('birdCount').value) || 0);
             const feedPrice = Math.max(0, parseFloat(document.getElementById('feedPrice').value) || 0);
             const monthlyEggs = Math.max(0, parseFloat(document.getElementById('monthlyEggs').value) || 0);
+            const marketValue = Math.max(0, parseFloat(document.getElementById('marketValue').value) || 0);
             const miscCosts = Math.max(0, parseFloat(document.getElementById('miscCosts').value) || 0);
             
             // Baseline logic: Every chicken consumes roughly 4 lbs of feed per month
@@ -499,38 +593,33 @@
                 finalEggCost = absoluteMonthlyTotal / monthlyEggs;
             }
             
-            // Render outputs directly to UI
+            // Render basic outputs directly to UI
             document.getElementById('monthlyTotal').textContent = '$' + absoluteMonthlyTotal.toFixed(2);
             document.getElementById('eggCost').textContent = '$' + finalEggCost.toFixed(2);
+
+            // --- Dynamic Profit Intelligence System ---
+            const totalProducedDozens = monthlyEggs / 12;
+            const estimatedGrossRevenue = totalProducedDozens * marketValue;
+            
+            const leakBox = document.getElementById('leakBox');
+            const profitBox = document.getElementById('profitBox');
+
+            if (birdCount === 0 || monthlyEggs === 0) {
+                // Hide both if there's no layout data inputted
+                leakBox.style.display = 'none';
+                profitBox.style.display = 'none';
+            } else if (absoluteMonthlyTotal > estimatedGrossRevenue) {
+                // Upkeep is more than egg value -> Cash Leak
+                leakBox.style.display = 'flex';
+                profitBox.style.display = 'none';
+            } else {
+                // In the green -> Profitable optimization flag
+                leakBox.style.display = 'none';
+                profitBox.style.display = 'flex';
+            }
         }
 
         // UI Toggle State Machine
         function togglePricing() {
             const isYearly = document.getElementById('billingToggle').checked;
-            
-            const pricingData = {
-                residential: { monthly: '$29', yearly: '$23', totalAnnual: '$276/yr' },
-                business:    { monthly: '$49', yearly: '$39', totalAnnual: '$468/yr' },
-                premium:     { monthly: '$99', yearly: '$79', totalAnnual: '$948/yr' }
-            };
-            
-            Object.keys(pricingData).forEach(tier => {
-                const priceEl = document.getElementById(`${tier}Price`);
-                const annualEl = document.getElementById(`${tier}Annual`);
-                
-                if (isYearly) {
-                    priceEl.textContent = pricingData[tier].yearly;
-                    annualEl.textContent = `Billed annually at ${pricingData[tier].totalAnnual}`;
-                } else {
-                    priceEl.textContent = pricingData[tier].monthly;
-                    annualEl.textContent = ''; 
-                }
-            });
-        }
-
-        // Initialization
-        calculateFlockIntelligence();
-        togglePricing();
-    </script>
-</body>
-</html>
+      
