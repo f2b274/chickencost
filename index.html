@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Cost & Profit Intelligence Dashboard</title>
+    <title>Chicken Cost & Pricing Calculator</title>
     <style>
-        /* --- High-End Executive Styling --- */
+        /* Base styles & Reset */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,176 +14,87 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
-            color: #334e68;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        main {
-            width: 100%;
-            max-width: 1050px;
+            background-color: #f7f9fa;
+            color: #333;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        h1 {
-            font-size: 2.2rem;
-            color: #102a43;
-            margin-bottom: 8px;
-            text-align: center;
-            font-weight: 800;
-        }
-
-        .subtitle {
-            color: #486581;
-            margin-bottom: 35px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        /* --- Calculator Interface Grid --- */
-        .calculator-card {
+        .container {
             width: 100%;
-            max-width: 750px;
+            max-width: 600px;
             background: #ffffff;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(16, 42, 67, 0.08);
-            margin-bottom: 50px;
-            border: 1px solid #bcccdc;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
         }
 
-        .calculator-card h2 {
-            color: #102a43;
-            font-size: 1.4rem;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #f0f4f8;
-            padding-bottom: 10px;
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
         }
 
-        .grid-inputs {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 600px) {
-            .grid-inputs {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
+        /* Calculator Styles */
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 15px;
         }
 
         label {
-            margin-bottom: 8px;
-            font-weight: 700;
-            color: #243e56;
-            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4a5568;
         }
 
         input[type="number"] {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #cbd5e0;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 16px; /* Prevents iOS auto-zoom on focus */
+        }
+
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #edf2f7;
             border-radius: 8px;
-            font-size: 16px;
-            color: #102a43;
-            background-color: #f0f4f8;
-            transition: border-color 0.2s;
-        }
-
-        input[type="number"]:focus {
-            border-color: #627d98;
-            outline: none;
-            background-color: #ffffff;
-        }
-
-        /* --- Dynamic Metrics Output Panels --- */
-        .metrics-display {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        @media (min-width: 500px) {
-            .metrics-display {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .metric-box {
-            padding: 20px;
-            border-radius: 10px;
+            font-weight: bold;
             text-align: center;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        .metric-box.expense {
-            background: #fcefc7;
-            border: 1px solid #f8b91a;
-        }
-
-        .metric-box.analysis {
-            background: #e3faf1;
-            border: 1px solid #23db93;
-        }
-
-        .metric-label {
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #486581;
-            margin-bottom: 5px;
-        }
-
-        .metric-value {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #102a43;
-        }
-
-        /* --- Legendary Pricing Tiers Section --- */
+        /* --- New Pricing Section Styles --- */
         .pricing-section {
             width: 100%;
+            max-width: 1000px;
+            margin-top: 20px;
             text-align: center;
         }
 
-        .pricing-section h2 {
-            font-size: 1.8rem;
-            color: #102a43;
-            margin-bottom: 15px;
-        }
-
+        /* Toggle Switch Styling */
         .toggle-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 40px;
-            gap: 15px;
+            margin-bottom: 30px;
+            gap: 12px;
         }
 
         .switch-label {
             font-size: 16px;
-            font-weight: 700;
-            color: #486581;
+            font-weight: 600;
+            color: #4a5568;
         }
 
         .switch {
             position: relative;
             display: inline-block;
-            width: 65px;
-            height: 36px;
+            width: 60px;
+            height: 34px;
         }
 
         .switch input {
@@ -199,158 +110,130 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #bac7d5;
-            border-radius: 36px;
+            background-color: #cbd5e0;
             transition: .3s;
+            border-radius: 34px;
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 28px;
-            width: 28px;
+            height: 26px;
+            width: 26px;
             left: 4px;
             bottom: 4px;
             background-color: white;
-            border-radius: 50%;
             transition: .3s;
+            border-radius: 50%;
         }
 
         input:checked + .slider {
-            background-color: #1982fc;
+            background-color: #3182ce;
         }
 
         input:checked + .slider:before {
-            transform: translateX(29px);
+            transform: translateX(26px);
         }
 
+        /* Pricing Grid (Mobile First) */
         .pricing-grid {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 20px;
             width: 100%;
             padding: 10px;
         }
 
         .pricing-card {
             background: white;
-            border: 2px solid #f0f4f8;
-            border-radius: 16px;
-            padding: 35px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
             flex: 1;
-            box-shadow: 0 4px 10px rgba(16, 42, 67, 0.02);
-            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            transition: transform 0.2s, border-color 0.2s;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
 
         .pricing-card.featured {
-            border-color: #1982fc;
-            box-shadow: 0 15px 30px rgba(25, 130, 252, 0.15);
+            border-color: #3182ce;
+            box-shadow: 0 10px 15px rgba(49, 130, 206, 0.1);
         }
 
         .badge {
             position: absolute;
-            top: -14px;
+            top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1982fc;
+            background: #3182ce;
             color: white;
-            padding: 5px 16px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
             text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 0.8px;
+            font-weight: bold;
         }
 
         .tier-name {
-            font-size: 24px;
-            color: #102a43;
-            margin-bottom: 15px;
-            font-weight: 800;
+            font-size: 20px;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
         .price-container {
-            margin-bottom: 25px;
-            min-height: 80px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            margin-bottom: 20px;
         }
 
         .price {
-            font-size: 44px;
-            font-weight: 900;
-            color: #102a43;
+            font-size: 36px;
+            font-weight: 800;
+            color: #1a202c;
         }
 
         .period {
-            font-size: 16px;
-            color: #627d98;
-            font-weight: 600;
-        }
-
-        .annual-breakdown {
-            font-size: 13px;
-            color: #23db93;
-            font-weight: 700;
-            margin-top: 6px;
-            display: block;
-            min-height: 18px;
+            font-size: 14px;
+            color: #718096;
         }
 
         .features-list {
             list-style: none;
             text-align: left;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
         }
 
         .features-list li {
-            margin-bottom: 14px;
-            color: #334e68;
-            font-size: 15px;
+            margin-bottom: 10px;
+            color: #4a5568;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .features-list li::before {
             content: "✓";
-            color: #23db93;
-            font-weight: 900;
+            color: #38a169;
+            font-weight: bold;
         }
 
         .cta-button {
             display: block;
             width: 100%;
-            padding: 15px;
-            background: #486581;
+            padding: 12px;
+            background: #4a5568;
             color: white;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 16px;
+            border-radius: 6px;
+            font-weight: 600;
             transition: background 0.2s;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-        }
-
-        .cta-button:hover {
-            background: #334e68;
         }
 
         .pricing-card.featured .cta-button {
-            background: #1982fc;
+            background: #3182ce;
         }
 
-        .pricing-card.featured .cta-button:hover {
-            background: #1166ca;
-        }
-
+        /* Desktop Layout Upgrades */
         @media (min-width: 768px) {
             .pricing-grid {
                 flex-direction: row;
@@ -361,176 +244,120 @@
 </head>
 <body>
 
-    <main>
-        <h1>Chicken Cost Auditing Engine</h1>
-        <p class="subtitle">Real-time flock overhead analytics and expense mitigation tool</p>
+    <div class="container">
+        <h1>Flock Expense Calculator</h1>
+        
+        <div class="form-group">
+            <label for="birdCount">Number of Birds</label>
+            <input type="number" id="birdCount" value="10" min="0" oninput="calculateCosts()">
+        </div>
 
-        <section class="calculator-card">
-            <h2>Flock Operational Variables</h2>
+        <div class="form-group">
+            <label for="feedPrice">Feed Price (per lb)</label>
+            <input type="number" id="feedPrice" value="0.75" step="0.01" min="0" oninput="calculateCosts()">
+        </div>
+
+        <div class="results">
+            <p>Estimated Monthly Cost: <span id="monthlyTotal">$0.00</span></p>
+        </div>
+    </div>
+
+    <div class="pricing-section">
+        <h2>Choose Your Plan</h2>
+        
+        <div class="toggle-container">
+            <span class="switch-label">Monthly</span>
+            <label class="switch">
+                <input type="checkbox" id="billingToggle" onchange="togglePricing()">
+                <span class="slider"></span>
+            </label>
+            <span class="switch-label">Yearly (Save 20%)</span>
+        </div>
+
+        <div class="pricing-grid">
             
-            <div class="grid-inputs">
-                <div class="form-group">
-                    <label for="birdCount">Flock Size (Total Birds)</label>
-                    <input type="number" id="birdCount" value="12" min="0" oninput="calculateFlockIntelligence()">
+            <div class="pricing-card">
+                <div class="tier-name">Residential</div>
+                <div class="price-container">
+                    <span class="price" id="residentialPrice" data-monthly="$29" data-yearly="$23">$29</span>
+                    <span class="period" id="residentialPeriod">/mo</span>
                 </div>
-
-                <div class="form-group">
-                    <label for="feedPrice">Feed Price (Per Pound)</label>
-                    <input type="number" id="feedPrice" value="0.85" step="0.01" min="0" oninput="calculateFlockIntelligence()">
-                </div>
-
-                <div class="form-group">
-                    <label for="monthlyEggs">Eggs Gathered (Monthly Total)</label>
-                    <input type="number" id="monthlyEggs" value="240" min="0" oninput="calculateFlockIntelligence()">
-                </div>
-
-                <div class="form-group">
-                    <label for="miscCosts">Coop Upkeep & Misc Fees (Monthly)</label>
-                    <input type="number" id="miscCosts" value="15.00" step="0.50" min="0" oninput="calculateFlockIntelligence()">
-                </div>
+                <ul class="features-list">
+                    <li>Up to 25 birds tracked</li>
+                    <li>Basic feed cost variables</li>
+                    <li>Egg production logging</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#" class="cta-button">Get Started</a>
             </div>
 
-            <div class="metrics-display">
-                <div class="metric-box expense">
-                    <div class="metric-label">Total Monthly Maintenance</div>
-                    <div class="metric-value" id="monthlyTotal">$0.00</div>
+            <div class="pricing-card featured">
+                <div class="badge">Most Popular</div>
+                <div class="tier-name">Business</div>
+                <div class="price-container">
+                    <span class="price" id="businessPrice" data-monthly="$49" data-yearly="$39">$49</span>
+                    <span class="period" id="businessPeriod">/mo</span>
                 </div>
-                <div class="metric-box analysis">
-                    <div class="metric-label">Operational Net Cost Per Egg</div>
-                    <div class="metric-value" id="eggCost">$0.00</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="pricing-section">
-            <h2>SaaS Account Licensing</h2>
-            
-            <div class="toggle-container">
-                <span class="switch-label">Monthly Billing</span>
-                <label class="switch">
-                    <input type="checkbox" id="billingToggle" onchange="togglePricing()">
-                    <span class="slider"></span>
-                </label>
-                <span class="switch-label">Yearly Billing (Save 20%)</span>
+                <ul class="features-list">
+                    <li>Up to 150 birds tracked</li>
+                    <li>Advanced feed & medicine inputs</li>
+                    <li>Revenue & profit calculators</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#" class="cta-button">Go Pro</a>
             </div>
 
-            <div class="pricing-grid">
-                
-                <div class="pricing-card">
-                    <div>
-                        <div class="tier-name">Residential</div>
-                        <div class="price-container">
-                            <div>
-                                <span class="price" id="residentialPrice" data-monthly="$29" data-yearly="$23">$29</span>
-                                <span class="period">/mo</span>
-                            </div>
-                            <span class="annual-breakdown" id="residentialAnnual"></span>
-                        </div>
-                        <ul class="features-list">
-                            <li>Up to 25 birds tracked</li>
-                            <li>Basic feed cost variables</li>
-                            <li>Egg production logging</li>
-                            <li>Email support</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="cta-button">Get Started</button>
+            <div class="pricing-card">
+                <div class="tier-name">Premium</div>
+                <div class="price-container">
+                    <span class="price" id="premiumPrice" data-monthly="$99" data-yearly="$79">$99</span>
+                    <span class="period" id="premiumPeriod">/mo</span>
                 </div>
-
-                <div class="pricing-card featured">
-                    <div class="badge">Most Popular</div>
-                    <div>
-                        <div class="tier-name">Business</div>
-                        <div class="price-container">
-                            <div>
-                                <span class="price" id="businessPrice" data-monthly="$49" data-yearly="$39">$49</span>
-                                <span class="period">/mo</span>
-                            </div>
-                            <span class="annual-breakdown" id="businessAnnual"></span>
-                        </div>
-                        <ul class="features-list">
-                            <li>Up to 150 birds tracked</li>
-                            <li>Advanced feed &amp; medicine inputs</li>
-                            <li>Revenue &amp; profit calculators</li>
-                            <li>Priority support</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="cta-button">Go Pro</button>
-                </div>
-
-                <div class="pricing-card">
-                    <div>
-                        <div class="tier-name">Premium</div>
-                        <div class="price-container">
-                            <div>
-                                <span class="price" id="premiumPrice" data-monthly="$99" data-yearly="$79">$99</span>
-                                <span class="period">/mo</span>
-                            </div>
-                            <span class="annual-breakdown" id="premiumAnnual"></span>
-                        </div>
-                        <ul class="features-list">
-                            <li><strong>Unlimited</strong> birds &amp; flocks</li>
-                            <li>Multi-flock aggregate data</li>
-                            <li>Custom commercial reporting</li>
-                            <li>Dedicated account manager</li>
-                        </ul>
-                    </div>
-                    <button type="button" class="cta-button">Contact Scale</button>
-                </div>
-
+                <ul class="features-list">
+                    <li><strong>Unlimited</strong> birds & flocks</li>
+                    <li>Multi-flock aggregate data</li>
+                    <li>Custom commercial reporting</li>
+                    <li>Dedicated account manager</li>
+                </ul>
+                <a href="#" class="cta-button">Contact Scale</a>
             </div>
-        </section>
-    </main>
+
+        </div>
+    </div>
 
     <script>
-        // High-Fidelity Advanced Cost Computation Engine
-        function calculateFlockIntelligence() {
-            const birdCount = Math.max(0, parseFloat(document.getElementById('birdCount').value) || 0);
-            const feedPrice = Math.max(0, parseFloat(document.getElementById('feedPrice').value) || 0);
-            const monthlyEggs = Math.max(0, parseFloat(document.getElementById('monthlyEggs').value) || 0);
-            const miscCosts = Math.max(0, parseFloat(document.getElementById('miscCosts').value) || 0);
+        // Existing core calculator logic
+        function calculateCosts() {
+            const birdCount = parseFloat(document.getElementById('birdCount').value) || 0;
+            const feedPrice = parseFloat(document.getElementById('feedPrice').value) || 0;
             
-            // Standard baseline engineering logic: Every chicken consumes roughly 4 lbs of feed per month
-            const feedTotalCost = birdCount * 4 * feedPrice;
-            const absoluteMonthlyTotal = feedTotalCost + miscCosts;
+            // Basic baseline assumption: a chicken eats roughly 4 lbs of feed per month
+            const estimatedCost = birdCount * 4 * feedPrice;
             
-            // Calculate Unit-Cost Metrics
-            let finalEggCost = 0;
-            if (monthlyEggs > 0) {
-                finalEggCost = absoluteMonthlyTotal / monthlyEggs;
-            }
-            
-            // Render outputs directly to interface UI
-            document.getElementById('monthlyTotal').textContent = '$' + absoluteMonthlyTotal.toFixed(2);
-            document.getElementById('eggCost').textContent = '$' + finalEggCost.toFixed(2);
+            document.getElementById('monthlyTotal').textContent = '$' + estimatedCost.toFixed(2);
         }
 
-        // Clean UI Toggle State Machine
+        // Placeholder function for UI toggle swapping (JS state logic to be wired up next)
         function togglePricing() {
             const isYearly = document.getElementById('billingToggle').checked;
+            const tiers = ['residential', 'business', 'premium'];
             
-            const pricingData = {
-                residential: { monthly: '$29', yearly: '$23', totalAnnual: '$276/yr' },
-                business:    { monthly: '$49', yearly: '$39', totalAnnual: '$468/yr' },
-                premium:     { monthly: '$99', yearly: '$79', totalAnnual: '$948/yr' }
-            };
-            
-            Object.keys(pricingData).forEach(tier => {
+            tiers.forEach(tier => {
                 const priceEl = document.getElementById(`${tier}Price`);
-                const annualEl = document.getElementById(`${tier}Annual`);
+                const periodEl = document.getElementById(`${tier}Period`);
                 
                 if (isYearly) {
-                    priceEl.textContent = pricingData[tier].yearly;
-                    annualEl.textContent = `Billed annually at ${pricingData[tier].totalAnnual}`;
+                    priceEl.textContent = priceEl.getAttribute('data-yearly');
+                    periodEl.textContent = '/mo (billed annually)';
                 } else {
-                    priceEl.textContent = pricingData[tier].monthly;
-                    annualEl.textContent = ''; 
+                    priceEl.textContent = priceEl.getAttribute('data-monthly');
+                    periodEl.textContent = '/mo';
                 }
             });
         }
 
-        // Direct Execution Pipeline Initializations
-        calculateFlockIntelligence();
-        togglePricing();
+        // Run calculator once on load initialization
+        calculateCosts();
     </script>
 </body>
 </html>
