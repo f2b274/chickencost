@@ -5,321 +5,532 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chicken Cost & Profit Intelligence Dashboard</title>
     <style>
-        /* --- Core Layout & Immersive Barn Backdrop --- */
+        /* --- High-End Executive Styling --- */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            /* Loads a beautiful rustic barn image, centers it, and locks it to the viewport */
-            background: linear-gradient(rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.45)), 
-                        url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
             color: #334e68;
-            padding: 40px 15px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1050px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .dashboard-wrapper {
-            width: 100%;
-            max-width: 600px;
-        }
-
         h1 {
-            text-align: center;
             font-size: 2.2rem;
-            color: #ffffff;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-            margin-bottom: 6px;
+            color: #102a43;
+            margin-bottom: 8px;
+            text-align: center;
             font-weight: 800;
         }
 
         .subtitle {
-            text-align: center;
-            color: #f1f5f9;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-            font-size: 1.05rem;
+            color: #486581;
             margin-bottom: 35px;
-            font-weight: 500;
+            text-align: center;
+            font-size: 1.1rem;
         }
 
-        /* --- Crisp White Calculator Card --- */
-        .panel-card {
-            background: rgba(255, 255, 255, 0.98);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            padding: 30px;
+        /* --- Calculator Interface Grid --- */
+        .calculator-card {
+            width: 100%;
+            max-width: 750px;
+            background: #ffffff;
+            padding: 35px;
             border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(16, 42, 67, 0.08);
+            margin-bottom: 50px;
+            border: 1px solid #bcccdc;
         }
 
-        .panel-card h2 {
-            font-size: 1.25rem;
+        .calculator-card h2 {
             color: #102a43;
-            margin-bottom: 20px;
+            font-size: 1.4rem;
+            margin-bottom: 25px;
             border-bottom: 2px solid #f0f4f8;
-            padding-bottom: 8px;
-            font-weight: 800;
+            padding-bottom: 10px;
         }
 
-        .form-grid {
+        .grid-inputs {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 18px;
+            gap: 20px;
         }
 
-        @media (min-width: 480px) {
-            .form-grid {
+        @media (min-width: 600px) {
+            .grid-inputs {
                 grid-template-columns: 1fr 1fr;
             }
         }
 
-        .input-group {
+        .form-group {
             display: flex;
             flex-direction: column;
         }
 
         label {
-            font-size: 0.9rem;
+            margin-bottom: 8px;
             font-weight: 700;
             color: #243e56;
-            margin-bottom: 6px;
+            font-size: 0.95rem;
         }
 
         input[type="number"] {
             width: 100%;
             padding: 12px;
-            background: #f0f4f8;
             border: 2px solid #cbd5e0;
             border-radius: 8px;
-            color: #102a43;
             font-size: 16px;
-            font-weight: 600;
+            color: #102a43;
+            background-color: #f0f4f8;
             transition: border-color 0.2s;
         }
 
         input[type="number"]:focus {
-            border-color: #1982fc;
-            background-color: #ffffff;
+            border-color: #627d98;
             outline: none;
+            background-color: #ffffff;
         }
 
-        /* --- Split Display Analytics Boxes --- */
-        .stats-grid {
-            margin-top: 25px;
+        /* --- Dynamic Metrics Output Panels --- */
+        .metrics-display {
+            margin-top: 30px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 15px;
         }
 
-        .stat-box {
-            padding: 18px;
+        @media (min-width: 500px) {
+            .metrics-display {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .metric-box {
+            padding: 20px;
             border-radius: 10px;
             text-align: center;
-            background: #f0f4f8;
-            border: 1px solid #cbd5e0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #486581;
-            margin-bottom: 4px;
+        .metric-box.expense {
+            background: #fcefc7;
+            border: 1px solid #f8b91a;
+        }
+
+        .metric-box.analysis {
+            background: #e3faf1;
+            border: 1px solid #23db93;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
             font-weight: 700;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
+            color: #486581;
+            margin-bottom: 5px;
         }
 
-        .stat-value {
-            font-size: 1.6rem;
+        .metric-value {
+            font-size: 1.8rem;
             font-weight: 900;
             color: #102a43;
         }
 
-        /* --- High-Contrast Profit/Loss Fields --- */
-        .intelligence-alert {
-            padding: 25px;
-            border-radius: 14px;
-            margin-top: 5px;
-            display: none; /* Managed dynamically by running script */
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 18px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .intelligence-alert.leak-alert {
-            background-color: #ffe3e3;
-            border: 2px solid #ff8080;
-            color: #660000;
-        }
-
-        .intelligence-alert.profit-alert {
-            background-color: #e3faf1;
-            border: 2px solid #23db93;
-            color: #004d26;
-        }
-
-        .alert-heading {
-            font-weight: 800;
-            font-size: 1.25rem;
-            margin-bottom: 4px;
-        }
-
-        .alert-desc {
-            font-size: 0.95rem;
-            line-height: 1.45;
-            opacity: 0.95;
-        }
-
-        .action-btn {
-            display: inline-block;
+        /* --- Legendary Pricing Tiers Section --- */
+        .pricing-section {
             width: 100%;
-            max-width: 240px;
-            padding: 14px;
+            text-align: center;
+        }
+
+        .pricing-section h2 {
+            font-size: 1.8rem;
+            color: #102a43;
+            margin-bottom: 15px;
+        }
+
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 15px;
+        }
+
+        .switch-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #486581;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 65px;
+            height: 36px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #bac7d5;
+            border-radius: 36px;
+            transition: .3s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 28px;
+            width: 28px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        input:checked + .slider {
+            background-color: #1982fc;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(29px);
+        }
+
+        .pricing-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid #f0f4f8;
+            border-radius: 16px;
+            padding: 35px;
+            flex: 1;
+            box-shadow: 0 4px 10px rgba(16, 42, 67, 0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .pricing-card.featured {
+            border-color: #1982fc;
+            box-shadow: 0 15px 30px rgba(25, 130, 252, 0.15);
+        }
+
+        .badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1982fc;
+            color: white;
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+        }
+
+        .tier-name {
+            font-size: 24px;
+            color: #102a43;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+
+        .price-container {
+            margin-bottom: 25px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .price {
+            font-size: 44px;
+            font-weight: 900;
+            color: #102a43;
+        }
+
+        .period {
+            font-size: 16px;
+            color: #627d98;
+            font-weight: 600;
+        }
+
+        .annual-breakdown {
+            font-size: 13px;
+            color: #23db93;
+            font-weight: 700;
+            margin-top: 6px;
+            display: block;
+            min-height: 18px;
+        }
+
+        .features-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 35px;
+        }
+
+        .features-list li {
+            margin-bottom: 14px;
+            color: #334e68;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .features-list li::before {
+            content: "✓";
+            color: #23db93;
+            font-weight: 900;
+        }
+
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: #486581;
+            color: white;
+            text-decoration: none;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 15px;
-            text-decoration: none;
+            font-size: 16px;
+            transition: background 0.2s;
             text-align: center;
-            transition: transform 0.1s, opacity 0.15s;
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        .action-btn:active {
-            transform: scale(0.98);
+        .cta-button:hover {
+            background: #334e68;
         }
 
-        .leak-alert .action-btn {
-            background-color: #cc0000;
-            color: #fff;
+        .pricing-card.featured .cta-button {
+            background: #1982fc;
         }
 
-        .profit-alert .action-btn {
-            background-color: #008040;
-            color: #fff;
+        .pricing-card.featured .cta-button:hover {
+            background: #1166ca;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid {
+                flex-direction: row;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard-wrapper">
-        <h1>Chicken Cost Engine</h1>
-        <p class="subtitle">Flock expense tracking and margin intelligence dashboard</p>
+    <main>
+        <h1>Chicken Cost Auditing Engine</h1>
+        <p class="subtitle">Real-time flock overhead analytics and expense mitigation tool</p>
 
-        <main class="panel-card">
-            <h2>Operational Inputs</h2>
+        <section class="calculator-card">
+            <h2>Flock Operational Variables</h2>
             
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="birdCount">Flock Size (Birds)</label>
-                    <input type="number" id="birdCount" value="12" min="0" oninput="runOperationalIntelligence()">
+            <div class="grid-inputs">
+                <div class="form-group">
+                    <label for="birdCount">Flock Size (Total Birds)</label>
+                    <input type="number" id="birdCount" value="12" min="0" oninput="calculateFlockIntelligence()">
                 </div>
 
-                <div class="input-group">
-                    <label for="feedPrice">Feed Cost (Per Lb)</label>
-                    <input type="number" id="feedPrice" value="0.85" step="0.01" min="0" oninput="runOperationalIntelligence()">
+                <div class="form-group">
+                    <label for="feedPrice">Feed Price (Per Pound)</label>
+                    <input type="number" id="feedPrice" value="0.85" step="0.01" min="0" oninput="calculateFlockIntelligence()">
                 </div>
 
-                <div class="input-group">
-                    <label for="monthlyEggs">Monthly Egg Yield</label>
-                    <input type="number" id="monthlyEggs" value="240" min="0" oninput="runOperationalIntelligence()">
+                <div class="form-group">
+                    <label for="monthlyEggs">Eggs Gathered (Monthly Total)</label>
+                    <input type="number" id="monthlyEggs" value="240" min="0" oninput="calculateFlockIntelligence()">
                 </div>
 
-                <div class="input-group">
-                    <label for="marketValue">Market Price (Per Dozen)</label>
-                    <input type="number" id="marketValue" value="4.50" step="0.25" min="0" oninput="runOperationalIntelligence()">
-                </div>
-
-                <div class="input-group" style="grid-column: span 1;">
-                    <label for="miscCosts">Fixed Upkeep (Monthly)</label>
-                    <input type="number" id="miscCosts" value="15.00" step="1.00" min="0" oninput="runOperationalIntelligence()">
+                <div class="form-group">
+                    <label for="miscCosts">Coop Upkeep & Misc Fees (Monthly)</label>
+                    <input type="number" id="miscCosts" value="15.00" step="0.50" min="0" oninput="calculateFlockIntelligence()">
                 </div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Total Upkeep</div>
-                    <div class="stat-value" id="monthlyTotal">$0.00</div>
+            <div class="metrics-display">
+                <div class="metric-box expense">
+                    <div class="metric-label">Total Monthly Maintenance</div>
+                    <div class="metric-value" id="monthlyTotal">$0.00</div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">Cost Per Egg</div>
-                    <div class="stat-value" id="eggCost">$0.00</div>
+                <div class="metric-box analysis">
+                    <div class="metric-label">Operational Net Cost Per Egg</div>
+                    <div class="metric-value" id="eggCost">$0.00</div>
                 </div>
             </div>
-        </main>
+        </section>
 
-        <div id="leakBox" class="intelligence-alert leak-alert">
-            <div>
-                <div class="alert-heading">⚠️ You are leaking money!</div>
-                <div class="alert-desc">Your operational overhead outpaces your retail egg production value. This is how you fix it.</div>
+        <section class="pricing-section">
+            <h2>SaaS Account Licensing</h2>
+            
+            <div class="toggle-container">
+                <span class="switch-label">Monthly Billing</span>
+                <label class="switch">
+                    <input type="checkbox" id="billingToggle" onchange="togglePricing()">
+                    <span class="slider"></span>
+                </label>
+                <span class="switch-label">Yearly Billing (Save 20%)</span>
             </div>
-            <button class="action-btn" onclick="alert('Opening margin optimization workflow...');">Fix My Margins</button>
-        </div>
 
-        <div id="profitBox" class="intelligence-alert profit-alert">
-            <div>
-                <div class="alert-heading">📈 Your flock is profitable!</div>
-                <div class="alert-desc">Your asset margins are currently positive. If you would like to increase your profits further, try this.</div>
+            <div class="pricing-grid">
+                
+                <div class="pricing-card">
+                    <div>
+                        <div class="tier-name">Residential</div>
+                        <div class="price-container">
+                            <div>
+                                <span class="price" id="residentialPrice" data-monthly="$29" data-yearly="$23">$29</span>
+                                <span class="period">/mo</span>
+                            </div>
+                            <span class="annual-breakdown" id="residentialAnnual"></span>
+                        </div>
+                        <ul class="features-list">
+                            <li>Up to 25 birds tracked</li>
+                            <li>Basic feed cost variables</li>
+                            <li>Egg production logging</li>
+                            <li>Email support</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="cta-button">Get Started</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="badge">Most Popular</div>
+                    <div>
+                        <div class="tier-name">Business</div>
+                        <div class="price-container">
+                            <div>
+                                <span class="price" id="businessPrice" data-monthly="$49" data-yearly="$39">$49</span>
+                                <span class="period">/mo</span>
+                            </div>
+                            <span class="annual-breakdown" id="businessAnnual"></span>
+                        </div>
+                        <ul class="features-list">
+                            <li>Up to 150 birds tracked</li>
+                            <li>Advanced feed &amp; medicine inputs</li>
+                            <li>Revenue &amp; profit calculators</li>
+                            <li>Priority support</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="cta-button">Go Pro</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div>
+                        <div class="tier-name">Premium</div>
+                        <div class="price-container">
+                            <div>
+                                <span class="price" id="premiumPrice" data-monthly="$99" data-yearly="$79">$99</span>
+                                <span class="period">/mo</span>
+                            </div>
+                            <span class="annual-breakdown" id="premiumAnnual"></span>
+                        </div>
+                        <ul class="features-list">
+                            <li><strong>Unlimited</strong> birds &amp; flocks</li>
+                            <li>Multi-flock aggregate data</li>
+                            <li>Custom commercial reporting</li>
+                            <li>Dedicated account manager</li>
+                        </ul>
+                    </div>
+                    <button type="button" class="cta-button">Contact Scale</button>
+                </div>
+
             </div>
-            <button class="action-btn" onclick="alert('Opening scaling upgrade view...');">Maximize Profits</button>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
-        function runOperationalIntelligence() {
+        // High-Fidelity Advanced Cost Computation Engine
+        function calculateFlockIntelligence() {
             const birdCount = Math.max(0, parseFloat(document.getElementById('birdCount').value) || 0);
             const feedPrice = Math.max(0, parseFloat(document.getElementById('feedPrice').value) || 0);
             const monthlyEggs = Math.max(0, parseFloat(document.getElementById('monthlyEggs').value) || 0);
-            const marketValue = Math.max(0, parseFloat(document.getElementById('marketValue').value) || 0);
             const miscCosts = Math.max(0, parseFloat(document.getElementById('miscCosts').value) || 0);
             
-            // Standard baseline logic: chickens consume roughly 4 lbs of feed per month
-            const feedMonthlyExpense = birdCount * 4 * feedPrice;
-            const absoluteMonthlyCost = feedMonthlyExpense + miscCosts;
+            // Standard baseline engineering logic: Every chicken consumes roughly 4 lbs of feed per month
+            const feedTotalCost = birdCount * 4 * feedPrice;
+            const absoluteMonthlyTotal = feedTotalCost + miscCosts;
             
-            // Unit conversion cost calculations
-            let unitEggCost = 0;
+            // Calculate Unit-Cost Metrics
+            let finalEggCost = 0;
             if (monthlyEggs > 0) {
-                unitEggCost = absoluteMonthlyCost / monthlyEggs;
+                finalEggCost = absoluteMonthlyTotal / monthlyEggs;
             }
             
-            // Update UI panels
-            document.getElementById('monthlyTotal').textContent = '$' + absoluteMonthlyCost.toFixed(2);
-            document.getElementById('eggCost').textContent = '$' + unitEggCost.toFixed(2);
-
-            // Audit true asset profitability
-            const producedDozens = monthlyEggs / 12;
-            const grossAssetRevenue = producedDozens * marketValue;
-            
-            const leakBox = document.getElementById('leakBox');
-            const profitBox = document.getElementById('profitBox');
-
-            if (birdCount === 0 || monthlyEggs === 0) {
-                leakBox.style.display = 'none';
-                profitBox.style.display = 'none';
-            } else if (absoluteMonthlyCost > grossAssetRevenue) {
-                // Costs exceed revenue: trigger cash leak template
-                leakBox.style.display = 'flex';
-                profitBox.style.display = 'none';
-            } else {
-                // Revenue exceeds costs: trigger optimization prompt
-                leakBox.style.display = 'flex'; // Keeping container responsive
-                leakBox.style.display = 'none';
-                profitBox.style.display = 'flex';
-            }
+            // Render outputs directly to interface UI
+            document.getElementById('monthlyTotal').textContent = '$' + absoluteMonthlyTotal.toFixed(2);
+            document.getElementById('eggCost').textContent = '$' + finalEggCost.toFixed(2);
         }
 
-        // Run calculation framework on initial initialization
-        runOperationalIntelligence();
+        // Clean UI Toggle State Machine
+        function togglePricing() {
+            const isYearly = document.getElementById('billingToggle').checked;
+            
+            const pricingData = {
+                residential: { monthly: '$29', yearly: '$23', totalAnnual: '$276/yr' },
+                business:    { monthly: '$49', yearly: '$39', totalAnnual: '$468/yr' },
+                premium:     { monthly: '$99', yearly: '$79', totalAnnual: '$948/yr' }
+            };
+            
+            Object.keys(pricingData).forEach(tier => {
+                const priceEl = document.getElementById(`${tier}Price`);
+                const annualEl = document.getElementById(`${tier}Annual`);
+                
+                if (isYearly) {
+                    priceEl.textContent = pricingData[tier].yearly;
+                    annualEl.textContent = `Billed annually at ${pricingData[tier].totalAnnual}`;
+                } else {
+                    priceEl.textContent = pricingData[tier].monthly;
+                    annualEl.textContent = ''; 
+                }
+            });
+        }
+
+        // Direct Execution Pipeline Initializations
+        calculateFlockIntelligence();
+        togglePricing();
     </script>
 </body>
 </html>
