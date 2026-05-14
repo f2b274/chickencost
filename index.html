@@ -1,526 +1,510 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Cost & Profit Intelligence Dashboard</title>
+    <title>Chicken Cost - All-American Diagnostic</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'barn-red': '#A52A2A',
+                        'bright-red': '#D00000',
+                        'grass-green': '#2D5A27',
+                        'grass-green-light': '#F4F7F4',
+                        'emerald-farm': '#388E3C',
+                        'coal': '#121212',
+                        'ivory-farm': '#FFFFF0'
+                    },
+                    animation: {
+                        'vibrant-pulse': 'vibrant-pulse 1.5s infinite',
+                    },
+                    keyframes: {
+                        'vibrant-pulse': {
+                            '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(208, 0, 0, 0.4)' },
+                            '50%': { transform: 'scale(1.03)', boxShadow: '0 0 20px 10px rgba(208, 0, 0, 0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* --- Core Layout & Immersive Barn Backdrop --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-        }
-
         body {
-            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.5)), 
-                        url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2070&auto=format&fit=crop') no-repeat center center fixed;
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             background-size: cover;
-            color: #334e68;
-            padding: 40px 15px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-position: center;
+            background-attachment: fixed;
         }
-
-        .dashboard-wrapper {
-            width: 100%;
-            max-width: 650px;
+        .main-card {
+            background: linear-gradient(to bottom, #ffffff, #fcfcfc);
+            border: 6px solid #A52A2A;
         }
-
-        h1 {
-            text-align: center;
-            font-size: 2.4rem;
-            color: #ffffff;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-            margin-bottom: 6px;
-            font-weight: 800;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #f1f5f9;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-            font-size: 1.1rem;
-            margin-bottom: 35px;
-            font-weight: 500;
-        }
-
-        /* --- White Panel Cards --- */
-        .panel-card {
-            background: rgba(255, 255, 255, 0.98);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            margin-bottom: 25px;
-        }
-
-        .panel-card h2 {
-            font-size: 1.35rem;
-            color: #102a43;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f0f4f8;
-            padding-bottom: 8px;
-            font-weight: 800;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 18px;
-        }
-
-        @media (min-width: 480px) {
-            .form-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #243e56;
-            margin-bottom: 6px;
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 12px;
-            background: #f0f4f8;
-            border: 2px solid #cbd5e0;
-            border-radius: 8px;
-            color: #102a43;
-            font-size: 16px;
-            font-weight: 600;
-            transition: border-color 0.2s;
-        }
-
-        input[type="number"]:focus {
-            border-color: #1982fc;
-            background-color: #ffffff;
-            outline: none;
-        }
-
-        /* --- Analytics Display Box Grid --- */
-        .stats-grid {
-            margin-top: 25px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .stat-box {
-            padding: 18px;
-            border-radius: 10px;
-            text-align: center;
-            background: #f0f4f8;
-            border: 1px solid #cbd5e0;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #486581;
-            margin-bottom: 4px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-value {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: #102a43;
-        }
-
-        /* --- Dynamic Profit/Loss Alerts --- */
-        .intelligence-alert {
-            padding: 25px;
-            border-radius: 14px;
-            margin-top: 5px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 18px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            margin-bottom: 25px;
-        }
-
-        .intelligence-alert.leak-alert {
-            background-color: #ffe3e3;
-            border: 2px solid #ff8080;
-            color: #660000;
-        }
-
-        .intelligence-alert.profit-alert {
-            background-color: #e3faf1;
-            border: 2px solid #23db93;
-            color: #004d26;
-        }
-
-        .alert-heading {
-            font-weight: 800;
-            font-size: 1.25rem;
-            margin-bottom: 4px;
-        }
-
-        .alert-desc {
-            font-size: 0.95rem;
-            line-height: 1.45;
-            opacity: 0.95;
-            margin-bottom: 5px;
-        }
-
-        .action-btn {
-            display: inline-block;
-            width: 100%;
-            max-width: 280px;
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 15px;
-            text-decoration: none;
-            text-align: center;
-            transition: transform 0.1s, opacity 0.15s;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        .action-btn:active { transform: scale(0.98); }
-        .leak-alert .action-btn { background-color: #cc0000; color: #fff; }
-        .profit-alert .action-btn { background-color: #008040; color: #fff; }
-
-        /* --- Membership Toggle Elements --- */
-        .center-trigger {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0 30px 0;
-        }
-
-        .tier-toggle-btn {
-            background: rgba(255, 255, 255, 0.25);
-            border: 2px solid #ffffff;
-            color: #ffffff;
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-weight: 700;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.2s ease;
-        }
-
-        .tier-toggle-btn:hover {
-            background: #ffffff;
-            color: #102a43;
-        }
-
-        #membershipSection {
-            display: none; /* Initially hidden until button click */
-            animation: fadeIn 0.4s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Three Tier Pricing Grid --- */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin-top: 15px;
-        }
-
-        @media (min-width: 580px) {
-            .pricing-grid {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-
-        .price-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-        }
-
-        .price-card:hover {
-            transform: translateY(-4px);
-        }
-
-        .price-card.featured {
-            border: 2px solid #1982fc;
-            position: relative;
-        }
-
-        .badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1982fc;
-            color: white;
-            padding: 3px 12px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            border-radius: 12px;
-            text-transform: uppercase;
-        }
-
-        .price-title {
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #102a43;
-            margin-bottom: 8px;
-        }
-
-        .price-amt {
-            font-size: 1.75rem;
-            font-weight: 900;
-            color: #1982fc;
-            margin-bottom: 15px;
-        }
-
-        .price-amt span {
-            font-size: 0.85rem;
-            color: #627d98;
-            font-weight: 500;
-        }
-
-        .price-features {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 20px;
-            text-align: left;
-            font-size: 0.85rem;
-            color: #486581;
-        }
-
-        .price-features li {
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .price-features li::before {
-            content: "✓";
-            color: #23db93;
-            font-weight: bold;
-        }
-
-        .select-tier-btn {
-            background: #f0f4f8;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            color: #102a43;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
-        }
-
-        .price-card.featured .select-tier-btn {
-            background: #1982fc;
-            color: #ffffff;
-        }
-
-        .price-card.featured .select-tier-btn:hover {
-            background: #116bcc;
-        }
+        .btn-red { background: linear-gradient(135deg, #A52A2A, #D00000); }
+        .btn-green { background: linear-gradient(135deg, #2D5A27, #388E3C); }
+        .btn-black { background: linear-gradient(135deg, #1A1A1A, #333333); }
     </style>
 </head>
-<body>
+<body class="text-coal font-sans antialiased">
 
-    <div class="dashboard-wrapper">
-        <h1>Chicken Cost Engine</h1>
-        <p class="subtitle">Flock expense tracking and margin intelligence dashboard</p>
+    <div x-data="{
+        currentPage: 'calculator',
+        state: 'Select State',
+        birds: 5,
+        feedCost: 20,
+        eggsPerWeek: 20,
+        pricePerDozen: 5.00,
+        billingCycle: 'monthly', 
+        selectedTier: 'personal', 
+        firstName: '',
+        emailAddress: '',
+        zipCode: '', 
+        stateData: {
+            'Alabama': { eggPrice: 6.12, feedCost: 21 },
+            'Alaska': { eggPrice: 4.61, feedCost: 26 },
+            'Arizona': { eggPrice: 6.03, feedCost: 20 },
+            'Arkansas': { eggPrice: 4.95, feedCost: 18 },
+            'California': { eggPrice: 6.05, feedCost: 24 },
+            'Colorado': { eggPrice: 5.77, feedCost: 21 },
+            'Connecticut': { eggPrice: 5.54, feedCost: 23 },
+            'Delaware': { eggPrice: 4.79, feedCost: 20 },
+            'Florida': { eggPrice: 6.36, feedCost: 22 },
+            'Georgia': { eggPrice: 5.96, feedCost: 19 },
+            'Hawaii': { eggPrice: 9.73, feedCost: 29 },
+            'Idaho': { eggPrice: 5.09, feedCost: 19 },
+            'Illinois': { eggPrice: 4.82, feedCost: 17 },
+            'Indiana': { eggPrice: 4.33, feedCost: 16 },
+            'Iowa': { eggPrice: 4.44, feedCost: 15 },
+            'Kansas': { eggPrice: 4.41, feedCost: 16 },
+            'Kentucky': { eggPrice: 4.51, feedCost: 18 },
+            'Louisiana': { eggPrice: 5.59, feedCost: 21 },
+            'Maine': { eggPrice: 5.84, feedCost: 24 },
+            'Maryland': { eggPrice: 4.78, feedCost: 22 },
+            'Massachusetts': { eggPrice: 5.04, feedCost: 24 },
+            'Michigan': { eggPrice: 4.82, feedCost: 18 },
+            'Minnesota': { eggPrice: 5.10, feedCost: 17 },
+            'Mississippi': { eggPrice: 5.04, feedCost: 19 },
+            'Missouri': { eggPrice: 4.24, feedCost: 16 },
+            'Montana': { eggPrice: 5.46, feedCost: 21 },
+            'Nebraska': { eggPrice: 4.25, feedCost: 16 },
+            'Nevada': { eggPrice: 6.07, feedCost: 22 },
+            'New Hampshire': { eggPrice: 4.91, feedCost: 23 },
+            'New Jersey': { eggPrice: 5.05, feedCost: 23 },
+            'New Mexico': { eggPrice: 5.65, feedCost: 20 },
+            'New York': { eggPrice: 5.37, feedCost: 24 },
+            'North Carolina': { eggPrice: 5.60, feedCost: 19 },
+            'North Dakota': { eggPrice: 4.83, feedCost: 19 },
+            'Ohio': { eggPrice: 4.39, feedCost: 17 },
+            'Oklahoma': { eggPrice: 4.92, feedCost: 18 },
+            'Oregon': { eggPrice: 4.81, feedCost: 21 },
+            'Pennsylvania': { eggPrice: 4.52, feedCost: 19 },
+            'Rhode Island': { eggPrice: 5.10, feedCost: 24 },
+            'South Carolina': { eggPrice: 5.76, feedCost: 20 },
+            'South Dakota': { eggPrice: 5.00, feedCost: 18 },
+            'Tennessee': { eggPrice: 5.61, feedCost: 19 },
+            'Texas': { eggPrice: 5.43, feedCost: 18 },
+            'Utah': { eggPrice: 5.67, feedCost: 20 },
+            'Vermont': { eggPrice: 5.70, feedCost: 24 },
+            'Virginia': { eggPrice: 4.96, feedCost: 20 },
+            'Washington': { eggPrice: 4.91, feedCost: 22 },
+            'West Virginia': { eggPrice: 4.64, feedCost: 20 },
+            'Wisconsin': { eggPrice: 4.78, feedCost: 18 },
+            'Wyoming': { eggPrice: 5.84, feedCost: 22 }
+        },
+        updateStateDefaults() {
+            if (this.state !== 'Select State' && this.stateData[this.state]) {
+                this.pricePerDozen = this.stateData[this.state].eggPrice;
+                this.feedCost = this.stateData[this.state].feedCost;
+            }
+        },
+        get monthlyIncome() {
+            return ((this.eggsPerWeek * 4) / 12 * this.pricePerDozen);
+        },
+        get monthlyProfit() {
+            return (this.monthlyIncome - this.feedCost);
+        },
+        get costPerEgg() {
+            let totalEggsMonthly = this.eggsPerWeek * 4;
+            return totalEggsMonthly > 0 ? (this.feedCost / totalEggsMonthly) : 0;
+        },
+        get breakingEven() {
+            return this.monthlyProfit >= 0;
+        },
+        get selectedTierLabel() {
+            if (this.selectedTier === 'personal') {
+                return this.billingCycle === 'monthly' ? 'Personal Tier ($29/mo)' : 'Personal Tier ($24/mo Billed Annually)';
+            }
+            if (this.selectedTier === 'business') {
+                return this.billingCycle === 'monthly' ? 'Business Tier ($49/mo)' : 'Business Tier ($39/mo Billed Annually)';
+            }
+            return this.billingCycle === 'monthly' ? 'Complete Industrial Tier ($99/mo)' : 'Complete Industrial Tier ($79/mo Billed Annually)';
+        },
+        submitForm() {
+            console.log('Sending to n8n webhook:', {
+                tier: this.selectedTier,
+                cycle: this.billingCycle,
+                name: this.firstName,
+                email: this.emailAddress,
+                zip: this.zipCode,
+                state: this.state,
+                calculatedCostPerEgg: this.costPerEgg.toFixed(2)
+            });
+            alert('Form submitted! This will connect to your n8n workflow.');
+        }
+    }" class="container mx-auto p-4 md:p-12 min-h-screen flex flex-col items-center">
 
-        <main class="panel-card">
-            <h2>Operational Inputs</h2>
+        <div class="text-center mb-8 cursor-pointer" @click="currentPage = 'calculator'">
+            <h1 class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_8px_8px_rgba(0,0,0,0.9)] uppercase italic tracking-tighter">
+                CHICKEN <span class="text-bright-red">COST</span>
+            </h1>
+            <p class="bg-bright-red text-white inline-block px-4 py-1 font-black uppercase text-sm mt-2 skew-x-[-10deg]">
+                50-State Profitability Tracker
+            </p>
+        </div>
+
+        <div x-show="currentPage === 'calculator'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full">
             
-            <div class="form-grid">
-                <div class="input-group">
-                    <label for="birdCount">Flock Size (Birds)</label>
-                    <input type="number" id="birdCount" value="12" min="0" oninput="runOperationalIntelligence()">
-                </div>
+            <div class="mb-4">
+                <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest text-center">Select Your Location</label>
+                <select x-model="state" @change="updateStateDefaults()" class="w-full p-3 border-2 border-barn-red rounded font-bold text-center bg-white shadow-sm appearance-none cursor-pointer">
+                    <option>Select State</option>
+                    <template x-for="s in Object.keys(stateData)" :key="s">
+                        <option x-text="s"></option>
+                    </template>
+                </select>
+            </div>
 
-                <div class="input-group">
-                    <label for="feedPrice">Feed Cost (Per Lb)</label>
-                    <input type="number" id="feedPrice" value="0.85" step="0.01" min="0" oninput="runOperationalIntelligence()">
-                </div>
+            <div class="mb-6 bg-white border border-gray-300 p-3 rounded text-xs text-coal font-semibold flex items-start gap-2 shadow-sm">
+                <span class="text-base leading-none">💡</span>
+                <p>
+                    These figures are loaded based on average state data. If your actual feed bills or local retail egg prices are higher or lower, feel free to edit any of the fields below!
+                </p>
+            </div>
 
-                <div class="input-group">
-                    <label for="monthlyEggs">Monthly Egg Yield</label>
-                    <input type="number" id="monthlyEggs" value="240" min="0" oninput="runOperationalIntelligence()">
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+                    <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Flock Size</label>
+                    <input type="number" x-model="birds" class="text-2xl font-black bg-transparent w-full focus:outline-none">
                 </div>
-
-                <div class="input-group">
-                    <label for="marketValue">Market Price (Per Dozen)</label>
-                    <input type="number" id="marketValue" value="4.50" step="0.25" min="0" oninput="runOperationalIntelligence()">
+                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+                    <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Feed Bill ($)</label>
+                    <input type="number" x-model="feedCost" class="text-2xl font-black bg-transparent w-full focus:outline-none">
                 </div>
-
-                <div class="input-group" style="grid-column: span 1;">
-                    <label for="miscCosts">Fixed Upkeep (Monthly)</label>
-                    <input type="number" id="miscCosts" value="15.00" step="1.00" min="0" oninput="runOperationalIntelligence()">
+                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+                    <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Weekly Yield</label>
+                    <input type="number" x-model="eggsPerWeek" class="text-2xl font-black bg-transparent w-full focus:outline-none">
+                </div>
+                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+                    <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Price / Doz ($)</label>
+                    <input type="number" x-model="pricePerDozen" step="0.01" class="text-2xl font-black bg-transparent w-full focus:outline-none">
                 </div>
             </div>
 
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label">Total Upkeep</div>
-                    <div class="stat-value" id="monthlyTotal">$0.00</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Cost Per Egg</div>
-                    <div class="stat-value" id="eggCost">$0.00</div>
-                </div>
-            </div>
-        </main>
-
-        <div id="leakBox" class="intelligence-alert leak-alert">
-            <div>
-                <div class="alert-heading">⚠️ You are leaking money!</div>
-                <div class="alert-desc">Your operational overhead outpaces your retail egg production value. Try these stop-loss ideas to clear your margins.</div>
-            </div>
-            <button class="action-btn" onclick="toggleMemberships()">View Stop-Loss Solutions</button>
-        </div>
-
-        <div id="profitBox" class="intelligence-alert profit-alert">
-            <div>
-                <div class="alert-heading">📈 Your flock is profitable!</div>
-                <div class="alert-desc">Your asset margins are currently positive. Unlock strategies to scale your production and maximize profits further.</div>
-            </div>
-            <button class="action-btn" onclick="toggleMemberships()">Maximize Your Profits</button>
-        </div>
-
-        <div class="center-trigger">
-            <button class="tier-toggle-btn" onclick="toggleMemberships()" id="toggleViewBtn">Show Membership Options</button>
-        </div>
-
-        <section id="membershipSection" class="panel-card">
-            <h2>Available Membership Tiers</h2>
-            <div class="pricing-grid">
+            <div class="p-6 md:p-10 rounded-xl border-4 mb-8 transform transition-all flex flex-col items-center justify-center w-full min-h-[220px] mx-auto box-border"
+                 :class="breakingEven ? 'bg-green-50 border-grass-green shadow-lg' : 'bg-red-50 border-bright-red shadow-lg'">
                 
-                <div class="price-card">
-                    <div>
-                        <div class="price-title">Personal</div>
-                        <div class="price-amt">$9<span>/mo</span></div>
-                        <ul class="price-features">
-                            <li>Basic Cost Log</li>
-                            <li>Standard Metrics</li>
-                            <li>Email Support</li>
-                        </ul>
+                <p class="font-black text-xs md:text-sm uppercase mb-2 tracking-[0.2em] text-center w-full" 
+                   :class="breakingEven ? 'text-grass-green' : 'text-bright-red'">
+                    Monthly Flock ROI
+                </p>
+                
+                <div class="flex items-center justify-center w-full text-center py-2 px-1">
+                    <div class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-coal leading-none block break-all" 
+                         x-text="`$${monthlyProfit.toFixed(2)}`">
                     </div>
-                    <button class="select-tier-btn" onclick="alert('Personal option selected!')">Select Plan</button>
+                </div>
+                
+                <div class="mt-4 pt-3 border-t border-dashed w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-600" 
+                     :class="breakingEven ? 'border-green-300' : 'border-red-300'">
+                    <span>Total Cost Per Egg:</span>
+                    <span class="text-coal font-black text-base" x-text="`$${costPerEgg.toFixed(2)}`"></span>
                 </div>
 
-                <div class="price-card featured">
-                    <div class="badge">Popular</div>
+                <div class="mt-4 font-bold italic w-full text-center text-xs md:text-sm tracking-wide" 
+                     :class="breakingEven ? 'text-grass-green' : 'text-barn-red'">
+                    <span x-show="breakingEven">✔ PROFITABLE OPERATION</span>
+                    <span x-show="!breakingEven">✘ LEAKING REVENUE</span>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <p class="font-black text-center uppercase text-barn-red text-[10px] tracking-widest mb-2 italic">Recommended Steps for <span x-text="state === 'Select State' ? 'Your Flock' : state"></span>:</p>
+                
+                <template x-if="!breakingEven">
+                    <button @click="currentPage = 'leak-report'" class="w-full text-left animate-vibrant-pulse flex items-center justify-between btn-red text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
+                        <div>
+                            <p class="font-black uppercase text-lg leading-tight">🛑 RED ALERT: Stop the Leak</p>
+                            <p class="text-xs font-bold opacity-90">Cut feed costs by 20% immediately.</p>
+                        </div>
+                        <span class="text-3xl font-black">➔</span>
+                    </button>
+                </template>
+
+                <template x-if="breakingEven">
+                    <button @click="currentPage = 'yield-report'" class="w-full text-left flex items-center justify-between btn-green text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
+                        <div>
+                            <p class="font-black uppercase text-lg leading-tight">🥚 BOOST: Optimize Your Yield</p>
+                            <p class="text-xs font-bold opacity-90">Maximize output based on your state's climate.</p>
+                        </div>
+                        <span class="text-3xl font-black">➔</span>
+                    </button>
+                </template>
+
+                <button @click="currentPage = 'elite-club'" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
                     <div>
-                        <div class="price-title">Business</div>
-                        <div class="price-amt">$29<span>/mo</span></div>
-                        <ul class="price-features">
-                            <li>Advanced Margin Tools</li>
-                            <li>Feed Optimization Ideas</li>
-                            <li>Priority Support</li>
-                        </ul>
+                        <p class="font-black uppercase text-lg leading-tight">💎 ELITE: <span x-text="state === 'Select State' ? '' : state"></span> Club</p>
+                        <p class="text-xs font-bold opacity-90 italic underline">Unlock Local Blueprint, Automated AI Agents & Intel Alarms</p>
                     </div>
-                    <button class="select-tier-btn" onclick="alert('Business option selected!')">Select Plan</button>
+                    <span class="text-3xl font-black">➔</span>
+                </button>
+            </div>
+
+        </div>
+
+        <div x-show="currentPage === 'leak-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
+            
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+                <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
+                    ← Back to Calculator
+                </button>
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-black text-barn-red uppercase italic tracking-tight mb-4">
+                How to Cut Your Backyard Flock Feed Costs by 20% or More
+            </h2>
+            
+            <p class="text-xs text-gray-500 font-bold mb-6 uppercase tracking-wider">Special Report • Backyard Management Secrets</p>
+
+            <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
+                <p>
+                    Feed is the single largest ongoing expense of keeping laying hens. If your calculator results show a deficit, <strong class="text-bright-red">you are likely wasting up to a third of your feed</strong> through simple, hidden flock-management mistakes.
+                </p>
+                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Upgrade to a No-Waste Gravity Feeder</h3>
+                <p>
+                    Standard trough or hanging open feeders let chickens "billing out" feed. They flick the best grains onto the coop floor with their beaks, where it gets stamped into the dirt and wasted. Switch to a closed gravity-port feeder design so they can only put their heads in, keeping the feed locked inside.
+                </p>
+                
+                <div class="my-6 bg-amber-50 border border-amber-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
+                    <div class="bg-amber-100 p-4 rounded text-3xl">🐔</div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h4 class="font-black uppercase text-amber-950 text-sm">Top Rated: No-Waste DIY Feeder Ports</h4>
+                        <p class="text-xs text-amber-900 mt-1">Transform any standard bucket into a zero-spill feeder instantly. Eliminates pest access and saves up to 15 lbs of feed per bird annually.</p>
+                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-amber-800 text-white font-black text-xs uppercase px-4 py-2 rounded hover:bg-amber-900 transition-all shadow-md">
+                            Check Price on Amazon
+                        </a>
+                    </div>
                 </div>
 
-                <div class="price-card">
+                <h3 class="text-lg font-black uppercase text-coal mt-6">2. Ferment Your Chicken Feed</h3>
+                <p>
+                    Soaking your regular scratch or crumbles in water for 3 days unlocks lactic-acid fermentation. This process multiplies the vitamins and healthy bacteria, making the food much more digestible. Your flock will feel fuller on **one-third less physical feed** while producing stronger eggshells.
+                </p>
+            </div>
+
+            <button @click="currentPage = 'elite-club'" class="w-full text-center py-4 btn-black text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all border-b-4 border-bright-red">
+                Unlock Complete Automated Tools & Strategies ➔
+            </button>
+        </div>
+
+        <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
+            
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+                <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
+                    ← Back to Calculator
+                </button>
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-black text-grass-green uppercase italic tracking-tight mb-4">
+                Max Yield: Boosting Production & Winter Laying Hacks
+            </h2>
+            
+            <p class="text-xs text-gray-500 font-bold mb-6 uppercase tracking-wider">Production Guide • Advanced Poultry Analytics</p>
+
+            <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
+                <p>
+                    If your flock is already breaking even or showing a profit, your focus should be on **maximizing egg frequency** and extending laying cycles through the cold autumn and winter months when seasonal light naturally drops.
+                </p>
+                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Implement a Light Cycle Schedule</h3>
+                <p>
+                    Hens require roughly 14 hours of light daily to trigger their pituitary glands to produce an egg. When days naturally shorten below 10 hours, laying slows to a crawl or stops entirely. Putting a small, timer-controlled LED inside the coop to turn on in the early morning hours can keep output high all winter.
+                </p>
+                
+                <div class="my-6 bg-green-50 border border-green-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
+                    <div class="bg-green-100 p-4 rounded text-3xl">💡</div>
+                    <div class="flex-1 text-center md:text-left">
+                        <h4 class="font-black uppercase text-green-950 text-sm">Top Rated: Automatic Coop Solar Lighting</h4>
+                        <p class="text-xs text-green-900 mt-1">Provides reliable, energy-efficient morning lighting automatically. Perfect for extending winter yields without running expensive electric cords.</p>
+                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-grass-green text-white font-black text-xs uppercase px-4 py-2 rounded hover:bg-emerald-farm transition-all shadow-md">
+                            Check Price on Amazon
+                        </a>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-black uppercase text-coal mt-6">2. Dial in the Protein & Calcium Ratio</h3>
+                <p>
+                    An eggshell is almost entirely calcium carbonate. If you're pushing for maximum yields, standard feed doesn't cut it. Provide free-choice crushed oyster shells or clean eggshells in a separate dish so hens can supplement their intake based on their immediate needs.
+                </p>
+            </div>
+
+            <button @click="currentPage = 'elite-club'" class="w-full text-center py-4 btn-black text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all border-b-4 border-bright-red">
+                Scale Operations via Premium Trackers ➔
+            </button>
+        </div>
+
+        <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
+            
+            <button @click="currentPage = 'calculator'" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
+                ← Back to Calculator
+            </button>
+
+            <h2 class="text-3xl md:text-4xl font-black text-coal uppercase italic tracking-tight mb-2 text-center">
+                JOIN THE <span class="text-bright-red" x-text="state === 'Select State' ? 'ELITE' : state.toUpperCase()"></span> CLUB
+            </h2>
+            <p class="text-center font-bold text-xs uppercase text-barn-red tracking-widest mb-6">Honest, Actionable Local Regulations & Operations Data</p>
+
+            <div class="mb-6 p-4 rounded-lg bg-orange-50 border border-orange-200 text-xs">
+                <p class="font-black text-orange-950 uppercase mb-2">📍 Dynamic State Intel:</p>
+                <template x-if="state === 'Connecticut'">
+                    <p class="text-orange-900 font-semibold leading-relaxed">
+                        In Connecticut, keeping poultry is governed purely by your municipal zoning board (none of CT's 8 counties enforce county laws). Because rules are 100% local, our members get a step-by-step blueprint to decode town clerk requirements alongside direct links to UConn Extension's poultry guidelines.
+                    </p>
+                </template>
+                <template x-if="state !== 'Connecticut'">
+                    <p class="text-orange-900 font-semibold leading-relaxed">
+                        Backyard zoning is highly localized and determined by cities or towns, meaning there is no single state-level policy. We provide a clean blueprint to easily navigate your specific town clerk's codes, alongside direct links to agricultural university cooperative programs for <span x-text="state === 'Select State' ? 'your state' : state"></span>.
+                    </p>
+                </template>
+            </div>
+
+            <div class="flex justify-center items-center gap-3 mb-8 bg-gray-100 p-2 rounded-full max-w-xs mx-auto border border-gray-200">
+                <button type="button" @click="billingCycle = 'monthly'" 
+                        :class="billingCycle === 'monthly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500 hover:text-coal'"
+                        class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 text-center">
+                    Monthly
+                </button>
+                <button type="button" @click="billingCycle = 'yearly'" 
+                        :class="billingCycle === 'yearly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500 hover:text-coal'"
+                        class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 text-center relative">
+                    Yearly
+                    <span class="absolute -top-3 -right-2 bg-emerald-farm text-white text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tighter shadow-sm">Save ~20%</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                
+                <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all"
+                     :class="selectedTier === 'personal' ? 'border-barn-red bg-amber-50/30' : 'border-gray-200 bg-white hover:border-gray-300'"
+                     @click="selectedTier = 'personal'">
                     <div>
-                        <div class="price-title">Industrial</div>
-                        <div class="price-amt">$79<span>/mo</span></div>
-                        <ul class="price-features">
-                            <li>Multi-Flock Management</li>
-                            <li>Automated Supply Audits</li>
-                            <li>24/7 Dedicated Support</li>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-black text-[10px] uppercase text-gray-500 tracking-wider">🏡 PERSONAL</span>
+                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-barn-red" :class="selectedTier === 'personal' ? 'bg-barn-red' : ''"></span>
+                        </div>
+                        <div class="mb-1">
+                            <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$29' : '$24'"></span>
+                            <span class="text-[10px] text-gray-500 font-bold">/ mo</span>
+                        </div>
+                        <div class="text-[9px] font-bold text-emerald-farm mb-3 uppercase tracking-wide min-h-[14px]">
+                            <span x-show="billingCycle === 'yearly'">Billed $288 upfront</span>
+                        </div>
+                        <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
+                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Basic Illness Matrix:</strong> Symptom logs for top 5 conditions + Vet call criteria.</span></li>
+                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Core Planning:</strong> Static regional feeding guides and lighting matrices.</span></li>
+                            <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1">Standard search scripts to locate your town's zoning codes manually.</span></li>
                         </ul>
                     </div>
-                    <button class="select-tier-btn" onclick="alert('Complete Industrial option selected!')">Select Plan</button>
+                    <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest text-center mt-2">Hobbyist Core</p>
+                </div>
+
+                <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all relative"
+                     :class="selectedTier === 'business' ? 'border-bright-red bg-red-50/10' : 'border-gray-200 bg-white hover:border-gray-300'"
+                     @click="selectedTier = 'business'">
+                    <span class="absolute -top-2.5 right-2 bg-bright-red text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full skew-x-[-10deg]">POPULAR</span>
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-black text-[10px] uppercase text-bright-red tracking-wider">🚜 BUSINESS PRO</span>
+                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-bright-red" :class="selectedTier === 'business' ? 'bg-bright-red' : ''"></span>
+                        </div>
+                        <div class="mb-1">
+                            <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$49' : '$39'"></span>
+                            <span class="text-[10px] text-gray-500 font-bold">/ mo</span>
+                        </div>
+                        <div class="text-[9px] font-bold text-emerald-farm mb-3 uppercase tracking-wide min-h-[14px]">
+                            <span x-show="billingCycle === 'yearly'">Billed $468 upfront</span>
+                        </div>
+                        <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
+                            <li class="flex items-start gap-1 text-bright-red">★ <span class="flex-1 font-extrabold text-coal">Includes Personal plus:</span></li>
+                            <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1 font-bold">🤖 AI Agent Zoning Audit:</span> Automated scanning for local coop sizes, setbacks, & limits.</li>
+                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Full Medical Bible:</strong> Comprehensive diagnosis checklists & treatments.</span></li>
+                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Smart Alarms:</strong> Automated SMS alerts for frost windows & feed shifts.</span></li>
+                        </ul>
+                    </div>
+                    <p class="text-[9px] text-bright-red font-black uppercase tracking-widest text-center mt-2">Markets & Sales</p>
+                </div>
+
+                <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all"
+                     :class="selectedTier === 'industrial' ? 'border-coal bg-gray-50' : 'border-gray-200 bg-white hover:border-gray-300'"
+                     @click="selectedTier = 'industrial'">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-black text-[10px] uppercase text-coal tracking-wider">🏭 INDUSTRIAL</span>
+                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-coal" :class="selectedTier === 'industrial' ? 'bg-coal' : ''"></span>
+                        </div>
+                        <div class="mb-1">
+                            <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$99' : '$79'"></span>
+                            <span class="text-[10px] text-gray-500 font-bold">/ mo</span>
+                        </div>
+                        <div class="text-[9px] font-bold text-emerald-farm mb-3 uppercase tracking-wide min-h-[14px]">
+                            <span x-show="billingCycle === 'yearly'">Billed $948 upfront</span>
+                        </div>
+                        <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
+                            <li class="flex items-start gap-1 text-coal">★ <span class="flex-1 font-extrabold text-coal">Includes Pro plus:</span></li>
+                            <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1 font-bold">🤖 Commercial Law Scout:</span> Multi-location tracking for retail egg permits.</li>
+                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Industrial Bio-Security:</strong> Outbreak prevention blueprints & quarantine steps.</span></li>
+                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Enterprise Alarms:</strong> Multi-coop tasking schedules & staff tracking.</span></li>
+                        </ul>
+                    </div>
+                    <p class="text-[9px] text-gray-700 font-black uppercase tracking-widest text-center mt-2">Full Commercial</p>
                 </div>
 
             </div>
-        </section>
+
+            <form @submit.prevent="submitForm()" class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                
+                <div class="bg-white border p-3 rounded-lg flex justify-between items-center text-xs font-black shadow-sm">
+                    <span class="text-gray-500 uppercase tracking-wider">Calculated Flock Cost Per Egg:</span>
+                    <span class="text-barn-red text-sm" x-text="`$${costPerEgg.toFixed(2)} / egg`"></span>
+                </div>
+
+                <p class="text-center font-black text-[10px] uppercase text-gray-500 tracking-wider">
+                    Secure checkout for the <span class="text-bright-red" x-text="selectedTierLabel"></span>
+                </p>
+                
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="font-black text-[9px] uppercase text-gray-500 block mb-1">First Name</label>
+                        <input type="text" x-model="firstName" class="w-full p-2 border border-gray-300 rounded font-bold text-xs" placeholder="First Name" required>
+                    </div>
+                    <div>
+                        <label class="font-black text-[9px] uppercase text-gray-500 block mb-1">Email Address</label>
+                        <input type="email" x-model="emailAddress" class="w-full p-2 border border-gray-300 rounded font-bold text-xs" placeholder="your@email.com" required>
+                    </div>
+                    <div>
+                        <label class="font-black text-[9px] uppercase text-gray-500 block mb-1">Zip Code</label>
+                        <input type="text" x-model="zipCode" maxlength="5" pattern="[0-9]{5}" class="w-full p-2 border border-gray-300 rounded font-bold text-xs" placeholder="00000" required>
+                    </div>
+                </div>
+                <button type="submit" class="w-full btn-black text-white font-black uppercase text-xs py-3 rounded shadow-xl border-b-4 border-bright-red hover:scale-[1.01] transition-all">
+                    Initialize Secure Membership & Access Guides
+                </button>
+            </form>
+        </div>
 
     </div>
 
-    <script>
-        function runOperationalIntelligence() {
-            const birdCount = Math.max(0, parseFloat(document.getElementById('birdCount').value) || 0);
-            const feedPrice = Math.max(0, parseFloat(document.getElementById('feedPrice').value) || 0);
-            const monthlyEggs = Math.max(0, parseFloat(document.getElementById('monthlyEggs').value) || 0);
-            const marketValue = Math.max(0, parseFloat(document.getElementById('marketValue').value) || 0);
-            const miscCosts = Math.max(0, parseFloat(document.getElementById('miscCosts').value) || 0);
-            
-            // Baseline metric: Chickens consume ~4 lbs of feed per month
-            const feedMonthlyExpense = birdCount * 4 * feedPrice;
-            const absoluteMonthlyCost = feedMonthlyExpense + miscCosts;
-            
-            let unitEggCost = 0;
-            if (monthlyEggs > 0) {
-                unitEggCost = absoluteMonthlyCost / monthlyEggs;
-            }
-            
-            document.getElementById('monthlyTotal').textContent = '$' + absoluteMonthlyCost.toFixed(2);
-            document.getElementById('eggCost').textContent = '$' + unitEggCost.toFixed(2);
-
-            // Audit operational profitability 
-            const producedDozens = monthlyEggs / 12;
-            const grossAssetRevenue = producedDozens * marketValue;
-            
-            const leakBox = document.getElementById('leakBox');
-            const profitBox = document.getElementById('profitBox');
-
-            if (birdCount === 0 || monthlyEggs === 0) {
-                leakBox.style.display = 'none';
-                profitBox.style.display = 'none';
-            } else if (absoluteMonthlyCost > grossAssetRevenue) {
-                leakBox.style.display = 'flex';
-                profitBox.style.display = 'none';
-            } else {
-                leakBox.style.display = 'none';
-                profitBox.style.display = 'flex';
-            }
-        }
-
-        // Toggles visibility of the interactive plan selection cards
-        function toggleMemberships() {
-            const section = document.getElementById('membershipSection');
-            const mainBtn = document.getElementById('toggleViewBtn');
-            
-            if (section.style.display === 'block') {
-                section.style.display = 'none';
-                mainBtn.textContent = 'Show Membership Options';
-            } else {
-                section.style.display = 'block';
-                mainBtn.textContent = 'Hide Membership Options';
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Initialize engine tracking calculations
-        runOperationalIntelligence();
-    </script>
 </body>
 </html>
+                                      
