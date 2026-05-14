@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Cost - All-American Diagnostic</title>
+    <title>Chicken Cost - AI Diagnostic & Farm Intel</title>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -19,9 +19,7 @@
                         'coal': '#121212',
                         'ivory-farm': '#FFFFF0'
                     },
-                    animation: {
-                        'vibrant-pulse': 'vibrant-pulse 1.5s infinite',
-                    },
+                    animation: { 'vibrant-pulse': 'vibrant-pulse 1.5s infinite' },
                     keyframes: {
                         'vibrant-pulse': {
                             '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(208, 0, 0, 0.4)' },
@@ -35,14 +33,9 @@
     <style>
         body {
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background-size: cover; background-position: center; background-attachment: fixed;
         }
-        .main-card {
-            background: linear-gradient(to bottom, #ffffff, #fcfcfc);
-            border: 6px solid #A52A2A;
-        }
+        .main-card { background: linear-gradient(to bottom, #ffffff, #fcfcfc); border: 6px solid #A52A2A; }
         .btn-red { background: linear-gradient(135deg, #A52A2A, #D00000); }
         .btn-green { background: linear-gradient(135deg, #2D5A27, #388E3C); }
         .btn-black { background: linear-gradient(135deg, #1A1A1A, #333333); }
@@ -53,66 +46,35 @@
     <div x-data="{
         currentPage: 'calculator',
         state: 'Select State',
-        birds: 5,
-        feedCost: 20,
-        eggsPerWeek: 20,
-        pricePerDozen: 5.00,
-        billingCycle: 'monthly', 
-        selectedTier: 'homestead', 
-        firstName: '',
-        emailAddress: '',
-        zipCode: '', 
+        birds: 5, feedCost: 20, eggsPerWeek: 20, pricePerDozen: 5.00,
+        billingCycle: 'monthly', selectedTier: 'homestead', 
+        firstName: '', emailAddress: '', zipCode: '', 
         stateData: {
-            'Alabama': { eggPrice: 6.12, feedCost: 21 },
-            'Alaska': { eggPrice: 4.61, feedCost: 26 },
-            'Arizona': { eggPrice: 6.03, feedCost: 20 },
-            'Arkansas': { eggPrice: 4.95, feedCost: 18 },
-            'California': { eggPrice: 6.05, feedCost: 24 },
-            'Colorado': { eggPrice: 5.77, feedCost: 21 },
-            'Connecticut': { eggPrice: 5.54, feedCost: 23 },
-            'Delaware': { eggPrice: 4.79, feedCost: 20 },
-            'Florida': { eggPrice: 6.36, feedCost: 22 },
-            'Georgia': { eggPrice: 5.96, feedCost: 19 },
-            'Hawaii': { eggPrice: 9.73, feedCost: 29 },
-            'Idaho': { eggPrice: 5.09, feedCost: 19 },
-            'Illinois': { eggPrice: 4.82, feedCost: 17 },
-            'Indiana': { eggPrice: 4.33, feedCost: 16 },
-            'Iowa': { eggPrice: 4.44, feedCost: 15 },
-            'Kansas': { eggPrice: 4.41, feedCost: 16 },
-            'Kentucky': { eggPrice: 4.51, feedCost: 18 },
-            'Louisiana': { eggPrice: 5.59, feedCost: 21 },
-            'Maine': { eggPrice: 5.84, feedCost: 24 },
-            'Maryland': { eggPrice: 4.78, feedCost: 22 },
-            'Massachusetts': { eggPrice: 5.04, feedCost: 24 },
-            'Michigan': { eggPrice: 4.82, feedCost: 18 },
-            'Minnesota': { eggPrice: 5.10, feedCost: 17 },
-            'Mississippi': { eggPrice: 5.04, feedCost: 19 },
-            'Missouri': { eggPrice: 4.24, feedCost: 16 },
-            'Montana': { eggPrice: 5.46, feedCost: 21 },
-            'Nebraska': { eggPrice: 4.25, feedCost: 16 },
-            'Nevada': { eggPrice: 6.07, feedCost: 22 },
-            'New Hampshire': { eggPrice: 4.91, feedCost: 23 },
-            'New Jersey': { eggPrice: 5.05, feedCost: 23 },
-            'New Mexico': { eggPrice: 5.65, feedCost: 20 },
-            'New York': { eggPrice: 5.37, feedCost: 24 },
-            'North Carolina': { eggPrice: 5.60, feedCost: 19 },
-            'North Dakota': { eggPrice: 4.83, feedCost: 19 },
-            'Ohio': { eggPrice: 4.39, feedCost: 17 },
-            'Oklahoma': { eggPrice: 4.92, feedCost: 18 },
-            'Oregon': { eggPrice: 4.81, feedCost: 21 },
-            'Pennsylvania': { eggPrice: 4.52, feedCost: 19 },
-            'Rhode Island': { eggPrice: 5.10, feedCost: 24 },
-            'South Carolina': { eggPrice: 5.76, feedCost: 20 },
-            'South Dakota': { eggPrice: 5.00, feedCost: 18 },
-            'Tennessee': { eggPrice: 5.61, feedCost: 19 },
-            'Texas': { eggPrice: 5.43, feedCost: 18 },
-            'Utah': { eggPrice: 5.67, feedCost: 20 },
-            'Vermont': { eggPrice: 5.70, feedCost: 24 },
-            'Virginia': { eggPrice: 4.96, feedCost: 20 },
-            'Washington': { eggPrice: 4.91, feedCost: 22 },
-            'West Virginia': { eggPrice: 4.64, feedCost: 20 },
-            'Wisconsin': { eggPrice: 4.78, feedCost: 18 },
-            'Wyoming': { eggPrice: 5.84, feedCost: 22 }
+            'Alabama': { eggPrice: 6.12, feedCost: 21 }, 'Alaska': { eggPrice: 4.61, feedCost: 26 },
+            'Arizona': { eggPrice: 6.03, feedCost: 20 }, 'Arkansas': { eggPrice: 4.95, feedCost: 18 },
+            'California': { eggPrice: 6.05, feedCost: 24 }, 'Colorado': { eggPrice: 5.77, feedCost: 21 },
+            'Connecticut': { eggPrice: 5.54, feedCost: 23 }, 'Delaware': { eggPrice: 4.79, feedCost: 20 },
+            'Florida': { eggPrice: 6.36, feedCost: 22 }, 'Georgia': { eggPrice: 5.96, feedCost: 19 },
+            'Hawaii': { eggPrice: 9.73, feedCost: 29 }, 'Idaho': { eggPrice: 5.09, feedCost: 19 },
+            'Illinois': { eggPrice: 4.82, feedCost: 17 }, 'Indiana': { eggPrice: 4.33, feedCost: 16 },
+            'Iowa': { eggPrice: 4.44, feedCost: 15 }, 'Kansas': { eggPrice: 4.41, feedCost: 16 },
+            'Kentucky': { eggPrice: 4.51, feedCost: 18 }, 'Louisiana': { eggPrice: 5.59, feedCost: 21 },
+            'Maine': { eggPrice: 5.84, feedCost: 24 }, 'Maryland': { eggPrice: 4.78, feedCost: 22 },
+            'Massachusetts': { eggPrice: 5.04, feedCost: 24 }, 'Michigan': { eggPrice: 4.82, feedCost: 18 },
+            'Minnesota': { eggPrice: 5.10, feedCost: 17 }, 'Mississippi': { eggPrice: 5.04, feedCost: 19 },
+            'Missouri': { eggPrice: 4.24, feedCost: 16 }, 'Montana': { eggPrice: 5.46, feedCost: 21 },
+            'Nebraska': { eggPrice: 4.25, feedCost: 16 }, 'Nevada': { eggPrice: 6.07, feedCost: 22 },
+            'New Hampshire': { eggPrice: 4.91, feedCost: 23 }, 'New Jersey': { eggPrice: 5.05, feedCost: 23 },
+            'New Mexico': { eggPrice: 5.65, feedCost: 20 }, 'New York': { eggPrice: 5.37, feedCost: 24 },
+            'North Carolina': { eggPrice: 5.60, feedCost: 19 }, 'North Dakota': { eggPrice: 4.83, feedCost: 19 },
+            'Ohio': { eggPrice: 4.39, feedCost: 17 }, 'Oklahoma': { eggPrice: 4.92, feedCost: 18 },
+            'Oregon': { eggPrice: 4.81, feedCost: 21 }, 'Pennsylvania': { eggPrice: 4.52, feedCost: 19 },
+            'Rhode Island': { eggPrice: 5.10, feedCost: 24 }, 'South Carolina': { eggPrice: 5.76, feedCost: 20 },
+            'South Dakota': { eggPrice: 5.00, feedCost: 18 }, 'Tennessee': { eggPrice: 5.61, feedCost: 19 },
+            'Texas': { eggPrice: 5.43, feedCost: 18 }, 'Utah': { eggPrice: 5.67, feedCost: 20 },
+            'Vermont': { eggPrice: 5.70, feedCost: 24 }, 'Virginia': { eggPrice: 4.96, feedCost: 20 },
+            'Washington': { eggPrice: 4.91, feedCost: 22 }, 'West Virginia': { eggPrice: 4.64, feedCost: 20 },
+            'Wisconsin': { eggPrice: 4.78, feedCost: 18 }, 'Wyoming': { eggPrice: 5.84, feedCost: 22 }
         },
         updateStateDefaults() {
             if (this.state !== 'Select State' && this.stateData[this.state]) {
@@ -120,40 +82,19 @@
                 this.feedCost = this.stateData[this.state].feedCost;
             }
         },
-        get monthlyIncome() {
-            return ((this.eggsPerWeek * 4) / 12 * this.pricePerDozen);
-        },
-        get monthlyProfit() {
-            return (this.monthlyIncome - this.feedCost);
-        },
-        get costPerEgg() {
-            let totalEggsMonthly = this.eggsPerWeek * 4;
-            return totalEggsMonthly > 0 ? (this.feedCost / totalEggsMonthly) : 0;
-        },
-        get breakingEven() {
-            return this.monthlyProfit >= 0;
-        },
+        get monthlyIncome() { return ((this.eggsPerWeek * 4) / 12 * this.pricePerDozen); },
+        get monthlyProfit() { return (this.monthlyIncome - this.feedCost); },
+        get costPerEgg() { let total = this.eggsPerWeek * 4; return total > 0 ? (this.feedCost / total) : 0; },
+        get breakingEven() { return this.monthlyProfit >= 0; },
         get selectedTierLabel() {
-            if (this.selectedTier === 'homestead') {
-                return this.billingCycle === 'monthly' ? 'Homestead Tier ($29/mo)' : 'Homestead Tier ($24/mo Billed Annually)';
-            }
-            if (this.selectedTier === 'smallfarm') {
-                return this.billingCycle === 'monthly' ? 'Small Farm Tier ($49/mo)' : 'Small Farm Tier ($39/mo Billed Annually)';
-            }
-            return this.billingCycle === 'monthly' ? 'Large Farm Tier ($99/mo)' : 'Large Farm Tier ($79/mo Billed Annually)';
+            let names = { homestead: 'Homestead', smallfarm: 'Small Farm', largefarm: 'Large Farm' };
+            let prices = { 
+                monthly: { homestead: '$29', smallfarm: '$99', largefarm: '$199' },
+                yearly: { homestead: '$24', smallfarm: '$79', largefarm: '$159' }
+            };
+            return `${names[this.selectedTier]} Tier (${prices[this.billingCycle][this.selectedTier]}/mo)`;
         },
-        submitForm() {
-            console.log('Sending to n8n webhook:', {
-                tier: this.selectedTier,
-                cycle: this.billingCycle,
-                name: this.firstName,
-                email: this.emailAddress,
-                zip: this.zipCode,
-                state: this.state,
-                calculatedCostPerEgg: this.costPerEgg.toFixed(2)
-            });
-            alert('Form submitted! This will connect to your n8n workflow.');
-        }
+        submitForm() { alert('Connecting to your n8n AI workflow...'); }
     }" class="container mx-auto p-4 md:p-12 min-h-screen flex flex-col items-center">
 
         <div class="text-center mb-8 cursor-pointer" @click="currentPage = 'calculator'">
@@ -161,12 +102,11 @@
                 CHICKEN <span class="text-bright-red">COST</span>
             </h1>
             <p class="bg-bright-red text-white inline-block px-4 py-1 font-black uppercase text-sm mt-2 skew-x-[-10deg]">
-                50-State Profitability Tracker
+                AI-Powered Profitability & Growth
             </p>
         </div>
 
         <div x-show="currentPage === 'calculator'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full">
-            
             <div class="mb-4">
                 <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest text-center">Select Your Location</label>
                 <select x-model="state" @change="updateStateDefaults()" class="w-full p-3 border-2 border-barn-red rounded font-bold text-center bg-white shadow-sm appearance-none cursor-pointer">
@@ -175,13 +115,6 @@
                         <option x-text="s"></option>
                     </template>
                 </select>
-            </div>
-
-            <div class="mb-6 bg-white border border-gray-300 p-3 rounded text-xs text-coal font-semibold flex items-start gap-2 shadow-sm">
-                <span class="text-base leading-none">💡</span>
-                <p>
-                    These figures are loaded based on average state data. If your actual feed bills or local retail egg prices are higher or lower, feel free to edit any of the fields below!
-                </p>
             </div>
 
             <div class="grid grid-cols-2 gap-4 mb-8">
@@ -203,41 +136,24 @@
                 </div>
             </div>
 
-            <div class="p-6 md:p-10 rounded-xl border-4 mb-8 transform transition-all flex flex-col items-center justify-center w-full min-h-[220px] mx-auto box-border"
+            <div class="p-6 md:p-10 rounded-xl border-4 mb-8 flex flex-col items-center justify-center w-full min-h-[220px]"
                  :class="breakingEven ? 'bg-green-50 border-grass-green shadow-lg' : 'bg-red-50 border-bright-red shadow-lg'">
-                
-                <p class="font-black text-xs md:text-sm uppercase mb-2 tracking-[0.2em] text-center w-full" 
-                   :class="breakingEven ? 'text-grass-green' : 'text-bright-red'">
-                    Monthly Flock ROI
-                </p>
-                
+                <p class="font-black text-xs md:text-sm uppercase mb-2 tracking-[0.2em] text-center" :class="breakingEven ? 'text-grass-green' : 'text-bright-red'">Monthly Flock ROI</p>
                 <div class="flex items-center justify-center w-full text-center py-2 px-1">
-                    <div class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-coal leading-none block break-all" 
-                         x-text="`$${monthlyProfit.toFixed(2)}`">
-                    </div>
+                    <div class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-coal leading-none block break-all" x-text="`$${monthlyProfit.toFixed(2)}`"></div>
                 </div>
-                
-                <div class="mt-4 pt-3 border-t border-dashed w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-600" 
-                     :class="breakingEven ? 'border-green-300' : 'border-red-300'">
-                    <span>Total Cost Per Egg:</span>
+                <div class="mt-4 pt-3 border-t border-dashed w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-700" :class="breakingEven ? 'border-green-300' : 'border-red-300'">
+                    <span>Cost Per Egg:</span>
                     <span class="text-coal font-black text-base" x-text="`$${costPerEgg.toFixed(2)}`"></span>
-                </div>
-
-                <div class="mt-4 font-bold italic w-full text-center text-xs md:text-sm tracking-wide" 
-                     :class="breakingEven ? 'text-grass-green' : 'text-barn-red'">
-                    <span x-show="breakingEven">✔ PROFITABLE OPERATION</span>
-                    <span x-show="!breakingEven">✘ LEAKING REVENUE</span>
                 </div>
             </div>
 
-            <div class="space-y-4">
-                <p class="font-black text-center uppercase text-barn-red text-[10px] tracking-widest mb-2 italic">Recommended Steps for <span x-text="state === 'Select State' ? 'Your Flock' : state"></span>:</p>
-                
+            <div class="space-y-4 mb-6">
                 <template x-if="!breakingEven">
                     <button @click="currentPage = 'leak-report'" class="w-full text-left animate-vibrant-pulse flex items-center justify-between btn-red text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
                         <div>
-                            <p class="font-black uppercase text-lg leading-tight">🛑 RED ALERT: Stop the Leak</p>
-                            <p class="text-xs font-bold opacity-90">Cut feed costs by 20% immediately.</p>
+                            <p class="font-black uppercase text-lg leading-tight">🛑 STOP THE LEAK</p>
+                            <p class="text-xs font-bold opacity-90 italic">Your operation is losing money. See how to cut feed waste by 20%.</p>
                         </div>
                         <span class="text-3xl font-black">➔</span>
                     </button>
@@ -246,8 +162,8 @@
                 <template x-if="breakingEven">
                     <button @click="currentPage = 'yield-report'" class="w-full text-left flex items-center justify-between btn-green text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
                         <div>
-                            <p class="font-black uppercase text-lg leading-tight">🥚 BOOST: Optimize Your Yield</p>
-                            <p class="text-xs font-bold opacity-90">Maximize output based on your state's climate.</p>
+                            <p class="font-black uppercase text-lg leading-tight">🥚 BOOST YOUR YIELD</p>
+                            <p class="text-xs font-bold opacity-90 italic">Profitable foundation detected. Unlock advanced laying hacks.</p>
                         </div>
                         <span class="text-3xl font-black">➔</span>
                     </button>
@@ -256,254 +172,113 @@
                 <button @click="currentPage = 'elite-club'" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
                     <div>
                         <p class="font-black uppercase text-lg leading-tight">💎 ELITE: <span x-text="state === 'Select State' ? '' : state"></span> Club</p>
-                        <p class="text-xs font-bold opacity-90 italic underline">Unlock Local Blueprint, Automated AI Agents & Intel Alarms</p>
+                        <p class="text-xs font-bold opacity-90 italic underline">Unlock Local AI Law Scouts, Disease Alarms & Smart Scheduling</p>
                     </div>
                     <span class="text-3xl font-black">➔</span>
                 </button>
             </div>
-
         </div>
 
         <div x-show="currentPage === 'leak-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
-            
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-                <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
-                    ← Back to Calculator
-                </button>
-            </div>
-
-            <h2 class="text-3xl md:text-4xl font-black text-barn-red uppercase italic tracking-tight mb-4">
-                How to Cut Your Backyard Flock Feed Costs by 20% or More
-            </h2>
-            
-            <p class="text-xs text-gray-500 font-bold mb-6 uppercase tracking-wider">Special Report • Backyard Management Secrets</p>
-
+            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <h2 class="text-3xl font-black text-barn-red uppercase italic mb-4 leading-tight">Stop the Leak: Cut Feed Costs by 20% or More</h2>
             <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
-                <p>
-                    Feed is the single largest ongoing expense of keeping laying hens. If your calculator results show a deficit, <strong class="text-bright-red">you are likely wasting up to a third of your feed</strong> through simple, hidden flock-management mistakes.
-                </p>
-                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Upgrade to a No-Waste Gravity Feeder</h3>
-                <p>
-                    Standard trough or hanging open feeders let chickens "billing out" feed. They flick the best grains onto the coop floor with their beaks, where it gets stamped into the dirt and wasted. Switch to a closed gravity-port feeder design so they can only put their heads in, keeping the feed locked inside.
-                </p>
+                <p>Feed is your largest ongoing expense. If you are leaking revenue, <strong class="text-bright-red">you are likely wasting 1/3 of your grain</strong> to billing out or pests.</p>
+                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Gravity Feed Conversion</h3>
+                <p>Chickens naturally flick feed. Switch to a closed-port gravity system to ensure they only eat what they need, keeping the rest locked away from the dirt and rodents.</p>
                 
                 <div class="my-6 bg-amber-50 border border-amber-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
                     <div class="bg-amber-100 p-4 rounded text-3xl">🐔</div>
-                    <div class="flex-1 text-center md:text-left">
-                        <h4 class="font-black uppercase text-amber-950 text-sm">Top Rated: No-Waste DIY Feeder Ports</h4>
-                        <p class="text-xs text-amber-900 mt-1">Transform any standard bucket into a zero-spill feeder instantly. Eliminates pest access and saves up to 15 lbs of feed per bird annually.</p>
-                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-amber-800 text-white font-black text-xs uppercase px-4 py-2 rounded hover:bg-amber-900 transition-all shadow-md">
-                            Check Price on Amazon
-                        </a>
+                    <div class="flex-1">
+                        <h4 class="font-black uppercase text-sm">DIY Zero-Waste Feeder Ports</h4>
+                        <p class="text-[11px] text-amber-900 mt-1 italic">Eliminate waste instantly. Fits any bucket or container.</p>
+                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-barn-red text-white font-black text-[10px] uppercase px-4 py-2 rounded shadow-md">Get it on Amazon</a>
                     </div>
                 </div>
-
-                <h3 class="text-lg font-black uppercase text-coal mt-6">2. Ferment Your Chicken Feed</h3>
-                <p>
-                    Soaking your regular scratch or crumbles in water for 3 days unlocks lactic-acid fermentation. This process multiplies the vitamins and healthy bacteria, making the food much more digestible. Your flock will feel fuller on **one-third less physical feed** while producing stronger eggshells.
-                </p>
             </div>
-
-            <button @click="currentPage = 'elite-club'" class="w-full text-center py-4 btn-black text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all border-b-4 border-bright-red">
-                Unlock Complete Automated Tools & Strategies ➔
-            </button>
+            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock AI-Scanned Regional Feed Arbitrage ➔</button>
         </div>
 
         <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
-            
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
-                <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
-                    ← Back to Calculator
-                </button>
-            </div>
-
-            <h2 class="text-3xl md:text-4xl font-black text-grass-green uppercase italic tracking-tight mb-4">
-                Max Yield: Boosting Production & Winter Laying Hacks
-            </h2>
-            
-            <p class="text-xs text-gray-500 font-bold mb-6 uppercase tracking-wider">Production Guide • Advanced Poultry Analytics</p>
-
+            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-grass-green mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <h2 class="text-3xl font-black text-grass-green uppercase italic mb-4 leading-tight">Max Yield: Advanced Laying & Winter Hacks</h2>
             <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
-                <p>
-                    If your flock is already breaking even or showing a profit, your focus should be on **maximizing egg frequency** and extending laying cycles through the cold autumn and winter months when seasonal light naturally drops.
-                </p>
-                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Implement a Light Cycle Schedule</h3>
-                <p>
-                    Hens require roughly 14 hours of light daily to trigger their pituitary glands to produce an egg. When days naturally shorten below 10 hours, laying slows to a crawl or stops entirely. Putting a small, timer-controlled LED inside the coop to turn on in the early morning hours can keep output high all winter.
-                </p>
-                
+                <p>You've got a profitable foundation. Now, focus on <strong class="text-emerald-farm">maximizing frequency</strong> during seasonal light drops.</p>
+                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Managed Light Cycles</h3>
+                <p>Hens require 14 hours of daily light for peak production. In winter, an automated timer light triggers the pituitary gland to maintain yield even when days are short.</p>
+
                 <div class="my-6 bg-green-50 border border-green-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
                     <div class="bg-green-100 p-4 rounded text-3xl">💡</div>
-                    <div class="flex-1 text-center md:text-left">
-                        <h4 class="font-black uppercase text-green-950 text-sm">Top Rated: Automatic Coop Solar Lighting</h4>
-                        <p class="text-xs text-green-900 mt-1">Provides reliable, energy-efficient morning lighting automatically. Perfect for extending winter yields without running expensive electric cords.</p>
-                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-grass-green text-white font-black text-xs uppercase px-4 py-2 rounded hover:bg-emerald-farm transition-all shadow-md">
-                            Check Price on Amazon
-                        </a>
+                    <div class="flex-1">
+                        <h4 class="font-black uppercase text-sm">Solar Smart Coop Lighting</h4>
+                        <p class="text-[11px] text-green-900 mt-1 italic">Extend winter laying without running expensive electrical lines.</p>
+                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-grass-green text-white font-black text-[10px] uppercase px-4 py-2 rounded shadow-md">Get it on Amazon</a>
                     </div>
                 </div>
-
-                <h3 class="text-lg font-black uppercase text-coal mt-6">2. Dial in the Protein & Calcium Ratio</h3>
-                <p>
-                    An eggshell is almost entirely calcium carbonate. If you're pushing for maximum yields, standard feed doesn't cut it. Provide free-choice crushed oyster shells or clean eggshells in a separate dish so hens can supplement their intake based on their immediate needs.
-                </p>
             </div>
-
-            <button @click="currentPage = 'elite-club'" class="w-full text-center py-4 btn-black text-white font-black uppercase text-sm rounded shadow-lg hover:scale-[1.01] transition-all border-b-4 border-bright-red">
-                Scale Operations via Premium Trackers ➔
-            </button>
+            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock AI-Powered Production Analytics ➔</button>
         </div>
 
-        <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
+        <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-6xl w-full" x-transition>
+            <button @click="currentPage = 'calculator'" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <h2 class="text-3xl md:text-4xl font-black text-coal uppercase italic tracking-tight mb-2 text-center">JOIN THE <span class="text-bright-red" x-text="state === 'Select State' ? 'ELITE' : state.toUpperCase()"></span> CLUB</h2>
             
-            <button @click="currentPage = 'calculator'" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">
-                ← Back to Calculator
-            </button>
-
-            <h2 class="text-3xl md:text-4xl font-black text-coal uppercase italic tracking-tight mb-2 text-center">
-                JOIN THE <span class="text-bright-red" x-text="state === 'Select State' ? 'ELITE' : state.toUpperCase()"></span> CLUB
-            </h2>
-            <p class="text-center font-bold text-xs uppercase text-barn-red tracking-widest mb-6">Honest, Actionable Local Regulations & Operations Data</p>
-
-            <div class="mb-6 p-4 rounded-lg bg-orange-50 border border-orange-200 text-xs">
-                <p class="font-black text-orange-950 uppercase mb-2">📍 Dynamic State Intel:</p>
-                <template x-if="state === 'Connecticut'">
-                    <p class="text-orange-900 font-semibold leading-relaxed">
-                        In Connecticut, keeping poultry is governed purely by your municipal zoning board (none of CT's 8 counties enforce county laws). Because rules are 100% local, our members get a step-by-step blueprint to decode town clerk requirements alongside direct links to UConn Extension's poultry guidelines.
-                    </p>
-                </template>
-                <template x-if="state !== 'Connecticut'">
-                    <p class="text-orange-900 font-semibold leading-relaxed">
-                        Backyard zoning is highly localized and determined by cities or towns, meaning there is no single state-level policy. We provide a clean blueprint to easily navigate your specific town clerk's codes, alongside direct links to agricultural university cooperative programs for <span x-text="state === 'Select State' ? 'your state' : state"></span>.
-                    </p>
-                </template>
+            <div class="flex justify-center items-center gap-3 my-8 bg-gray-100 p-2 rounded-full max-w-xs mx-auto border">
+                <button type="button" @click="billingCycle = 'monthly'" :class="billingCycle === 'monthly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500'" class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1">Monthly</button>
+                <button type="button" @click="billingCycle = 'yearly'" :class="billingCycle === 'yearly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500'" class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 relative">Yearly <span class="absolute -top-3 -right-2 bg-emerald-farm text-[8px] font-black px-1.5 py-0.5 rounded-full text-white">SAVE 20%</span></button>
             </div>
 
-            <div class="flex justify-center items-center gap-3 mb-8 bg-gray-100 p-2 rounded-full max-w-xs mx-auto border border-gray-200">
-                <button type="button" @click="billingCycle = 'monthly'" 
-                        :class="billingCycle === 'monthly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500 hover:text-coal'"
-                        class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 text-center">
-                    Monthly
-                </button>
-                <button type="button" @click="billingCycle = 'yearly'" 
-                        :class="billingCycle === 'yearly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500 hover:text-coal'"
-                        class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 text-center relative">
-                    Yearly
-                    <span class="absolute -top-3 -right-2 bg-emerald-farm text-white text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tighter shadow-sm">Save ~20%</span>
-                </button>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center">
+                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer" :class="selectedTier === 'homestead' ? 'border-barn-red bg-amber-50/30 shadow-lg' : 'bg-white'" @click="selectedTier = 'homestead'">
+                    <div>
+                        <span class="font-black text-[10px] text-gray-400 uppercase tracking-widest">🏡 Homestead</span>
+                        <div class="text-3xl font-black my-2" x-text="billingCycle === 'monthly' ? '$29' : '$24'"><span class="text-sm">/mo</span></div>
+                        <ul class="text-[11px] font-bold space-y-2 mb-4 text-left">
+                            <li>✔ <span class="text-emerald-farm">AI Safe-Food Bot:</span> SMS safety check.</li>
+                            <li>✔ <span class="text-emerald-farm">AI Predator ID:</span> Scan tracks & scat.</li>
+                            <li>✔ Illness Matrix + Local Zoning Scripts.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer relative" :class="selectedTier === 'smallfarm' ? 'border-bright-red bg-red-50/10 shadow-lg' : 'bg-white'" @click="selectedTier = 'smallfarm'">
+                    <span class="absolute -top-3 right-4 bg-bright-red text-white text-[9px] font-black px-2 py-0.5 rounded-full">POPULAR</span>
+                    <div>
+                        <span class="font-black text-[10px] text-bright-red uppercase tracking-widest">🚜 Small Farm</span>
+                        <div class="text-3xl font-black my-2" x-text="billingCycle === 'monthly' ? '$99' : '$79'"><span class="text-sm">/mo</span></div>
+                        <ul class="text-[11px] font-bold space-y-2 mb-4 text-left">
+                            <li>★ <span class="font-black text-coal underline">Homestead + plus:</span></li>
+                            <li>✔ <span class="text-emerald-farm">AI Zoning Scout:</span> Automated permit audit.</li>
+                            <li>✔ <span class="text-emerald-farm">AI Feed Arbitrage:</span> mill price scans.</li>
+                            <li>✔ Medical Bible + Climate Alarms.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer" :class="selectedTier === 'largefarm' ? 'border-coal bg-gray-50 shadow-lg' : 'bg-white'" @click="selectedTier = 'largefarm'">
+                    <div>
+                        <span class="font-black text-[10px] text-coal uppercase tracking-widest">🏭 Large Farm</span>
+                        <div class="text-3xl font-black my-2" x-text="billingCycle === 'monthly' ? '$199' : '$159'"><span class="text-sm">/mo</span></div>
+                        <ul class="text-[11px] font-bold space-y-2 mb-4 text-left">
+                            <li>★ <span class="font-black text-coal underline">Small Farm + plus:</span></li>
+                            <li>✔ <span class="text-emerald-farm">AI Law Scout:</span> Retail permit tracking.</li>
+                            <li>✔ <span class="text-emerald-farm">AI Outbreak Shield:</span> 100mi radius alerts.</li>
+                            <li>✔ AI Bookkeeping + Enterprise Alarms.</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                
-                <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all"
-                     :class="selectedTier === 'homestead' ? 'border-barn-red bg-amber-50/30' : 'border-gray-200 bg-white hover:border-gray-300'"
-                     @click="selectedTier = 'homestead'">
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-black text-[10px] uppercase text-gray-500 tracking-wider">🏡 HOMESTEAD</span>
-                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-barn-red" :class="selectedTier === 'homestead' ? 'bg-barn-red' : ''"></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$29' : '$24'"></span>
-                            <span class="text-[10px] text-gray-500 font-bold">/ mo</span>
-                        </div>
-                        <div class="text-[9px] font-bold text-emerald-farm mb-3 uppercase tracking-wide min-h-[14px]">
-                            <span x-show="billingCycle === 'yearly'">Billed $288 upfront</span>
-                        </div>
-                        <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
-                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Basic Illness Matrix:</strong> Symptom logs for top 5 conditions + Vet call criteria.</span></li>
-                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Core Planning:</strong> Static regional feeding guides and lighting matrices.</span></li>
-                            <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1">Standard search scripts to locate your town's zoning codes manually.</span></li>
-                        </ul>
-                    </div>
-                    <p class="text-[9px] text-gray-400 font-black uppercase tracking-widest text-center mt-2">Hobbyist Core</p>
+            <form @submit.prevent="submitForm()" class="bg-gray-50 p-6 rounded-xl border max-w-2xl mx-auto">
+                <p class="text-center font-black text-xs mb-4 uppercase tracking-widest">Confirming: <span class="text-bright-red" x-text="selectedTierLabel"></span></p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <input type="text" x-model="firstName" class="p-3 border rounded text-xs font-bold" placeholder="First Name" required>
+                    <input type="email" x-model="emailAddress" class="p-3 border rounded text-xs font-bold" placeholder="Email" required>
+                    <input type="text" x-model="zipCode" maxlength="5" class="p-3 border rounded text-xs font-bold" placeholder="Zip" required>
                 </div>
-
-                <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all relative"
-                     :class="selectedTier === 'smallfarm' ? 'border-bright-red bg-red-50/10' : 'border-gray-200 bg-white hover:border-gray-300'"
-                     @click="selectedTier = 'smallfarm'">
-                    <span class="absolute -top-2.5 right-2 bg-bright-red text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full skew-x-[-10deg]">POPULAR</span>
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-black text-[10px] uppercase text-bright-red tracking-wider">🚜 SMALL FARM</span>
-                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-bright-red" :class="selectedTier === 'smallfarm' ? 'bg-bright-red' : ''"></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$49' : '$39'"></span>
-                            <span class="text-[10px] text-gray-500 font-bold">/ mo</span>
-                        </div>
-                        <div class="text-[9px] font-bold text-emerald-farm mb-3 uppercase tracking-wide min-h-[14px]">
-                            <span x-show="billingCycle === 'yearly'">Billed $468 upfront</span>
-                        </div>
-                        <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
-                            <li class="flex items-start gap-1 text-bright-red">★ <span class="flex-1 font-extrabold text-coal">Includes Homestead plus:</span></li>
-                            <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1 font-bold">🤖 AI Agent Zoning Audit:</span> Automated scanning for local coop sizes, setbacks, & limits.</li>
-                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Full Medical Bible:</strong> Comprehensive diagnosis checklists & treatments.</span></li>
-                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Smart Alarms:</strong> Automated SMS alerts for frost windows & feed shifts.</span></li>
-                        </ul>
-                    </div>
-                    <p class="text-[9px] text-bright-red font-black uppercase tracking-widest text-center mt-2">Markets & Sales</p>
-                </div>
-
-                <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all"
-                     :class="selectedTier === 'largefarm' ? 'border-coal bg-gray-50' : 'border-gray-200 bg-white hover:border-gray-300'"
-                     @click="selectedTier = 'largefarm'">
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="font-black text-[10px] uppercase text-coal tracking-wider">🏭 LARGE FARM</span>
-                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-coal" :class="selectedTier === 'largefarm' ? 'bg-coal' : ''"></span>
-                        </div>
-                        <div class="mb-1">
-                            <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$99' : '$79'"></span>
-                            <span class="text-[10px] text-gray-500 font-bold">/ mo</span>
-                        </div>
-                        <div class="text-[9px] font-bold text-emerald-farm mb-3 uppercase tracking-wide min-h-[14px]">
-                            <span x-show="billingCycle === 'yearly'">Billed $948 upfront</span>
-                        </div>
-                        <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
-                            <li class="flex items-start gap-1 text-coal">★ <span class="flex-1 font-extrabold text-coal">Includes Small Farm plus:</span></li>
-                            <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1 font-bold">🤖 Commercial Law Scout:</span> Multi-location tracking for retail egg permits.</li>
-                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Industrial Bio-Security:</strong> Outbreak prevention blueprints & quarantine steps.</span></li>
-                            <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Enterprise Alarms:</strong> Multi-coop tasking schedules & staff tracking.</span></li>
-                        </ul>
-                    </div>
-                    <p class="text-[9px] text-gray-700 font-black uppercase tracking-widest text-center mt-2">Full Commercial</p>
-                </div>
-
-            </div>
-
-            <form @submit.prevent="submitForm()" class="space-y-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                
-                <div class="bg-white border p-3 rounded-lg flex justify-between items-center text-xs font-black shadow-sm">
-                    <span class="text-gray-500 uppercase tracking-wider">Calculated Flock Cost Per Egg:</span>
-                    <span class="text-barn-red text-sm" x-text="`$${costPerEgg.toFixed(2)} / egg`"></span>
-                </div>
-
-                <p class="text-center font-black text-[10px] uppercase text-gray-500 tracking-wider">
-                    Secure checkout for the <span class="text-bright-red" x-text="selectedTierLabel"></span>
-                </p>
-                
-                <div class="grid grid-cols-3 gap-2">
-                    <div>
-                        <label class="font-black text-[9px] uppercase text-gray-500 block mb-1">First Name</label>
-                        <input type="text" x-model="firstName" class="w-full p-2 border border-gray-300 rounded font-bold text-xs" placeholder="First Name" required>
-                    </div>
-                    <div>
-                        <label class="font-black text-[9px] uppercase text-gray-500 block mb-1">Email Address</label>
-                        <input type="email" x-model="emailAddress" class="w-full p-2 border border-gray-300 rounded font-bold text-xs" placeholder="your@email.com" required>
-                    </div>
-                    <div>
-                        <label class="font-black text-[9px] uppercase text-gray-500 block mb-1">Zip Code</label>
-                        <input type="text" x-model="zipCode" maxlength="5" pattern="[0-9]{5}" class="w-full p-2 border border-gray-300 rounded font-bold text-xs" placeholder="00000" required>
-                    </div>
-                </div>
-                <button type="submit" class="w-full btn-black text-white font-black uppercase text-xs py-3 rounded shadow-xl border-b-4 border-bright-red hover:scale-[1.01] transition-all">
-                    Initialize Secure Membership & Access Guides
-                </button>
+                <button type="submit" class="w-full btn-black text-white font-black uppercase text-sm py-4 rounded shadow-xl border-b-4 border-bright-red">Initialize AI Farm Intel Access</button>
             </form>
         </div>
-
     </div>
-
 </body>
 </html>
