@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -58,7 +58,7 @@
         eggsPerWeek: 20,
         pricePerDozen: 5.00,
         billingCycle: 'monthly', 
-        selectedTier: 'personal', 
+        selectedTier: 'homestead', 
         firstName: '',
         emailAddress: '',
         zipCode: '', 
@@ -134,13 +134,13 @@
             return this.monthlyProfit >= 0;
         },
         get selectedTierLabel() {
-            if (this.selectedTier === 'personal') {
-                return this.billingCycle === 'monthly' ? 'Personal Tier ($29/mo)' : 'Personal Tier ($24/mo Billed Annually)';
+            if (this.selectedTier === 'homestead') {
+                return this.billingCycle === 'monthly' ? 'Homestead Tier ($29/mo)' : 'Homestead Tier ($24/mo Billed Annually)';
             }
-            if (this.selectedTier === 'business') {
-                return this.billingCycle === 'monthly' ? 'Business Tier ($49/mo)' : 'Business Tier ($39/mo Billed Annually)';
+            if (this.selectedTier === 'smallfarm') {
+                return this.billingCycle === 'monthly' ? 'Small Farm Tier ($49/mo)' : 'Small Farm Tier ($39/mo Billed Annually)';
             }
-            return this.billingCycle === 'monthly' ? 'Complete Industrial Tier ($99/mo)' : 'Complete Industrial Tier ($79/mo Billed Annually)';
+            return this.billingCycle === 'monthly' ? 'Large Farm Tier ($99/mo)' : 'Large Farm Tier ($79/mo Billed Annually)';
         },
         submitForm() {
             console.log('Sending to n8n webhook:', {
@@ -396,12 +396,12 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 
                 <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all"
-                     :class="selectedTier === 'personal' ? 'border-barn-red bg-amber-50/30' : 'border-gray-200 bg-white hover:border-gray-300'"
-                     @click="selectedTier = 'personal'">
+                     :class="selectedTier === 'homestead' ? 'border-barn-red bg-amber-50/30' : 'border-gray-200 bg-white hover:border-gray-300'"
+                     @click="selectedTier = 'homestead'">
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <span class="font-black text-[10px] uppercase text-gray-500 tracking-wider">🏡 PERSONAL</span>
-                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-barn-red" :class="selectedTier === 'personal' ? 'bg-barn-red' : ''"></span>
+                            <span class="font-black text-[10px] uppercase text-gray-500 tracking-wider">🏡 HOMESTEAD</span>
+                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-barn-red" :class="selectedTier === 'homestead' ? 'bg-barn-red' : ''"></span>
                         </div>
                         <div class="mb-1">
                             <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$29' : '$24'"></span>
@@ -420,13 +420,13 @@
                 </div>
 
                 <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all relative"
-                     :class="selectedTier === 'business' ? 'border-bright-red bg-red-50/10' : 'border-gray-200 bg-white hover:border-gray-300'"
-                     @click="selectedTier = 'business'">
+                     :class="selectedTier === 'smallfarm' ? 'border-bright-red bg-red-50/10' : 'border-gray-200 bg-white hover:border-gray-300'"
+                     @click="selectedTier = 'smallfarm'">
                     <span class="absolute -top-2.5 right-2 bg-bright-red text-white text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full skew-x-[-10deg]">POPULAR</span>
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <span class="font-black text-[10px] uppercase text-bright-red tracking-wider">🚜 BUSINESS PRO</span>
-                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-bright-red" :class="selectedTier === 'business' ? 'bg-bright-red' : ''"></span>
+                            <span class="font-black text-[10px] uppercase text-bright-red tracking-wider">🚜 SMALL FARM</span>
+                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-bright-red" :class="selectedTier === 'smallfarm' ? 'bg-bright-red' : ''"></span>
                         </div>
                         <div class="mb-1">
                             <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$49' : '$39'"></span>
@@ -436,7 +436,7 @@
                             <span x-show="billingCycle === 'yearly'">Billed $468 upfront</span>
                         </div>
                         <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
-                            <li class="flex items-start gap-1 text-bright-red">★ <span class="flex-1 font-extrabold text-coal">Includes Personal plus:</span></li>
+                            <li class="flex items-start gap-1 text-bright-red">★ <span class="flex-1 font-extrabold text-coal">Includes Homestead plus:</span></li>
                             <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1 font-bold">🤖 AI Agent Zoning Audit:</span> Automated scanning for local coop sizes, setbacks, & limits.</li>
                             <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Full Medical Bible:</strong> Comprehensive diagnosis checklists & treatments.</span></li>
                             <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Smart Alarms:</strong> Automated SMS alerts for frost windows & feed shifts.</span></li>
@@ -446,12 +446,12 @@
                 </div>
 
                 <div class="border-2 rounded-xl p-4 flex flex-col justify-between cursor-pointer transition-all"
-                     :class="selectedTier === 'industrial' ? 'border-coal bg-gray-50' : 'border-gray-200 bg-white hover:border-gray-300'"
-                     @click="selectedTier = 'industrial'">
+                     :class="selectedTier === 'largefarm' ? 'border-coal bg-gray-50' : 'border-gray-200 bg-white hover:border-gray-300'"
+                     @click="selectedTier = 'largefarm'">
                     <div>
                         <div class="flex justify-between items-center mb-1">
-                            <span class="font-black text-[10px] uppercase text-coal tracking-wider">🏭 INDUSTRIAL</span>
-                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-coal" :class="selectedTier === 'industrial' ? 'bg-coal' : ''"></span>
+                            <span class="font-black text-[10px] uppercase text-coal tracking-wider">🏭 LARGE FARM</span>
+                            <span class="w-3 h-3 rounded-full border-2 flex items-center justify-center border-coal" :class="selectedTier === 'largefarm' ? 'bg-coal' : ''"></span>
                         </div>
                         <div class="mb-1">
                             <span class="text-2xl font-black text-coal" x-text="billingCycle === 'monthly' ? '$99' : '$79'"></span>
@@ -461,7 +461,7 @@
                             <span x-show="billingCycle === 'yearly'">Billed $948 upfront</span>
                         </div>
                         <ul class="text-[10px] font-bold text-gray-700 space-y-1.5 mb-4">
-                            <li class="flex items-start gap-1 text-coal">★ <span class="flex-1 font-extrabold text-coal">Includes Pro plus:</span></li>
+                            <li class="flex items-start gap-1 text-coal">★ <span class="flex-1 font-extrabold text-coal">Includes Small Farm plus:</span></li>
                             <li class="flex items-start gap-1 text-emerald-farm">✔ <span class="flex-1 font-bold">🤖 Commercial Law Scout:</span> Multi-location tracking for retail egg permits.</li>
                             <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Industrial Bio-Security:</strong> Outbreak prevention blueprints & quarantine steps.</span></li>
                             <li class="flex items-start gap-1">✔ <span class="flex-1"><strong>Enterprise Alarms:</strong> Multi-coop tasking schedules & staff tracking.</span></li>
@@ -507,4 +507,3 @@
 
 </body>
 </html>
-                                      
