@@ -14,17 +14,9 @@
                         'barn-red': '#A52A2A',
                         'bright-red': '#D00000',
                         'grass-green': '#2D5A27',
-                        'grass-green-light': '#F4F7F4',
                         'emerald-farm': '#388E3C',
                         'coal': '#121212',
                         'ivory-farm': '#FFFFF0'
-                    },
-                    animation: { 'vibrant-pulse': 'vibrant-pulse 1.5s infinite' },
-                    keyframes: {
-                        'vibrant-pulse': {
-                            '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(208, 0, 0, 0.4)' },
-                            '50%': { transform: 'scale(1.03)', boxShadow: '0 0 20px 10px rgba(208, 0, 0, 0)' },
-                        }
                     }
                 }
             }
@@ -32,18 +24,19 @@
     </script>
     <style>
         body {
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             background-size: cover; background-position: center; background-attachment: fixed;
         }
-        .main-card { background: linear-gradient(to bottom, #ffffff, #fcfcfc); border: 6px solid #A52A2A; }
+        .main-card { background: linear-gradient(to bottom, #FFFFF0, #F5F5F5); border: 6px solid #A52A2A; }
         .btn-red { background: linear-gradient(135deg, #A52A2A, #D00000); }
         .btn-green { background: linear-gradient(135deg, #2D5A27, #388E3C); }
         .btn-black { background: linear-gradient(135deg, #1A1A1A, #333333); }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="text-coal font-sans antialiased">
 
-    <div x-data="{
+    <div x-cloak x-data="{
         currentPage: 'calculator',
         state: 'Select State',
         birds: 5, feedCost: 20, eggsPerWeek: 20, pricePerDozen: 5.00,
@@ -94,22 +87,22 @@
             };
             return `${names[this.selectedTier]} Tier (${prices[this.billingCycle][this.selectedTier]}/mo)`;
         },
-        submitForm() { alert('Connecting to your n8n AI workflow...'); }
+        submitForm() { alert('Initializing your AI-Powered Farm Intel profile...'); }
     }" class="container mx-auto p-4 md:p-12 min-h-screen flex flex-col items-center">
 
         <div class="text-center mb-8 cursor-pointer" @click="currentPage = 'calculator'">
-            <h1 class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_8px_8px_rgba(0,0,0,0.9)] uppercase italic tracking-tighter">
+            <h1 class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_8px_8px_rgba(0,0,0,0.9)] uppercase italic tracking-tighter text-center">
                 CHICKEN <span class="text-bright-red">COST</span>
             </h1>
             <p class="bg-bright-red text-white inline-block px-4 py-1 font-black uppercase text-sm mt-2 skew-x-[-10deg]">
-                AI-Powered Profitability & Growth
+                AI-Powered Profitability & Nutrition
             </p>
         </div>
 
         <div x-show="currentPage === 'calculator'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full">
-            <div class="mb-4">
-                <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest text-center">Select Your Location</label>
-                <select x-model="state" @change="updateStateDefaults()" class="w-full p-3 border-2 border-barn-red rounded font-bold text-center bg-white shadow-sm appearance-none cursor-pointer">
+            <div class="mb-4 text-center">
+                <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest">Select Your Location</label>
+                <select x-model="state" @change="updateStateDefaults()" class="w-full p-3 border-2 border-barn-red rounded font-bold text-center bg-ivory-farm shadow-sm appearance-none cursor-pointer">
                     <option>Select State</option>
                     <template x-for="s in Object.keys(stateData)" :key="s">
                         <option x-text="s"></option>
@@ -117,32 +110,32 @@
                 </select>
             </div>
 
-            <div class="grid grid-cols-2 gap-4 mb-8">
-                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+            <div class="grid grid-cols-2 gap-4 mb-8 text-center">
+                <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Flock Size</label>
-                    <input type="number" x-model="birds" class="text-2xl font-black bg-transparent w-full focus:outline-none">
+                    <input type="number" x-model="birds" class="text-2xl font-black bg-transparent w-full text-center focus:outline-none">
                 </div>
-                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+                <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Feed Bill ($)</label>
-                    <input type="number" x-model="feedCost" class="text-2xl font-black bg-transparent w-full focus:outline-none">
+                    <input type="number" x-model="feedCost" class="text-2xl font-black bg-transparent w-full text-center focus:outline-none">
                 </div>
-                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+                <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Weekly Yield</label>
-                    <input type="number" x-model="eggsPerWeek" class="text-2xl font-black bg-transparent w-full focus:outline-none">
+                    <input type="number" x-model="eggsPerWeek" class="text-2xl font-black bg-transparent w-full text-center focus:outline-none">
                 </div>
-                <div class="bg-gray-100 p-3 rounded border-l-4 border-barn-red">
+                <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Price / Doz ($)</label>
-                    <input type="number" x-model="pricePerDozen" step="0.01" class="text-2xl font-black bg-transparent w-full focus:outline-none">
+                    <input type="number" x-model="pricePerDozen" step="0.01" class="text-2xl font-black bg-transparent w-full text-center focus:outline-none">
                 </div>
             </div>
 
             <div class="p-6 md:p-10 rounded-xl border-4 mb-8 flex flex-col items-center justify-center w-full min-h-[220px]"
-                 :class="breakingEven ? 'bg-green-50 border-grass-green shadow-lg' : 'bg-red-50 border-bright-red shadow-lg'">
+                 :class="breakingEven ? 'bg-emerald-farm/10 border-grass-green shadow-lg' : 'bg-bright-red/5 border-bright-red shadow-lg'">
                 <p class="font-black text-xs md:text-sm uppercase mb-2 tracking-[0.2em] text-center" :class="breakingEven ? 'text-grass-green' : 'text-bright-red'">Monthly Flock ROI</p>
                 <div class="flex items-center justify-center w-full text-center py-2 px-1">
                     <div class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-coal leading-none block break-all" x-text="`$${monthlyProfit.toFixed(2)}`"></div>
                 </div>
-                <div class="mt-4 pt-3 border-t border-dashed w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-700" :class="breakingEven ? 'border-green-300' : 'border-red-300'">
+                <div class="mt-4 pt-3 border-t border-dashed w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-600" :class="breakingEven ? 'border-green-300' : 'border-red-300'">
                     <span>Cost Per Egg:</span>
                     <span class="text-coal font-black text-base" x-text="`$${costPerEgg.toFixed(2)}`"></span>
                 </div>
@@ -153,7 +146,7 @@
                     <button @click="currentPage = 'leak-report'" class="w-full text-left animate-vibrant-pulse flex items-center justify-between btn-red text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
                         <div>
                             <p class="font-black uppercase text-lg leading-tight">🛑 STOP THE LEAK</p>
-                            <p class="text-xs font-bold opacity-90 italic">Your operation is losing money. See how to cut feed waste by 20%.</p>
+                            <p class="text-xs font-bold opacity-90 italic">Data suggests revenue waste. Access the diagnostic.</p>
                         </div>
                         <span class="text-3xl font-black">➔</span>
                     </button>
@@ -163,7 +156,7 @@
                     <button @click="currentPage = 'yield-report'" class="w-full text-left flex items-center justify-between btn-green text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all">
                         <div>
                             <p class="font-black uppercase text-lg leading-tight">🥚 BOOST YOUR YIELD</p>
-                            <p class="text-xs font-bold opacity-90 italic">Profitable foundation detected. Unlock advanced laying hacks.</p>
+                            <p class="text-xs font-bold opacity-90 italic">Profitable foundation. Access advanced production guides.</p>
                         </div>
                         <span class="text-3xl font-black">➔</span>
                     </button>
@@ -171,113 +164,115 @@
 
                 <button @click="currentPage = 'elite-club'" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
                     <div>
-                        <p class="font-black uppercase text-lg leading-tight">💎 ELITE: <span x-text="state === 'Select State' ? '' : state"></span> Club</p>
-                        <p class="text-xs font-bold opacity-90 italic underline">Unlock Local AI Law Scouts, Disease Alarms & Smart Scheduling</p>
+                        <p class="font-black uppercase text-lg leading-tight">💎 ELITE CLUB ACCESS</p>
+                        <p class="text-xs font-bold opacity-90 italic underline">AI Law Scouts, Health Bibles & Nutrition Alarms</p>
                     </div>
                     <span class="text-3xl font-black">➔</span>
                 </button>
             </div>
         </div>
 
-        <div x-show="currentPage === 'leak-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
-            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
-            <h2 class="text-3xl font-black text-barn-red uppercase italic mb-4 leading-tight">Stop the Leak: Cut Feed Costs by 20% or More</h2>
-            <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
-                <p>Feed is your largest ongoing expense. If you are leaking revenue, <strong class="text-bright-red">you are likely wasting 1/3 of your grain</strong> to billing out or pests.</p>
-                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Gravity Feed Conversion</h3>
-                <p>Chickens naturally flick feed. Switch to a closed-port gravity system to ensure they only eat what they need, keeping the rest locked away from the dirt and rodents.</p>
-                
-                <div class="my-6 bg-amber-50 border border-amber-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
-                    <div class="bg-amber-100 p-4 rounded text-3xl">🐔</div>
-                    <div class="flex-1">
-                        <h4 class="font-black uppercase text-sm">DIY Zero-Waste Feeder Ports</h4>
-                        <p class="text-[11px] text-amber-900 mt-1 italic">Eliminate waste instantly. Fits any bucket or container.</p>
-                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-barn-red text-white font-black text-[10px] uppercase px-4 py-2 rounded shadow-md">Get it on Amazon</a>
-                    </div>
-                </div>
-            </div>
-            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock AI-Scanned Regional Feed Arbitrage ➔</button>
-        </div>
-
-        <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
-            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-grass-green mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
-            <h2 class="text-3xl font-black text-grass-green uppercase italic mb-4 leading-tight">Max Yield: Advanced Laying & Winter Hacks</h2>
-            <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
-                <p>You've got a profitable foundation. Now, focus on <strong class="text-emerald-farm">maximizing frequency</strong> during seasonal light drops.</p>
-                <h3 class="text-lg font-black uppercase text-coal mt-6">1. Managed Light Cycles</h3>
-                <p>Hens require 14 hours of daily light for peak production. In winter, an automated timer light triggers the pituitary gland to maintain yield even when days are short.</p>
-
-                <div class="my-6 bg-green-50 border border-green-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
-                    <div class="bg-green-100 p-4 rounded text-3xl">💡</div>
-                    <div class="flex-1">
-                        <h4 class="font-black uppercase text-sm">Solar Smart Coop Lighting</h4>
-                        <p class="text-[11px] text-green-900 mt-1 italic">Extend winter laying without running expensive electrical lines.</p>
-                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-grass-green text-white font-black text-[10px] uppercase px-4 py-2 rounded shadow-md">Get it on Amazon</a>
-                    </div>
-                </div>
-            </div>
-            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock AI-Powered Production Analytics ➔</button>
-        </div>
-
         <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-6xl w-full" x-transition>
             <button @click="currentPage = 'calculator'" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">← Back to Calculator</button>
             <h2 class="text-3xl md:text-4xl font-black text-coal uppercase italic tracking-tight mb-2 text-center">JOIN THE <span class="text-bright-red" x-text="state === 'Select State' ? 'ELITE' : state.toUpperCase()"></span> CLUB</h2>
             
-            <div class="flex justify-center items-center gap-3 my-8 bg-gray-100 p-2 rounded-full max-w-xs mx-auto border">
-                <button type="button" @click="billingCycle = 'monthly'" :class="billingCycle === 'monthly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500'" class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1">Monthly</button>
-                <button type="button" @click="billingCycle = 'yearly'" :class="billingCycle === 'yearly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500'" class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 relative">Yearly <span class="absolute -top-3 -right-2 bg-emerald-farm text-[8px] font-black px-1.5 py-0.5 rounded-full text-white">SAVE 20%</span></button>
+            <div class="flex justify-center items-center gap-3 my-8 bg-black/5 p-2 rounded-full max-w-xs mx-auto border border-black/10 shadow-inner">
+                <button type="button" @click="billingCycle = 'monthly'" :class="billingCycle === 'monthly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500'" class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 text-center">Monthly</button>
+                <button type="button" @click="billingCycle = 'yearly'" :class="billingCycle === 'yearly' ? 'bg-barn-red text-white shadow-md' : 'text-gray-500'" class="px-4 py-2 font-black uppercase text-xs rounded-full transition-all flex-1 relative text-center">Yearly <span class="absolute -top-3 -right-2 bg-emerald-farm text-[8px] font-black px-1.5 py-0.5 rounded-full text-white shadow-sm">SAVE 20%</span></button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center">
-                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer" :class="selectedTier === 'homestead' ? 'border-barn-red bg-amber-50/30 shadow-lg' : 'bg-white'" @click="selectedTier = 'homestead'">
+                
+                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all hover:shadow-md" :class="selectedTier === 'homestead' ? 'border-barn-red bg-white shadow-lg' : 'bg-white/60'" @click="selectedTier = 'homestead'">
                     <div>
                         <span class="font-black text-[10px] text-gray-400 uppercase tracking-widest">🏡 Homestead</span>
-                        <div class="text-3xl font-black my-2" x-text="billingCycle === 'monthly' ? '$29' : '$24'"><span class="text-sm">/mo</span></div>
-                        <ul class="text-[11px] font-bold space-y-2 mb-4 text-left">
-                            <li>✔ <span class="text-emerald-farm">AI Safe-Food Bot:</span> SMS safety check.</li>
-                            <li>✔ <span class="text-emerald-farm">AI Predator ID:</span> Scan tracks & scat.</li>
-                            <li>✔ Illness Matrix + Local Zoning Scripts.</li>
+                        <div class="text-3xl font-black mt-2 mb-1" x-text="billingCycle === 'monthly' ? '$29' : '$24'"><span class="text-sm">/mo</span></div>
+                        <div class="text-[10px] font-black uppercase text-emerald-farm mb-3 h-4"><span x-show="billingCycle === 'yearly'">$288 billed annually</span></div>
+                        <ul class="text-[11px] font-bold space-y-2 text-left border-t border-black/5 pt-4">
+                            <li>✔ <span class="text-emerald-farm font-black">Regional Feeding Guides:</span> Localized nutrition.</li>
+                            <li>✔ <span class="text-emerald-farm font-black">Basic Illness Matrix:</span> Health symptom-checker.</li>
+                            <li>✔ AI Scrap-Checker & Predator ID Bots.</li>
+                            <li>✔ Diplomacy Guides & Extension Library.</li>
+                            <li>✔ Future-Proof Access to all new blueprints.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer relative" :class="selectedTier === 'smallfarm' ? 'border-bright-red bg-red-50/10 shadow-lg' : 'bg-white'" @click="selectedTier = 'smallfarm'">
-                    <span class="absolute -top-3 right-4 bg-bright-red text-white text-[9px] font-black px-2 py-0.5 rounded-full">POPULAR</span>
+                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all hover:shadow-md relative" :class="selectedTier === 'smallfarm' ? 'border-bright-red bg-white shadow-lg' : 'bg-white/60'" @click="selectedTier = 'smallfarm'">
+                    <span class="absolute -top-3 right-4 bg-bright-red text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-md">BEST VALUE</span>
                     <div>
                         <span class="font-black text-[10px] text-bright-red uppercase tracking-widest">🚜 Small Farm</span>
-                        <div class="text-3xl font-black my-2" x-text="billingCycle === 'monthly' ? '$99' : '$79'"><span class="text-sm">/mo</span></div>
-                        <ul class="text-[11px] font-bold space-y-2 mb-4 text-left">
+                        <div class="text-3xl font-black mt-2 mb-1" x-text="billingCycle === 'monthly' ? '$99' : '$79'"><span class="text-sm">/mo</span></div>
+                        <div class="text-[10px] font-black uppercase text-emerald-farm mb-3 h-4"><span x-show="billingCycle === 'yearly'">$948 billed annually</span></div>
+                        <ul class="text-[11px] font-bold space-y-2 text-left border-t border-black/5 pt-4">
                             <li>★ <span class="font-black text-coal underline">Homestead + plus:</span></li>
-                            <li>✔ <span class="text-emerald-farm">AI Zoning Scout:</span> Automated permit audit.</li>
-                            <li>✔ <span class="text-emerald-farm">AI Feed Arbitrage:</span> mill price scans.</li>
-                            <li>✔ Medical Bible + Climate Alarms.</li>
+                            <li>✔ <span class="text-emerald-farm font-black">AI Nutrition Alarms:</span> SMS feed/climate alerts.</li>
+                            <li>✔ <span class="text-emerald-farm font-black">Full Medical Bible:</span> Advanced diagnostic bible.</li>
+                            <li>✔ <span class="text-emerald-farm font-black">State Sales Guide:</span> Legal retail compliance.</li>
+                            <li>✔ AI Zoning Scout + ROI Templates.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer" :class="selectedTier === 'largefarm' ? 'border-coal bg-gray-50 shadow-lg' : 'bg-white'" @click="selectedTier = 'largefarm'">
+                <div class="border-2 rounded-xl p-5 flex flex-col justify-between cursor-pointer transition-all" :class="selectedTier === 'largefarm' ? 'border-coal bg-white shadow-lg' : 'bg-white/60'" @click="selectedTier = 'largefarm'">
                     <div>
                         <span class="font-black text-[10px] text-coal uppercase tracking-widest">🏭 Large Farm</span>
-                        <div class="text-3xl font-black my-2" x-text="billingCycle === 'monthly' ? '$199' : '$159'"><span class="text-sm">/mo</span></div>
-                        <ul class="text-[11px] font-bold space-y-2 mb-4 text-left">
+                        <div class="text-3xl font-black mt-2 mb-1" x-text="billingCycle === 'monthly' ? '$199' : '$159'"><span class="text-sm">/mo</span></div>
+                        <div class="text-[10px] font-black uppercase text-emerald-farm mb-3 h-4"><span x-show="billingCycle === 'yearly'">$1,908 billed annually</span></div>
+                        <ul class="text-[11px] font-bold space-y-2 text-left border-t border-black/5 pt-4">
                             <li>★ <span class="font-black text-coal underline">Small Farm + plus:</span></li>
-                            <li>✔ <span class="text-emerald-farm">AI Law Scout:</span> Retail permit tracking.</li>
-                            <li>✔ <span class="text-emerald-farm">AI Outbreak Shield:</span> 100mi radius alerts.</li>
-                            <li>✔ AI Bookkeeping + Enterprise Alarms.</li>
+                            <li>✔ <span class="text-emerald-farm font-black">Bio-Security Intel:</span> Industrial health shield.</li>
+                            <li>✔ <span class="text-emerald-farm font-black">H5N1 Shield:</span> 100mi radius flu alerts.</li>
+                            <li>✔ AI Expense Assistant & Multi-Flock Heatmaps.</li>
+                            <li>✔ Enterprise Task Alarms & Wholesale Scout.</li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <form @submit.prevent="submitForm()" class="bg-gray-50 p-6 rounded-xl border max-w-2xl mx-auto">
-                <p class="text-center font-black text-xs mb-4 uppercase tracking-widest">Confirming: <span class="text-bright-red" x-text="selectedTierLabel"></span></p>
+            <form @submit.prevent="submitForm()" class="bg-black/5 p-6 rounded-xl border border-black/10 max-w-2xl mx-auto shadow-inner">
+                <p class="text-center font-black text-xs mb-4 uppercase tracking-widest text-coal/70 text-center">Confirming: <span class="text-bright-red" x-text="selectedTierLabel"></span></p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <input type="text" x-model="firstName" class="p-3 border rounded text-xs font-bold" placeholder="First Name" required>
-                    <input type="email" x-model="emailAddress" class="p-3 border rounded text-xs font-bold" placeholder="Email" required>
-                    <input type="text" x-model="zipCode" maxlength="5" class="p-3 border rounded text-xs font-bold" placeholder="Zip" required>
+                    <input type="text" x-model="firstName" class="p-3 border rounded text-xs font-bold bg-white" placeholder="First Name" required>
+                    <input type="email" x-model="emailAddress" class="p-3 border rounded text-xs font-bold bg-white" placeholder="Email" required>
+                    <input type="text" x-model="zipCode" maxlength="5" class="p-3 border rounded text-xs font-bold bg-white" placeholder="Zip" required>
                 </div>
-                <button type="submit" class="w-full btn-black text-white font-black uppercase text-sm py-4 rounded shadow-xl border-b-4 border-bright-red">Initialize AI Farm Intel Access</button>
+                <button type="submit" class="w-full btn-black text-white font-black uppercase text-sm py-4 rounded shadow-xl border-b-4 border-bright-red hover:scale-[1.01] transition-all">Initialize AI Farm Intel Access</button>
             </form>
+        </div>
+
+        <div x-show="currentPage === 'leak-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
+            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <h2 class="text-3xl font-black text-barn-red uppercase italic mb-4 leading-tight text-center">Stop the Leak: Cut Feed Costs by 20%</h2>
+            <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
+                <p>Feed is your largest expense. If you're in the red, <strong class="text-bright-red">waste is usually the culprit.</strong></p>
+                <div class="my-6 bg-amber-100/50 border border-amber-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
+                    <div class="bg-amber-200 p-4 rounded text-3xl shadow-sm">🐔</div>
+                    <div class="flex-1">
+                        <h4 class="font-black uppercase text-sm">Zero-Waste Feed Solutions</h4>
+                        <p class="text-[11px] text-amber-900 mt-1 italic">Eliminate waste instantly with gravity-port feeders.</p>
+                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-barn-red text-white font-black text-[10px] uppercase px-4 py-2 rounded shadow-md text-center">Get it on Amazon</a>
+                    </div>
+                </div>
+            </div>
+            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Access Small Farm Nutrition Alarms ➔</button>
+        </div>
+
+        <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
+            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-grass-green mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <h2 class="text-3xl font-black text-grass-green uppercase italic mb-4 leading-tight text-center">Max Yield: Advanced Production Hacks</h2>
+            <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
+                <p>Profit detected. Focus on <strong class="text-emerald-farm">maximizing lay frequency</strong> through seasonal light drops.</p>
+                <div class="my-6 bg-green-100/50 border border-green-300 rounded-xl p-5 flex flex-col md:flex-row items-center gap-4">
+                    <div class="bg-green-200 p-4 rounded text-3xl shadow-sm">💡</div>
+                    <div class="flex-1">
+                        <h4 class="font-black uppercase text-sm">Smart Coop Lighting</h4>
+                        <p class="text-[11px] text-green-900 mt-1 italic">Extend winter laying without expensive high-voltage lines.</p>
+                        <a href="https://amazon.com" target="_blank" class="inline-block mt-3 bg-grass-green text-white font-black text-[10px] uppercase px-4 py-2 rounded shadow-md text-center">Get it on Amazon</a>
+                    </div>
+                </div>
+            </div>
+            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock Large Farm H5N1 Shield ➔</button>
         </div>
     </div>
 </body>
