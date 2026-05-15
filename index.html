@@ -89,7 +89,7 @@
             return `${names[this.selectedTier]} Tier (${prices[this.billingCycle][this.selectedTier]}/mo)`;
         },
         submitForm() {
-            const webhookUrl = 'http://localhost:5678/webhook-test/df8c5fb0-d7a9-4eca-9b3d-0de43145cd6f';
+            
             const payload = {
                 firstName: this.firstName,
                 email: this.emailAddress,
