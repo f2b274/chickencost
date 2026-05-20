@@ -33,14 +33,26 @@
         .btn-black { background: linear-gradient(135deg, #1A1A1A, #333333); }
         .disclaimer-text { font-size: 9px; line-height: 1.3; color: #333; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em; }
         [x-cloak] { display: none !important; }
+        
+        /* Custom toggle switch styling */
+        .toggle-checkbox:checked { right: 0; border-color: #2D5A27; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #2D5A27; }
+        .toggle-checkbox { right: 0; z-index: 1; border-color: #e2e8f0; transition: all 0.3s; }
+        .toggle-label { background-color: #e2e8f0; transition: all 0.3s; }
     </style>
 </head>
-<body class="text-coal font-sans antialiased">
+<body class="text-coal font-sans antialiased flex flex-col min-h-screen">
+
+    <div class="bg-coal text-white/70 text-[9px] font-bold uppercase tracking-widest text-center py-2 px-4 w-full z-50 order-last mt-auto">
+        <strong>Affiliate Disclosure:</strong> Chicken Cost is a participant in various affiliate advertising programs. When you click on links to various products and make a purchase, this can result in a commission credited to this site at no extra cost to you. We only recommend products we believe provide genuine value to your flock management.
+    </div>
 
     <div x-cloak x-data="{
         currentPage: 'calculator',
         state: 'Select State',
         birds: 5, feedCost: 20, eggsPerWeek: 20, pricePerDozen: 5.00,
+        showStartup: true, 
+        startupCosts: { coop: 0, fencing: 0, gear: 0, other: 0 },
         billingCycle: 'monthly', selectedTier: 'homestead', 
         firstName: '', emailAddress: '', zipCode: '', 
         stateData: {
@@ -78,6 +90,15 @@
         },
         get monthlyIncome() { return ((this.eggsPerWeek * 4) / 12 * this.pricePerDozen); },
         get monthlyProfit() { return (this.monthlyIncome - this.feedCost); },
+        get totalCapitalRequired() { 
+            if(!this.showStartup) return 0;
+            return Number(this.startupCosts.coop || 0) + Number(this.startupCosts.fencing || 0) + Number(this.startupCosts.gear || 0) + Number(this.startupCosts.other || 0);
+        },
+        get monthsToBreakeven() {
+            if(!this.showStartup || this.totalCapitalRequired === 0) return 0;
+            if(this.monthlyProfit <= 0) return -1; // Never breaks even
+            return Math.ceil(this.totalCapitalRequired / this.monthlyProfit);
+        },
         get costPerEgg() { let total = this.eggsPerWeek * 4; return total > 0 ? (this.feedCost / total) : 0; },
         get breakingEven() { return this.monthlyProfit >= 0; },
         get selectedTierLabel() {
@@ -97,7 +118,10 @@
                 tier: this.selectedTier,
                 billing: this.billingCycle,
                 state: this.state,
-                costPerEgg: this.costPerEgg.toFixed(2)
+                costPerEgg: this.costPerEgg.toFixed(2),
+                showStartup: this.showStartup,
+                startupCosts: this.startupCosts,
+                capitalRequired: this.totalCapitalRequired
             };
         const webhookUrl = 'https://n8n.chickencost.com/webhook/b439bcb2-4374-4abb-963b-137557538f83'
             fetch(webhookUrl, {
@@ -113,7 +137,7 @@
             })
             .catch(error => console.error('Error:', error));
         }
-    }" class="container mx-auto p-4 md:p-12 min-h-screen flex flex-col items-center">
+    }" class="container mx-auto p-4 md:p-12 flex-1 flex flex-col items-center">
 
         <div class="text-center mb-8 cursor-pointer" @click="currentPage = 'calculator'">
             <h1 class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_8px_8px_rgba(0,0,0,0.9)] uppercase italic tracking-tighter text-center">
@@ -124,10 +148,11 @@
             </p>
         </div>
 
-        <div x-show="currentPage === 'calculator'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full">
-            <div class="mb-4 text-center">
-                <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest">Select Your Location</label>
-                <select x-model="state" @change="updateStateDefaults()" class="w-full p-3 border-2 border-barn-red rounded font-bold text-center bg-ivory-farm shadow-sm appearance-none cursor-pointer">
+        <div x-show="currentPage === 'calculator'" class="main-card p-6 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full">
+            
+            <div class="mb-6 text-center pb-6 border-b border-black/10">
+                <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest">Select Your Location (For Local Averages)</label>
+                <select x-model="state" @change="updateStateDefaults()" class="w-full max-w-sm mx-auto p-3 border-2 border-barn-red rounded font-bold text-center bg-ivory-farm shadow-sm appearance-none cursor-pointer">
                     <option>Select State</option>
                     <template x-for="s in Object.keys(stateData)" :key="s">
                         <option x-text="s"></option>
@@ -135,14 +160,73 @@
                 </select>
             </div>
 
+            <div class="mb-6 flex flex-col items-center justify-center text-center">
+                <label class="font-black text-sm uppercase text-coal block mb-2">Are you starting a new flock?</label>
+                <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="toggle" id="toggle" x-model="showStartup" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                    <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                </div>
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-2" x-text="showStartup ? 'Calculating Initial Capital & Breakeven' : 'Calculating Monthly Operations Only'"></span>
+            </div>
+
+            <div x-show="showStartup" x-transition.duration.300ms class="mb-8 p-5 bg-white/70 border-2 border-black/10 rounded-xl shadow-inner">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-black text-xs uppercase tracking-widest text-barn-red">Initial Capital Expenses</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm relative">
+                        <label class="font-black text-[10px] uppercase text-gray-600 block mb-1">Coop & Run</label>
+                        <div class="flex items-center">
+                            <span class="text-gray-400 font-bold mr-1">$</span>
+                            <input type="number" x-model.number="startupCosts.coop" class="w-full font-black text-xl bg-transparent focus:outline-none" placeholder="0">
+                        </div>
+                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200" title="Check Market Price">[Price Ref]</a>
+                    </div>
+                    
+                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm relative">
+                        <label class="font-black text-[10px] uppercase text-gray-600 block mb-1">Hardware Cloth/Fence</label>
+                        <div class="flex items-center">
+                            <span class="text-gray-400 font-bold mr-1">$</span>
+                            <input type="number" x-model.number="startupCosts.fencing" class="w-full font-black text-xl bg-transparent focus:outline-none" placeholder="0">
+                        </div>
+                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200" title="Check Market Price">[Price Ref]</a>
+                    </div>
+
+                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm relative">
+                        <label class="font-black text-[10px] uppercase text-gray-600 block mb-1">Essential Gear</label>
+                        <div class="flex items-center">
+                            <span class="text-gray-400 font-bold mr-1">$</span>
+                            <input type="number" x-model.number="startupCosts.gear" class="w-full font-black text-xl bg-transparent focus:outline-none" placeholder="0">
+                        </div>
+                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200" title="Check Market Price">[Price Ref]</a>
+                    </div>
+
+                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm">
+                        <label class="font-black text-[10px] uppercase text-gray-600 block mb-1">Permits / Other</label>
+                        <div class="flex items-center">
+                            <span class="text-gray-400 font-bold mr-1">$</span>
+                            <input type="number" x-model.number="startupCosts.other" class="w-full font-black text-xl bg-transparent focus:outline-none" placeholder="0">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-dashed border-gray-300 text-center flex flex-col justify-center items-center">
+                    <p class="font-black text-[10px] uppercase tracking-widest text-gray-500 mb-1">Total Capital Required</p>
+                    <p class="text-3xl font-black text-coal leading-none" x-text="`$${totalCapitalRequired.toFixed(2)}`"></p>
+                </div>
+            </div>
+
+            <h3 class="font-black text-xs uppercase tracking-widest text-coal mb-4 text-center">Monthly Operating Metrics</h3>
             <div class="grid grid-cols-2 gap-4 mb-8 text-center">
                 <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Flock Size</label>
                     <input type="number" x-model="birds" class="text-2xl font-black bg-transparent w-full text-center focus:outline-none">
                 </div>
-                <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner">
+                <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner relative">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Feed Bill ($)</label>
                     <input type="number" x-model="feedCost" class="text-2xl font-black bg-transparent w-full text-center focus:outline-none">
+                    <a href="#" target="_blank" class="absolute bottom-1 right-1 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1 py-0.5 rounded border border-blue-200" title="Check Market Price">[Ref]</a>
                 </div>
                 <div class="bg-white/50 p-3 rounded border-l-4 border-barn-red shadow-inner">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Weekly Yield</label>
@@ -154,13 +238,25 @@
                 </div>
             </div>
 
-            <div class="p-6 md:p-10 rounded-xl border-4 mb-8 flex flex-col items-center justify-center w-full min-h-[220px]"
+            <div class="p-6 md:p-10 rounded-xl border-4 mb-8 flex flex-col items-center justify-center w-full relative"
                  :class="breakingEven ? 'bg-emerald-farm/10 border-grass-green shadow-lg' : 'bg-bright-red/5 border-bright-red shadow-lg'">
+                
                 <p class="font-black text-xs md:text-sm uppercase mb-2 tracking-[0.2em] text-center" :class="breakingEven ? 'text-grass-green' : 'text-bright-red'">Monthly Flock ROI</p>
-                <div class="flex items-center justify-center w-full text-center py-2 px-1">
+                <div class="flex items-center justify-center w-full text-center py-2 px-1 mb-2">
                     <div class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-coal leading-none block break-all" x-text="`$${monthlyProfit.toFixed(2)}`"></div>
                 </div>
-                <div class="mt-4 pt-3 border-t border-dashed w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-600" :class="breakingEven ? 'border-green-300' : 'border-red-300'">
+
+                <div x-show="showStartup" class="w-full mb-4 pt-3 border-t border-black/10 flex justify-center items-center flex-col">
+                    <p class="font-black text-[9px] uppercase tracking-widest text-gray-500 mb-1">Est. Capital Breakeven</p>
+                    <template x-if="monthsToBreakeven > 0">
+                        <span class="text-sm font-black bg-white px-3 py-1 rounded-full border shadow-sm text-coal"><span x-text="monthsToBreakeven"></span> Months</span>
+                    </template>
+                    <template x-if="monthsToBreakeven <= 0">
+                        <span class="text-sm font-black bg-bright-red/10 px-3 py-1 rounded-full border border-bright-red text-bright-red">Operating at a Loss</span>
+                    </template>
+                </div>
+
+                <div class="w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-600 border-t border-dashed pt-3" :class="breakingEven ? 'border-green-300' : 'border-red-300'">
                     <span>Cost Per Egg:</span>
                     <span class="text-coal font-black text-base" x-text="`$${costPerEgg.toFixed(2)}`"></span>
                 </div>
@@ -196,7 +292,13 @@
                 </button>
             </div>
             
-            <p class="disclaimer-text text-center mt-8 px-4">
+            <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 text-center mb-6">
+                <p class="text-[10px] text-blue-900 font-bold leading-relaxed">
+                    <strong>EXPERT TIP:</strong> Unsure of a cost? Click the <span class="bg-blue-100 text-blue-700 px-1 rounded uppercase text-[8px] border border-blue-200">[Price Ref]</span> links next to inputs to view current market rates for high-quality supplies. These are calibrated to ensure your financial forecast is as realistic as possible.
+                </p>
+            </div>
+
+            <p class="disclaimer-text text-center px-4">
                 <strong>LIABILITY DISCLAIMER:</strong> Calculations are estimates based on average data and user input. "Chicken Cost" and its parent LLC assume no liability for agricultural losses, legal disputes, or financial outcomes. All diagnostic data is for educational purposes only. Consult with veterinarians, town clerks, and financial professionals before making operational decisions.
             </p>
         </div>
@@ -275,7 +377,7 @@
                 <button type="submit" class="w-full btn-black text-white font-black uppercase text-sm py-4 rounded shadow-xl border-b-4 border-bright-red hover:scale-[1.01] transition-all">Start My Membership</button>
             </form>
 
-            <div class="mt-12 pt-8 border-t border-black/10 text-center">
+            <div class="mt-12 pt-8 border-t border-black/10 text-center mb-8">
                 <p class="font-black text-[10px] uppercase tracking-widest text-gray-600 mb-2">Platform Integrity Commitment</p>
                 <p class="text-[10px] font-black uppercase text-gray-800 px-4 max-w-4xl mx-auto leading-relaxed">
                     <strong>CHICKEN COST AND ITS AI COMPONENTS DO EVERYTHING POSSIBLE TO MAKE SURE THAT YOU HAVE ALL THE INFORMATION YOU NEED TO BE SUCCESSFUL. HOWEVER, BECAUSE LAWS, MEDICAL STANDARDS, AND MARKET PRICES ARE DYNAMIC, IT IS CRITICAL TO DOUBLE-CHECK ALL FINDINGS. WE WILL INCLUDE LINKS TO ALL CITED INFORMATION WHENEVER POSSIBLE TO ENSURE TOTAL TRANSPARENCY.</strong>
