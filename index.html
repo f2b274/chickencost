@@ -92,11 +92,11 @@
             // Check if state is selected before leaving calculator
             if (page !== 'calculator' && (!this.state || this.state === 'Select State')) {
                 alert('Please select your Location (State) to continue.');
-                window.scrollTo(0, 0); // Instant snap to top
+                window.scrollTo(0, 0); 
                 return;
             }
             this.currentPage = page;
-            window.scrollTo(0, 0); // Instant snap to top, no smooth scrolling
+            window.scrollTo(0, 0); 
         },
         get monthlyIncome() { return ((this.eggsPerWeek * 4) / 12 * this.pricePerDozen); },
         get monthlyProfit() { return (this.monthlyIncome - this.feedCost); },
@@ -143,9 +143,9 @@
         }
     }" class="container mx-auto p-4 md:p-12 flex-1 flex flex-col items-center">
 
-        <div class="text-center mb-8 cursor-pointer" @click="goToPage('calculator')">
-            <h1 class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] uppercase italic tracking-tighter text-center">
-                CHICKEN <span class="text-bright-red">COST</span>
+        <div class="text-center mb-8 cursor-pointer flex flex-col items-center w-full" @click="goToPage('calculator')">
+            <h1 class="text-4xl sm:text-6xl md:text-8xl font-black text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] uppercase italic tracking-tighter text-center flex flex-row items-center justify-center whitespace-nowrap gap-2 md:gap-4 w-full">
+                <span>CHICKEN</span> <span class="text-bright-red">COST</span>
             </h1>
             <p class="bg-bright-red text-white inline-block px-4 py-1 font-black uppercase text-sm mt-2 skew-x-[-10deg] shadow-md">
                 AI-Powered Precision Agriculture
@@ -303,14 +303,16 @@
         <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-6xl w-full" x-transition>
             <button @click="goToPage('calculator')" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">← Back to Calculator</button>
             
-            <h2 class="text-2xl md:text-3xl font-black text-gray-500 uppercase italic tracking-tight text-center">
-                Join the <span class="text-bright-red" x-text="state === 'Select State' ? 'Flock' : state.toUpperCase()"></span>
-            </h2>
-            <div class="text-center mb-8 pb-6 border-b border-black/10">
-                <h3 class="text-5xl md:text-7xl font-black text-coal drop-shadow-[0_4px_6px_rgba(0,0,0,0.4)] uppercase italic tracking-tighter">
-                    CHICKEN <span class="text-bright-red">COST</span>
+            <div class="text-center mb-8 pb-6 border-b border-black/10 flex flex-col items-center justify-center w-full">
+                <h2 class="text-2xl md:text-4xl font-black text-coal uppercase italic tracking-tight text-center mb-1" x-text="state === 'Select State' ? 'JOIN THE' : 'JOIN THE ' + state.toUpperCase()"></h2>
+                
+                <h3 class="text-4xl sm:text-5xl md:text-7xl font-black text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] uppercase italic tracking-tighter leading-none my-2 flex flex-row items-center justify-center whitespace-nowrap gap-2 md:gap-4 w-full">
+                    <span>CHICKEN</span> <span class="text-bright-red">COST</span>
                 </h3>
-                <p class="text-sm font-black uppercase text-gray-500 tracking-widest mt-2 bg-black/5 inline-block px-6 py-1 rounded-full shadow-inner">Family</p>
+                
+                <h2 class="text-3xl md:text-5xl font-black text-coal uppercase italic tracking-tight text-center mt-1">
+                    FAMILY
+                </h2>
             </div>
             
             <div class="flex justify-center items-center gap-3 my-8 bg-black/5 p-2 rounded-full max-w-xs mx-auto border border-black/10 shadow-inner">
