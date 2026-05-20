@@ -24,11 +24,9 @@
     </script>
     <style>
         body {
-            /* Removed the dark filter to bring back the bright blue sky */
             background-image: url('https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             background-size: cover; background-position: center; background-attachment: fixed;
         }
-        /* Slightly dimmed ivory gradient to keep it easy on the eyes against the bright background */
         .main-card { background: linear-gradient(to bottom, #F4F4EE, #EBEBE4); border: 6px solid #A52A2A; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); }
         .btn-red { background: linear-gradient(135deg, #A52A2A, #D00000); }
         .btn-green { background: linear-gradient(135deg, #2D5A27, #388E3C); }
@@ -90,16 +88,20 @@
                 this.feedCost = this.stateData[this.state].feedCost;
             }
         },
+        goToPage(page) {
+            if (page !== 'calculator' && this.state === 'Select State') {
+                alert('Please select your Location (State) to continue.');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            this.currentPage = page;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
         get monthlyIncome() { return ((this.eggsPerWeek * 4) / 12 * this.pricePerDozen); },
         get monthlyProfit() { return (this.monthlyIncome - this.feedCost); },
         get totalCapitalRequired() { 
             if(!this.showStartup) return 0;
             return Number(this.startupCosts.coop || 0) + Number(this.startupCosts.fencing || 0) + Number(this.startupCosts.gear || 0) + Number(this.startupCosts.other || 0);
-        },
-        get monthsToBreakeven() {
-            if(!this.showStartup || this.totalCapitalRequired === 0) return 0;
-            if(this.monthlyProfit <= 0) return -1; // Never breaks even
-            return Math.ceil(this.totalCapitalRequired / this.monthlyProfit);
         },
         get costPerEgg() { let total = this.eggsPerWeek * 4; return total > 0 ? (this.feedCost / total) : 0; },
         get breakingEven() { return this.monthlyProfit >= 0; },
@@ -112,7 +114,6 @@
             return `${names[this.selectedTier]} Tier (${prices[this.billingCycle][this.selectedTier]}/mo)`;
         },
         submitForm() {
-            
             const payload = {
                 firstName: this.firstName,
                 email: this.emailAddress,
@@ -134,14 +135,14 @@
             .then(response => {
                 if (response.ok) {
                     alert('Welcome to the Club! Your AI Intel is being generated now.');
-                    this.currentPage = 'calculator';
+                    this.goToPage('calculator');
                 }
             })
             .catch(error => console.error('Error:', error));
         }
     }" class="container mx-auto p-4 md:p-12 flex-1 flex flex-col items-center">
 
-        <div class="text-center mb-8 cursor-pointer" @click="currentPage = 'calculator'">
+        <div class="text-center mb-8 cursor-pointer" @click="goToPage('calculator')">
             <h1 class="text-6xl md:text-8xl font-black text-white drop-shadow-[0_4px_6px_rgba(0,0,0,0.8)] uppercase italic tracking-tighter text-center">
                 CHICKEN <span class="text-bright-red">COST</span>
             </h1>
@@ -159,7 +160,7 @@
             </div>
 
             <div class="mb-6 text-center pb-6 border-b border-black/10">
-                <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest">Select Your Location (For Local Averages)</label>
+                <label class="font-black text-[10px] uppercase text-barn-red block mb-2 tracking-widest">Select Your Location (Required)*</label>
                 <select x-model="state" @change="updateStateDefaults()" class="w-full max-w-sm mx-auto p-3 border-2 border-barn-red rounded font-bold text-center bg-white shadow-sm appearance-none cursor-pointer">
                     <option>Select State</option>
                     <template x-for="s in Object.keys(stateData)" :key="s">
@@ -253,35 +254,25 @@
                    :class="breakingEven ? 'text-grass-green' : 'text-bright-red'" 
                    x-text="breakingEven ? 'Profitable Setup' : 'Operating At A Loss'"></p>
                 
-                <div class="flex items-center justify-center w-full text-center py-2 px-1 mb-2">
+                <div class="flex items-center justify-center w-full text-center py-2 px-1 mb-2 border-b border-dashed pb-5" :class="breakingEven ? 'border-green-400' : 'border-red-400'">
                     <div class="text-5xl sm:text-6xl md:text-7xl font-black tracking-tighter text-coal leading-none block break-all" x-text="`$${monthlyProfit.toFixed(2)}`"></div>
                 </div>
 
-                <div x-show="showStartup" class="w-full mb-4 pt-3 border-t border-black/10 flex justify-center items-center flex-col">
-                    <p class="font-black text-[9px] uppercase tracking-widest text-gray-500 mb-1">Est. Capital Breakeven</p>
-                    <template x-if="monthsToBreakeven > 0">
-                        <span class="text-sm font-black bg-white/80 px-3 py-1 rounded-full border shadow-sm text-coal"><span x-text="monthsToBreakeven"></span> Months</span>
-                    </template>
-                    <template x-if="monthsToBreakeven <= 0">
-                        <span class="text-sm font-black bg-bright-red/10 px-3 py-1 rounded-full border border-bright-red text-bright-red">Never Breaks Even</span>
-                    </template>
-                </div>
-
-                <div class="w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-600 border-t border-dashed pt-3 pb-5" :class="breakingEven ? 'border-green-400' : 'border-red-400'">
+                <div class="w-full max-w-xs flex justify-between items-center text-xs md:text-sm font-extrabold text-gray-600 pt-3 pb-5">
                     <span>Cost Per Egg:</span>
                     <span class="text-coal font-black text-base" x-text="`$${costPerEgg.toFixed(2)}`"></span>
                 </div>
 
                 <div class="w-full mt-2">
                     <template x-if="!breakingEven">
-                        <button @click="currentPage = 'leak-report'" class="w-full animate-vibrant-pulse btn-red text-white p-3 rounded-lg shadow-md hover:scale-[1.02] transition-all flex flex-col items-center justify-center text-center">
+                        <button @click="goToPage('leak-report')" class="w-full animate-vibrant-pulse btn-red text-white p-3 rounded-lg shadow-md hover:scale-[1.02] transition-all flex flex-col items-center justify-center text-center">
                             <span class="font-black uppercase text-sm md:text-lg leading-tight tracking-widest">🛑 STOP THE LOSS</span>
                             <span class="text-[10px] md:text-xs font-bold opacity-90 italic mt-1">Click here to view ways to cut feed costs & eliminate waste.</span>
                         </button>
                     </template>
 
                     <template x-if="breakingEven">
-                        <button @click="currentPage = 'yield-report'" class="w-full btn-green text-white p-3 rounded-lg shadow-md hover:scale-[1.02] transition-all flex flex-col items-center justify-center text-center">
+                        <button @click="goToPage('yield-report')" class="w-full btn-green text-white p-3 rounded-lg shadow-md hover:scale-[1.02] transition-all flex flex-col items-center justify-center text-center">
                             <span class="font-black uppercase text-sm md:text-lg leading-tight tracking-widest">🥚 MAXIMIZE PROFIT</span>
                             <span class="text-[10px] md:text-xs font-bold opacity-90 italic mt-1">Click here for advanced production hacks to scale your yield.</span>
                         </button>
@@ -291,7 +282,7 @@
 
             <div class="space-y-2 mb-6">
                 <p class="text-center font-black uppercase text-barn-red text-xs tracking-widest">Join the Chicken Cost family</p>
-                <button @click="currentPage = 'elite-club'" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
+                <button @click="goToPage('elite-club')" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
                     <div>
                         <p class="font-black uppercase text-lg leading-tight">💎 MEMBER OPTIONS</p>
                         <p class="text-xs font-bold opacity-90 italic underline">Law Scouts, Medical Bibles & AI Intel Alarms</p>
@@ -306,7 +297,7 @@
         </div>
 
         <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-6xl w-full" x-transition>
-            <button @click="currentPage = 'calculator'" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <button @click="goToPage('calculator')" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">← Back to Calculator</button>
             <h2 class="text-3xl md:text-4xl font-black text-coal uppercase italic tracking-tight mb-2 text-center uppercase text-center">Join the <span class="text-bright-red" x-text="state === 'Select State' ? 'Family' : state.toUpperCase()"></span> Family</h2>
             
             <div class="flex justify-center items-center gap-3 my-8 bg-black/5 p-2 rounded-full max-w-xs mx-auto border border-black/10 shadow-inner">
@@ -388,7 +379,7 @@
         </div>
 
         <div x-show="currentPage === 'leak-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
-            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-barn-red mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <button @click="goToPage('calculator')" class="text-xs font-black uppercase text-barn-red mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
             <h2 class="text-3xl font-black text-barn-red uppercase italic mb-4 leading-tight text-center">Stop the Leak: Cut Feed Costs by 20%</h2>
             <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
                 <p>Feed is your largest expense. If you're in the red, <strong class="text-bright-red">waste is usually the culprit.</strong></p>
@@ -401,11 +392,11 @@
                     </div>
                 </div>
             </div>
-            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Access Pro ROI Templates & Alarms ➔</button>
+            <button @click="goToPage('elite-club')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Access Pro ROI Templates & Alarms ➔</button>
         </div>
 
         <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
-            <button @click="currentPage = 'calculator'" class="text-xs font-black uppercase text-grass-green mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
+            <button @click="goToPage('calculator')" class="text-xs font-black uppercase text-grass-green mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
             <h2 class="text-3xl font-black text-grass-green uppercase italic mb-4 leading-tight text-center">Max Yield: Advanced Production Hacks</h2>
             <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed text-center md:text-left">
                 <p>Profit detected. Focus on <strong class="text-emerald-farm">maximizing lay frequency</strong> through seasonal light drops.</p>
@@ -418,7 +409,7 @@
                     </div>
                 </div>
             </div>
-            <button @click="currentPage = 'elite-club'" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock Industrial Health Shield ➔</button>
+            <button @click="goToPage('elite-club')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock Industrial Health Shield ➔</button>
         </div>
     </div>
 </body>
