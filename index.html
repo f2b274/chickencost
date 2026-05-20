@@ -55,6 +55,7 @@
         startupCosts: { coop: 0, fencing: 0, gear: 0, other: 0 },
         billingCycle: 'monthly', selectedTier: 'homestead', 
         firstName: '', emailAddress: '', zipCode: '', 
+        newsletterName: '', newsletterEmail: '',
         stateData: {
             'Alabama': { eggPrice: 6.12, feedCost: 21 }, 'Alaska': { eggPrice: 4.61, feedCost: 26 },
             'Arizona': { eggPrice: 6.03, feedCost: 20 }, 'Arkansas': { eggPrice: 4.95, feedCost: 18 },
@@ -89,7 +90,6 @@
             }
         },
         goToPage(page) {
-            // Check if state is selected before leaving calculator
             if (page !== 'calculator' && (!this.state || this.state === 'Select State')) {
                 alert('Please select your Location (State) to continue.');
                 window.scrollTo(0, 0); 
@@ -114,6 +114,22 @@
             };
             return `${names[this.selectedTier]} Tier (${prices[this.billingCycle][this.selectedTier]}/mo)`;
         },
+        subscribeNewsletter() {
+            if(!this.newsletterName || !this.newsletterEmail) {
+                alert('Please enter both your name and email to subscribe.');
+                return;
+            }
+            const webhookUrl = 'https://n8n.chickencost.com/webhook/newsletter-signup';
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: this.newsletterName, email: this.newsletterEmail, source: 'calculator_optin' })
+            }).then(() => {
+                alert('Success! Check your email for your first edition of Farm Intel.');
+                this.newsletterName = '';
+                this.newsletterEmail = '';
+            }).catch(error => console.error('Error:', error));
+        },
         submitForm() {
             const payload = {
                 firstName: this.firstName,
@@ -135,7 +151,7 @@
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Welcome to the Club! Your AI Intel is being generated now.');
+                    alert('Welcome to the Family! Your AI Intel is being generated now.');
                     this.goToPage('calculator');
                 }
             })
@@ -194,7 +210,7 @@
                             <span class="text-gray-400 font-bold mr-1">$</span>
                             <input type="number" x-model.number="startupCosts.coop" class="w-full font-black text-xl bg-transparent focus:outline-none" placeholder="0">
                         </div>
-                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200" title="Check Market Price">[Price Ref]</a>
+                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[10px] sm:text-xs font-black uppercase text-blue-700 hover:text-white hover:bg-blue-600 bg-blue-100 px-2 py-1 rounded shadow-sm border border-blue-300 transition-colors duration-200" title="Check Market Price">[Price Ref]</a>
                     </div>
                     
                     <div class="bg-white p-3 rounded border border-gray-200 shadow-sm relative">
@@ -203,7 +219,7 @@
                             <span class="text-gray-400 font-bold mr-1">$</span>
                             <input type="number" x-model.number="startupCosts.fencing" class="w-full font-black text-xl bg-transparent focus:outline-none" placeholder="0">
                         </div>
-                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200" title="Check Market Price">[Price Ref]</a>
+                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[10px] sm:text-xs font-black uppercase text-blue-700 hover:text-white hover:bg-blue-600 bg-blue-100 px-2 py-1 rounded shadow-sm border border-blue-300 transition-colors duration-200" title="Check Market Price">[Price Ref]</a>
                     </div>
 
                     <div class="bg-white p-3 rounded border border-gray-200 shadow-sm relative">
@@ -212,7 +228,7 @@
                             <span class="text-gray-400 font-bold mr-1">$</span>
                             <input type="number" x-model.number="startupCosts.gear" class="w-full font-black text-xl bg-transparent focus:outline-none" placeholder="0">
                         </div>
-                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200" title="Check Market Price">[Price Ref]</a>
+                        <a href="#" target="_blank" class="absolute top-2 right-2 text-[10px] sm:text-xs font-black uppercase text-blue-700 hover:text-white hover:bg-blue-600 bg-blue-100 px-2 py-1 rounded shadow-sm border border-blue-300 transition-colors duration-200" title="Check Market Price">[Price Ref]</a>
                     </div>
 
                     <div class="bg-white p-3 rounded border border-gray-200 shadow-sm">
@@ -239,7 +255,7 @@
                 <div class="bg-white/60 p-3 rounded border-l-4 border-barn-red shadow-inner relative">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Feed Bill ($)</label>
                     <input type="number" x-model="feedCost" class="text-2xl font-black bg-transparent w-full text-center focus:outline-none">
-                    <a href="#" target="_blank" class="absolute bottom-1 right-1 text-[8px] font-black uppercase text-blue-600 hover:text-blue-800 bg-blue-50 px-1 py-0.5 rounded border border-blue-200" title="Check Market Price">[Ref]</a>
+                    <a href="#" target="_blank" class="absolute bottom-2 right-2 text-[10px] sm:text-xs font-black uppercase text-blue-700 hover:text-white hover:bg-blue-600 bg-blue-100 px-2 py-1 rounded shadow-sm border border-blue-300 transition-colors duration-200" title="Check Market Price">[Ref]</a>
                 </div>
                 <div class="bg-white/60 p-3 rounded border-l-4 border-barn-red shadow-inner">
                     <label class="font-black text-[10px] uppercase text-gray-500 block mb-1">Weekly Yield</label>
@@ -284,9 +300,19 @@
                 </div>
             </div>
 
+            <div class="bg-white/80 p-5 rounded-xl border border-gray-200 shadow-sm mb-6 w-full text-center">
+                <h4 class="font-black text-sm uppercase text-coal mb-2">Free Monthly Farm Intel</h4>
+                <p class="text-xs text-gray-600 mb-4 font-bold">Join 2,000+ backyard keepers getting our free monthly blog delivered straight to their inbox.</p>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <input type="text" x-model="newsletterName" placeholder="First Name" class="w-full sm:w-1/3 p-3 border rounded text-xs font-bold focus:ring-2 focus:ring-barn-red outline-none">
+                    <input type="email" x-model="newsletterEmail" placeholder="Email Address" class="w-full sm:w-1/3 p-3 border rounded text-xs font-bold focus:ring-2 focus:ring-barn-red outline-none">
+                    <button @click="subscribeNewsletter" class="w-full sm:w-1/3 btn-black text-white font-black uppercase text-xs py-3 rounded shadow hover:scale-[1.02] transition-all">Subscribe</button>
+                </div>
+            </div>
+
             <div class="space-y-2 mb-6">
                 <p class="text-center font-black uppercase text-barn-red text-xs tracking-widest">Join the Chicken Cost family</p>
-                <button @click="goToPage('elite-club')" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
+                <button @click="goToPage('membership')" class="w-full text-left flex items-center justify-between btn-black text-white p-5 rounded-lg shadow-xl hover:scale-[1.02] transition-all border-b-4 border-bright-red">
                     <div>
                         <p class="font-black uppercase text-lg leading-tight">💎 MEMBER OPTIONS</p>
                         <p class="text-xs font-bold opacity-90 italic underline">Law Scouts, Medical Bibles & AI Intel Alarms</p>
@@ -300,7 +326,7 @@
             </p>
         </div>
 
-        <div x-show="currentPage === 'elite-club'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-6xl w-full" x-transition>
+        <div x-show="currentPage === 'membership'" class="main-card p-6 md:p-8 rounded-2xl shadow-2xl max-w-6xl w-full" x-transition>
             <button @click="goToPage('calculator')" class="mb-6 text-xs font-black uppercase text-barn-red tracking-wider flex items-center gap-1 hover:underline">← Back to Calculator</button>
             
             <div class="text-center mb-8 pb-6 border-b border-black/10 flex flex-col items-center justify-center w-full">
@@ -418,7 +444,7 @@
                 </div>
             </div>
             
-            <button @click="goToPage('elite-club')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Access Pro ROI Templates & Alarms ➔</button>
+            <button @click="goToPage('membership')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">View Member Options ➔</button>
         </div>
 
         <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
@@ -446,7 +472,7 @@
                 </div>
             </div>
             
-            <button @click="goToPage('elite-club')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">Unlock Industrial Health Shield ➔</button>
+            <button @click="goToPage('membership')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">View Member Options ➔</button>
         </div>
     </div>
 </body>
