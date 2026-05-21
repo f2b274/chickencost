@@ -119,7 +119,7 @@
                 alert('Please enter both your name and email to subscribe.');
                 return;
             }
-            const webhookUrl = 'https://n8n.chickencost.com/webhook/newsletter-signup';
+            const webhookUrl = 'https://n8n.chickencost.com/webhook-test/newsletter-signup';
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
