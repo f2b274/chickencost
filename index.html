@@ -119,9 +119,7 @@
                 alert('Please enter both your name and email to subscribe.');
                 return;
             }
-            // FIXED: Points accurately to your active n8n test webhook endpoint
-           // Change this line in your code:
-const webhookUrl = 'https://n8n.chickencost.com/webhook-test/b439bcb2-4374-4abb-963b-137557538f83-newsletter';
+            const webhookUrl = 'https://n8n.chickencost.com/webhook-test/b439bcb2-4374-4abb-963b-137557538f83-newsletter';
             
             fetch(webhookUrl, {
                 method: 'POST',
@@ -154,7 +152,6 @@ const webhookUrl = 'https://n8n.chickencost.com/webhook-test/b439bcb2-4374-4abb-
                 startupCosts: this.startupCosts,
                 capitalRequired: this.totalCapitalRequired
             };
-            // FIXED: Also explicitly routes through the webhook-test pipeline
             const webhookUrl = 'https://n8n.chickencost.com/webhook-test/b439bcb2-4374-4abb-963b-137557538f83';
             
             fetch(webhookUrl, {
