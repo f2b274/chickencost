@@ -67,7 +67,7 @@
             'Iowa': { eggPrice: 4.44, feedCost: 15 }, 'Kansas': { eggPrice: 4.41, feedCost: 16 },
             'Kentucky': { eggPrice: 4.51, feedCost: 18 }, 'Louisiana': { eggPrice: 5.59, feedCost: 21 },
             'Maine': { eggPrice: 5.84, feedCost: 24 }, 'Maryland': { eggPrice: 4.78, feedCost: 22 },
-            'Massachusetts': { eggPrice: 5.04, feedCost: 24 }, 'Michigan': { eggPrice: 4.82, feedCost: 18 },
+            'Massachusetts': { eggPrice: 5.04, fontFeed: 24 }, 'Michigan': { eggPrice: 4.82, feedCost: 18 },
             'Minnesota': { eggPrice: 5.10, feedCost: 17 }, 'Mississippi': { eggPrice: 5.04, feedCost: 19 },
             'Missouri': { eggPrice: 4.24, feedCost: 16 }, 'Montana': { eggPrice: 5.46, feedCost: 21 },
             'Nebraska': { eggPrice: 4.25, feedCost: 16 }, 'Nevada': { eggPrice: 6.07, feedCost: 22 },
@@ -119,15 +119,25 @@
                 alert('Please enter both your name and email to subscribe.');
                 return;
             }
-            const webhookUrl = 'https://n8n.chickencost.com/webhook-test/newsletter-signup';
+            // FIXED: Points accurately to your active n8n test webhook endpoint
+            const webhookUrl = 'https://n8n.chickencost.com/webhook-test/b439bcb2-4374-4abb-963b-137557538f83';
+            
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: this.newsletterName, email: this.newsletterEmail, source: 'calculator_optin' })
-            }).then(() => {
-                alert('Success! Check your email for your first edition of Farm Intel.');
-                this.newsletterName = '';
-                this.newsletterEmail = '';
+                body: JSON.stringify({ 
+                    name: this.newsletterName, 
+                    email: this.newsletterEmail, 
+                    source: 'calculator_optin' 
+                })
+            }).then((response) => {
+                if (response.ok) {
+                    alert('Success! Check your email for your first edition of Farm Intel.');
+                    this.newsletterName = '';
+                    this.newsletterEmail = '';
+                } else {
+                    alert('There was an issue processing your subscription via the automation.');
+                }
             }).catch(error => console.error('Error:', error));
         },
         submitForm() {
@@ -143,7 +153,9 @@
                 startupCosts: this.startupCosts,
                 capitalRequired: this.totalCapitalRequired
             };
+            // FIXED: Also explicitly routes through the webhook-test pipeline
             const webhookUrl = 'https://n8n.chickencost.com/webhook-test/b439bcb2-4374-4abb-963b-137557538f83';
+            
             fetch(webhookUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -421,18 +433,14 @@
 
         <div x-show="currentPage === 'leak-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
             <button @click="goToPage('calculator')" class="text-xs font-black uppercase text-barn-red mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
-            
             <h2 class="text-3xl font-black text-barn-red uppercase italic mb-4 leading-tight text-center">Stop the Leak: The 20% Feed Trap</h2>
-            
             <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
                 <p>Feed is your largest ongoing expense. If your calculator is showing a loss, <strong class="text-bright-red">waste is usually the number one culprit.</strong></p>
-                
                 <p><strong>The "Scratch & Spill" Effect:</strong> Chickens have a natural instinct to scratch. When using standard open-trough feeders or pans, they "bill out" the feed, sweeping it onto the ground where it mixes with bedding and feces. Studies show that a flock can waste up to <strong>20% of their feed</strong> this way. You aren't just losing money; you're attracting rodents.</p>
                 
                 <div class="my-6 bg-amber-100/50 border border-amber-300 rounded-xl p-5">
                     <h4 class="font-black uppercase text-sm mb-2 text-amber-900">The Fix: Gravity-Port Feeders</h4>
                     <p class="text-xs mb-3 text-amber-950">By forcing the chicken to stick their head into a PVC or enclosed port, the "billing" motion is stopped completely. Any dropped feed falls back inside the container, not on the floor. This single upgrade often turns a monthly loss into a break-even instantly.</p>
-                    
                     <div class="flex items-center gap-4 border-t border-amber-200 pt-3 mt-3">
                         <div class="bg-amber-200 p-3 rounded text-2xl shadow-sm hidden sm:block">🐔</div>
                         <div class="w-full text-center sm:text-left">
@@ -443,24 +451,19 @@
                     </div>
                 </div>
             </div>
-            
             <button @click="goToPage('membership')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">View Member Options ➔</button>
         </div>
 
         <div x-show="currentPage === 'yield-report'" class="main-card p-8 md:p-10 rounded-2xl shadow-2xl max-w-2xl w-full" x-transition>
             <button @click="goToPage('calculator')" class="text-xs font-black uppercase text-grass-green mb-6 flex items-center gap-1 hover:underline">← Back to Calculator</button>
-            
             <h2 class="text-3xl font-black text-grass-green uppercase italic mb-4 leading-tight text-center">Max Yield: The Photoperiod Hack</h2>
-            
             <div class="prose text-sm text-gray-700 space-y-4 mb-8 leading-relaxed">
                 <p>Your foundation is solid. To scale your profit, we need to focus on <strong class="text-emerald-farm">maximizing lay frequency</strong> through biology, not just more feed.</p>
-                
                 <p><strong>The 14-Hour Rule:</strong> A hen's egg production is triggered by light entering her pineal gland. During the winter months, when daylight drops below 14 hours, a chicken's body naturally halts production to conserve energy. You can override this drop by providing <em>supplemental morning light</em>.</p>
                 
                 <div class="my-6 bg-green-100/50 border border-green-300 rounded-xl p-5">
                     <h4 class="font-black uppercase text-sm mb-2 text-green-900">The Fix: Automated Coop Lighting</h4>
                     <p class="text-xs mb-3 text-green-950">Never leave a light on 24/7—it stresses the birds and ruins their circadian rhythm. Instead, use a simple automated solar or battery-timed light that clicks on at 4:00 AM, giving them the 14 total hours of light they need to keep laying all winter long without running expensive high-voltage lines.</p>
-                    
                     <div class="flex items-center gap-4 border-t border-green-200 pt-3 mt-3">
                         <div class="bg-green-200 p-3 rounded text-2xl shadow-sm hidden sm:block">💡</div>
                         <div class="w-full text-center sm:text-left">
@@ -471,7 +474,6 @@
                     </div>
                 </div>
             </div>
-            
             <button @click="goToPage('membership')" class="w-full py-4 btn-black text-white font-black uppercase text-xs rounded shadow-lg">View Member Options ➔</button>
         </div>
     </div>
