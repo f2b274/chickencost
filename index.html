@@ -119,15 +119,16 @@
 
 <div class="card">
     <h3>Join the State of the Flock Newsletter</h3>
-    <form action="https://n8n.chickencost.com/webhook/chicken_membership_signup" method="POST">
+    <form id="chicken-newsletter-form">
         <div class="input-grid">
-            <div class="form-group"><label>Name:</label><input type="text" name="name" required></div>
-            <div class="form-group"><label>ZIP Code:</label><input type="text" name="zip" required></div>
+            <div class="form-group"><label>Name:</label><input type="text" id="subscriber-name" name="name" required></div>
+            <div class="form-group"><label>ZIP Code:</label><input type="text" id="subscriber-zip" name="zip" required></div>
         </div>
-        <div class="form-group"><label>Email:</label><input type="email" name="email" required></div>
-        <button class="action-btn" style="background:var(--accent-green)">Join the Chicken Cost Family</button>
+        <div class="form-group"><label>Email:</label><input type="email" id="subscriber-email" name="email" required></div>
+        <button type="submit" class="action-btn" style="background:var(--accent-green)">Join the Chicken Cost Family</button>
     </form>
-</div>
+    <div id="form-message" style="display: none; margin-top: 15px; font-weight: bold; text-align: center;"></div>
+    </div>
 
 <div class="ad-space">Sponsor Spotlight</div>
 <div class="ad-space">Google Ad Placement</div>
@@ -183,6 +184,41 @@
         
         document.getElementById('results-operating').style.display = 'block';
     }
+
+    // --- NEW WEBHOOK INTERCEPTION SCRIPT ---
+    document.getElementById('chicken-newsletter-form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Kills the default redirect
+        
+        const nameValue = document.getElementById('subscriber-name').value;
+        const zipValue = document.getElementById('subscriber-zip').value;
+        const emailValue = document.getElementById('subscriber-email').value;
+        const messageBox = document.getElementById('form-message');
+        
+        // Ships the full payload to your n8n engine invisibly
+        fetch('https://n8n.chickencost.com/webhook/chicken_membership_signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: nameValue, zip: zipValue, email: emailValue })
+        })
+        .then(response => {
+            if(response.ok) {
+                messageBox.textContent = 'Welcome to the Chicken Cost Family! Your email has been received.';
+                messageBox.style.color = 'var(--accent-green)';
+                messageBox.style.display = 'block';
+                document.getElementById('chicken-newsletter-form').reset();
+            } else {
+                messageBox.textContent = 'Server issue detected. Check your connection and try again.';
+                messageBox.style.color = 'var(--accent-red)';
+                messageBox.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Webhook Error:', error);
+            messageBox.textContent = 'Network error. Please try again.';
+            messageBox.style.color = 'var(--accent-red)';
+            messageBox.style.display = 'block';
+        });
+    });
 </script>
 </body>
 </html>
