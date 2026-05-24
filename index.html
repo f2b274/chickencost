@@ -195,7 +195,7 @@
         const messageBox = document.getElementById('form-message');
         
         // Ships the full payload to your n8n engine invisibly
-        fetch('https://n8n.chickencost.com/webhook-test/chicken_membership_signup', {
+        fetch('https://n8n.chickencost.com/webhook/chicken_membership_signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: nameValue, zip: zipValue, email: emailValue })
