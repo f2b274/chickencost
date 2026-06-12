@@ -163,7 +163,7 @@
             background: var(--panel-bg); padding: 40px; border-radius: 12px; border-top: 4px solid var(--cost-red); 
         }
         .subscription-tier h3 { font-size: 2rem; margin-bottom: 15px; }
-        .subscription-tier p { font-family: 'Inter', sans-serif; font-size: 0.95rem; margin-bottom: 30px; color: var(--text-muted); }
+        .subscription-tier p { font-family: 'Inter', sans-serif; font-size: 0.95rem; margin-bottom: 20px; color: var(--text-muted); line-height: 1.5; }
         
         .sub-btn {
             display: block; text-align: center; background: var(--chicken-white); color: #000;
@@ -246,16 +246,39 @@
             text-align:left; font-size:0.85rem; color:#ccc; line-height: 1.5;
         }
 
-        /* --- FOOTER PRO SIGNUP --- */
+        /* --- FOOTER PRO SIGNUP & LEGAL SECTION --- */
         footer {
             background: #000;
             border-top: 1px solid #222;
-            padding: 80px 20px;
+            padding: 80px 20px 40px 20px;
             text-align: center;
         }
         footer h2 { font-size: 3rem; color: var(--chicken-white); margin-bottom: 15px; }
-        footer p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px; }
+        footer p.footer-pitch { font-size: 1.1rem; color: var(--text-muted); margin: 0 auto 30px auto; max-width: 800px; line-height: 1.6; }
         footer .sub-btn { display: inline-block; padding: 16px 40px; font-size: 1.6rem; }
+        
+        .legal-footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #222;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: #555;
+        }
+        .founder-terms {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            line-height: 1.5;
+            color: #777;
+        }
+        .legal-links a {
+            color: #888;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+        .legal-links a:hover { color: var(--chicken-white); }
+        .copyright { margin-top: 20px; }
 
         /* --- DYNAMIC AFFILIATE MODAL OVERLAY --- */
         .modal-overlay {
@@ -321,11 +344,13 @@
 </head>
 <body>
 
+    <!-- UTILITY NAV (TOP) -->
     <div class="utility-nav">
         <a href="#login">Login</a>
         <a href="#pro-signup" class="btn-pro">Subscribe to Pro</a>
     </div>
 
+    <!-- HEADER -->
     <header>
         <div class="masthead-logo">
             <div class="logo-top"><span class="chicken">CHICKEN</span><span class="cost">COST</span></div>
@@ -335,6 +360,7 @@
     </header>
 
     <div class="container">
+        <!-- MAIN CONTENT -->
         <main>
             <article class="feature-story">
                 <h1>Data-Driven Flock Optimization.</h1>
@@ -380,13 +406,16 @@
             </section>
         </main>
 
+        <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="subscription-tier">
-                <h3>USDA-Level Data</h3>
-                <p>Time to go pro. From the Chicken Cost AI terminal and wholesale feed alerts to the predictive margin calculators, and advanced infrastructure schematics, we have something for everyone. Don't forget to sign up for our newsletter.</p>
+                <h3>Ready to take it to the next level?</h3>
+                <p>Upgrade to pro status to access the chicken cost AI text terminal which can answer your questions on the fly using solid, reputable data pulled from sources such as the USDA. Also included are wholesale feed alerts and predictive margin calculators. Everything you need to get started. First year founders get access to all current and future pro features for just $10 a month!</p>
+                <p class="imperative-statement">After the first year, as long as you don't cancel you're grandfathered in at that price.</p>
                 <a href="#pro-signup" class="sub-btn">Upgrade To Pro</a>
             </div>
 
+            <!-- IN-LINE TERMINAL CALCULATOR -->
             <div class="inline-calc" id="sidebarCalc">
                 <div class="calc-header">
                     <h3>Margin Terminal</h3>
@@ -398,6 +427,7 @@
                     <button class="tab-btn" onclick="switchCalcTab('current', this)">Current Flock</button>
                 </div>
 
+                <!-- TAB 1: SCRATCH (CapEx) -->
                 <div id="tab-setup" class="calc-tab-content active">
                     <div class="calc-group">
                         <div class="calc-label-wrapper">
@@ -424,6 +454,7 @@
                     <div id="setupResult" class="calc-result"></div>
                 </div>
 
+                <!-- TAB 2: CURRENT (OpEx & FCR) -->
                 <div id="tab-current" class="calc-tab-content">
                     <div class="calc-group">
                         <div class="calc-label-wrapper">
@@ -467,12 +498,25 @@
         </aside>
     </div>
 
+    <!-- FOOTER PRO SIGNUP & LEGAL SECTION -->
     <footer>
-        <h2>Secure Your Margins.</h2>
-        <p>Subscribe to Chicken Cost Pro for complete access to advanced schematics, predictive AI, and wholesale data.</p>
+        <h2>Ready to take it to the next level?</h2>
+        <p class="footer-pitch">Upgrade to pro status to access the chicken cost AI text terminal which can answer your questions on the fly using solid, reputable data pulled from sources such as the USDA. Also included are wholesale feed alerts and predictive margin calculators. Everything you need to get started. First year founders get access to all current and future pro features for just $10 a month!<br><br>
+        <span class="imperative-statement" style="font-size: 1.2rem;">After the first year, as long as you don't cancel you're grandfathered in at that price.</span></p>
         <a href="#pro-signup" class="sub-btn">Upgrade To Pro</a>
+        
+        <div class="legal-footer">
+            <p class="founder-terms">Pricing Notice: First-year founders lock in the $10/month rate for the lifetime of their active account. Subscribers joining after the founder period will be subject to the current market rate. If a founder cancels their subscription, they forfeit the grandfathered rate upon re-subscription.</p>
+            <div class="legal-links">
+                <a href="#privacy">Privacy Policy</a> | 
+                <a href="#terms">Terms of Service</a> | 
+                <a href="#disclaimer">Affiliate Disclosure</a>
+            </div>
+            <p class="copyright">© 2026 Chicken Cost. All rights reserved.</p>
+        </div>
     </footer>
 
+    <!-- DYNAMIC AFFILIATE MODAL OVERLAY -->
     <div id="affiliateModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" onclick="closeAffiliateModal()">×</span>
@@ -481,10 +525,12 @@
                 <p id="modalDesc">Select the tier that aligns with your operational budget.</p>
             </div>
             <div class="tier-grid" id="tierGrid">
-                </div>
+                <!-- Content injected dynamically via JavaScript -->
+            </div>
         </div>
     </div>
 
+    <!-- AI FAB -->
     <div class="ai-fab" onclick="toggleChat()">
         <svg viewBox="0 0 24 24">
             <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16Z"></path>
@@ -492,6 +538,7 @@
         </svg>
     </div>
 
+    <!-- AI CHAT -->
     <div class="chat-widget" id="aiChat">
         <div class="chat-header">
             <span>Chicken Cost AI</span>
