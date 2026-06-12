@@ -3,222 +3,721 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicken Cost - Know the cost. Raise 'em right.</title>
+    <title>Chicken Cost | The Authority on Poultry Margins</title>
+    <meta name="description" content="Precision agriculture, low overhead, and data-driven decisions for the modern homesteader.">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-bg: #1a1a1a; --surface: #2d2d2d; --text-main: #f5f5f5; --accent-red: #d32f2f; --accent-green: #388e3c; --accent-blue: #2196F3; --border-color: #555; }
-        body { font-family: sans-serif; background-color: var(--primary-bg); color: var(--text-main); margin: 0; padding: 15px; line-height: 1.6; }
-        
-        header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; }
-        h1 { font-size: 2.2rem; margin: 0; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: center; flex-wrap: wrap; }
-        .title-chicken { color: var(--text-main); margin-right: 8px; }
-        .title-cost { color: var(--accent-red); }
-        .tagline { font-size: 1.1rem; font-weight: bold; margin-top: 5px; white-space: nowrap; }
+        :root {
+            --bg-page: #121214; 
+            --panel-bg: #1a1a1d;
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            
+            --chicken-white: #ffffff;
+            --cost-red: #D90429; 
+            --profit-green: #22c55e;
+            
+            --border-light: rgba(255, 255, 255, 0.05);
+        }
 
-        .toggle-container { display: flex; background: #222; border-radius: 8px; padding: 4px; border: 1px solid var(--border-color); margin-bottom: 20px; }
-        .toggle-btn { flex: 1; padding: 10px; text-align: center; font-size: 0.9rem; font-weight: bold; text-transform: uppercase; cursor: pointer; color: #888; }
-        .toggle-btn.active { background: var(--accent-red); color: white; border-radius: 4px; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Lora', serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-size: 1.05rem; 
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+        }
 
-        .card { background: var(--surface); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 3px; }
-        input, select { width: 100%; padding: 10px; background: #333; border: 1px solid #555; color: white; border-radius: 4px; box-sizing: border-box; }
-        button.action-btn { background: var(--accent-red); color: white; border: none; padding: 15px; width: 100%; font-weight: bold; border-radius: 4px; text-transform: uppercase; margin-top: 10px; cursor: pointer; }
+        h1, h2, h3, h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .imperative-statement {
+            color: var(--cost-red);
+            font-weight: 600;
+        }
+
+        /* --- UTILITY NAV (TOP) --- */
+        .utility-nav {
+            display: flex;
+            justify-content: flex-end;
+            gap: 25px;
+            padding: 15px 5%;
+            background: #000;
+            border-bottom: 1px solid #222;
+        }
+        .utility-nav a {
+            color: var(--chicken-white);
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .utility-nav a:hover { color: var(--cost-red); }
+        .utility-nav .btn-pro { color: var(--cost-red); }
+
+        /* --- MASTHEAD --- */
+        header {
+            text-align: center;
+            padding: 50px 20px 40px 20px;
+            background: transparent; 
+        }
+
+        .masthead-logo {
+            display: inline-block;
+            line-height: 0.85;
+            text-align: center;
+        }
+
+        .logo-top { font-size: 5.5rem; }
+        .logo-top .chicken { color: var(--chicken-white); }
+        .logo-top .cost { color: var(--cost-red); }
+
+        .logo-bottom {
+            font-size: 1.6rem;
+            margin-top: 8px;
+            letter-spacing: 3px;
+        }
+        .logo-bottom .know { color: var(--chicken-white); }
+        .logo-bottom .raise { color: var(--cost-red); }
+
+        .date-issue {
+            font-family: 'Inter', sans-serif;
+            color: #555;
+            font-size: 0.8rem; 
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 30px;
+        }
+
+        /* --- GRID --- */
+        .container {
+            max-width: 1200px; 
+            margin: 0 auto;
+            padding: 0 5% 60px 5%; 
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 80px; 
+        }
+
+        /* --- EDITORIAL FEATURE --- */
+        .feature-story { margin-bottom: 60px; }
+        .feature-story h1 { font-size: 4rem; margin-bottom: 25px; color: var(--text-main); }
+        .feature-lead { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 50px; }
+
+        .editorial-optin {
+            background: var(--panel-bg);
+            border-radius: 12px;
+            padding: 50px; 
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .editorial-optin h3 { font-size: 2.5rem; color: var(--cost-red); margin-bottom: 10px; }
+        .editorial-optin p { font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin: 0; }
+
+        .optin-form { display: flex; gap: 15px; width: 100%; }
+        .optin-form input {
+            flex: 1; padding: 16px 20px; background: #000; border: 1px solid #333;
+            border-radius: 6px; color: white; font-family: 'Inter', sans-serif; font-size: 1rem; outline: none;
+        }
+        .optin-form input:focus { border-color: var(--cost-red); }
+        .optin-btn {
+            padding: 16px 30px; background: var(--cost-red); color: white; border: none;
+            border-radius: 6px; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; cursor: pointer; letter-spacing: 1px;
+        }
+
+        /* --- DIAGNOSTIC HELP SECTION --- */
+        .help-section { margin-bottom: 60px; }
+        .help-section h2 { font-size: 2.5rem; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .help-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .help-card {
+            background: var(--panel-bg); border-radius: 8px; padding: 30px; border-top: 3px solid #333; transition: border-color 0.3s ease;
+        }
+        .help-card:hover { border-top-color: var(--cost-red); }
+        .help-card h3 { font-size: 1.6rem; margin-bottom: 15px; color: var(--chicken-white); }
+        .help-card p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+        .help-upsell {
+            display: inline-block; font-family: 'Inter', sans-serif; font-weight: 700; color: var(--cost-red);
+            text-decoration: none; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar { display: flex; flex-direction: column; gap: 40px; padding-top: 10px; }
+
+        .subscription-tier {
+            background: var(--panel-bg); padding: 40px; border-radius: 12px; border-top: 4px solid var(--cost-red); 
+        }
+        .subscription-tier h3 { font-size: 2rem; margin-bottom: 15px; }
+        .subscription-tier p { font-family: 'Inter', sans-serif; font-size: 0.95rem; margin-bottom: 30px; color: var(--text-muted); }
         
-        .results-section { display: none; margin-top: 20px; border-top: 1px solid #555; padding-top: 20px; }
+        .sub-btn {
+            display: block; text-align: center; background: var(--chicken-white); color: #000;
+            text-decoration: none; border-radius: 6px; font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; padding: 15px 20px;
+            transition: all 0.3s ease;
+        }
+        .sub-btn:hover { background: var(--cost-red); color: white; }
+
+        /* --- IN-LINE CALCULATOR (Sidebar Terminal) --- */
+        .inline-calc {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
         
-        /* Fixed Data Grid */
-        .data-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .data-box { background: #222; padding: 10px; border-radius: 4px; border-left: 3px solid var(--border-color); font-size: 0.75rem; }
+        .calc-header {
+            background: #000;
+            padding: 20px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
         
-        /* STRICT Column alignment to prevent shifting */
-        .result-row { display: grid; grid-template-columns: 45px 1fr 75px; align-items: center; gap: 5px; margin-bottom: 5px; }
-        .shop-btn { font-size: 0.6rem; background: #444; color: #fff; padding: 4px 5px; text-decoration: none; border-radius: 3px; text-align: center; white-space: nowrap; }
-        .empty-space { width: 100%; display: inline-block; }
+        .calc-header h3 { font-size: 1.8rem; color: var(--chicken-white); }
+        .calc-header p { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px;}
+
+        .calc-tabs { display: flex; background: #0a0a0c; border-bottom: 1px solid #333; }
+        .tab-btn {
+            flex: 1; background: transparent; color: #555; border: none; padding: 15px 5px;
+            font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; cursor: pointer; letter-spacing: 1px;
+        }
+        .tab-btn.active { color: var(--cost-red); border-bottom: 2px solid var(--cost-red); }
+
+        .calc-tab-content { display: none; flex-direction: column; gap: 15px; padding: 25px; }
+        .calc-tab-content.active { display: flex; }
+
+        .calc-group { display: flex; flex-direction: column; gap: 8px; position: relative; }
         
-        .pl-box { text-align: center; padding: 20px; border-radius: 8px; border: 3px solid #555; margin-bottom: 20px; color: #fff; }
-        .pl-box.profit { border-color: var(--accent-green); background-color: rgba(56, 142, 60, 0.15); }
-        .pl-box.loss { border-color: var(--accent-red); background-color: rgba(211, 47, 47, 0.15); }
-        .pl-box.profit button { background-color: var(--accent-green); }
-        .pl-box.loss button { background-color: var(--accent-red); }
+        .calc-label-wrapper { display: flex; align-items: center; justify-content: space-between; }
+        .calc-label-wrapper label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
         
-        .ad-space { background: #222; border: 2px dashed #666; padding: 20px; text-align: center; color: #888; border-radius: 8px; margin-bottom: 10px; }
-        footer { text-align: center; font-size: 0.75rem; color: #888; margin-top: 30px; padding-top: 20px; border-top: 1px solid #444; }
-        footer a { color: #888; text-decoration: none; margin: 0 5px; }
+        .info-icon {
+            display: inline-block; width: 16px; height: 16px; background: #333; color: #aaa;
+            border-radius: 50%; text-align: center; line-height: 16px; font-size: 0.7rem; font-weight: bold; cursor: help; position: relative;
+        }
+        .info-icon:hover::after {
+            content: attr(data-info); position: absolute; bottom: 150%; left: 50%; transform: translateX(-50%);
+            background: var(--chicken-white); color: #000; padding: 10px; border-radius: 4px;
+            width: 200px; font-size: 0.75rem; font-weight: 500; text-transform: none; text-align: left;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 10; line-height: 1.4; pointer-events: none;
+        }
+
+        .cost-link {
+            font-size: 0.7rem; color: var(--cost-red); font-weight: 700; text-transform: uppercase; cursor: pointer;
+            letter-spacing: 0.5px; border-bottom: 1px solid transparent; transition: border-color 0.2s;
+        }
+        .cost-link:hover { border-color: var(--cost-red); }
+
+        .calc-group input {
+            padding: 12px; border: 1px solid #333; border-radius: 4px; background: #000;
+            color: white; font-family: 'Inter', sans-serif; font-size: 1rem; outline: none;
+        }
+        .calc-group input:focus { border-color: var(--text-muted); }
+
+        .calc-action-btn {
+            background: var(--cost-red); color: white; border: none; border-radius: 4px; padding: 12px;
+            font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; cursor: pointer; letter-spacing: 1px; margin-top: 10px;
+        }
+
+        .calc-result {
+            margin-top: 10px; padding: 15px; background: #000; border: 1px dashed #333; border-radius: 4px;
+            text-align: center; font-weight: 600; font-size: 1rem; display: none; color: white; line-height: 1.5;
+        }
+        .calc-result strong { font-size: 1.3rem; display: block; margin: 5px 0; }
+
+        .edutainment-blurb {
+            margin-top:15px; padding:15px; background:#111; border-radius:6px; border-left:4px solid var(--cost-red); 
+            text-align:left; font-size:0.85rem; color:#ccc; line-height: 1.5;
+        }
+
+        /* --- FOOTER PRO SIGNUP --- */
+        footer {
+            background: #000;
+            border-top: 1px solid #222;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        footer h2 { font-size: 3rem; color: var(--chicken-white); margin-bottom: 15px; }
+        footer p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 30px; }
+        footer .sub-btn { display: inline-block; padding: 16px 40px; font-size: 1.6rem; }
+
+        /* --- DYNAMIC AFFILIATE MODAL OVERLAY --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box;
+        }
+        .modal-content {
+            background: var(--panel-bg); border: 1px solid #333; border-radius: 12px;
+            width: 100%; max-width: 900px; padding: 40px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+        }
+        .close-modal {
+            position: absolute; top: 20px; right: 25px; font-size: 2rem; color: #888; cursor: pointer; line-height: 1; font-family: 'Inter', sans-serif;
+        }
+        .close-modal:hover { color: white; }
+        .modal-header { text-align: center; margin-bottom: 30px; }
+        .modal-header h3 { font-size: 2.5rem; color: var(--cost-red); margin-bottom: 10px;}
+        .modal-header p { font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--text-muted); }
         
-        @media (max-width: 600px) { .input-grid, .data-grid { grid-template-columns: 1fr; } }
+        .tier-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+        .tier-card { background: #111; border: 1px solid #333; padding: 30px 20px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; }
+        .tier-card h4 { color: var(--chicken-white); font-size: 1.4rem; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .tier-card p { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; flex-grow: 1; }
+        .tier-btn { background: white; color: black; padding: 12px; border-radius: 4px; text-decoration: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px; transition: background 0.2s; }
+        .tier-btn:hover { background: var(--cost-red); color: white; }
+
+        /* --- FLOATING AI TEASER BUTTON --- */
+        .ai-fab {
+            position: fixed; bottom: 30px; left: 30px; width: 60px; height: 60px; background: var(--cost-red);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(217, 4, 41, 0.4); z-index: 1001; transition: transform 0.2s ease;
+        }
+        .ai-fab:hover { transform: scale(1.05); }
+        .ai-fab svg { width: 30px; height: 30px; fill: white; }
+
+        /* --- HIDDEN AI CHAT PANEL --- */
+        .chat-widget {
+            position: fixed; bottom: 100px; left: 30px; width: 340px; background: var(--panel-bg); 
+            border: 1px solid #333; border-radius: 12px; display: none; flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); z-index: 1000; overflow: hidden;
+        }
+        .chat-header {
+            background: #111; color: white; padding: 18px 20px; font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem; display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px;
+        }
+        .chat-header span.pro-badge { background: #333; padding: 4px 8px; border-radius: 4px; font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--text-muted); }
+        .chat-body { height: 250px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; font-family: 'Inter', sans-serif; font-size: 0.9rem; }
+        .chat-msg { padding: 14px 18px; border-radius: 8px; line-height: 1.5; max-width: 85%; }
+        .msg-ai { background: #222; color: white; align-self: flex-start; border-left: 2px solid var(--cost-red); }
+        .msg-user { background: var(--cost-red); color: white; align-self: flex-end; }
+        .chat-input-area { display: flex; padding: 15px; background: #111; }
+        .chat-input-area input { flex: 1; padding: 12px; border: none; border-radius: 6px; background: #000; color: white; outline: none; font-family: 'Inter', sans-serif; font-size: 0.9rem; }
+        .chat-input-area button { background: var(--cost-red); color: white; border: none; border-radius: 6px; padding: 0 18px; margin-left: 10px; cursor: pointer; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; gap: 40px; }
+            .help-grid { grid-template-columns: 1fr; }
+            .tier-grid { grid-template-columns: 1fr; }
+            .chat-widget { width: calc(100% - 40px); bottom: 100px; left: 20px; }
+            .ai-fab { left: 20px; }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1><span class="title-chicken">Chicken</span> <span class="title-cost">Cost</span></h1>
-    <div class="tagline">Know the cost. <span style="color:var(--accent-red)">Raise 'em right.</span></div>
-</header>
-
-<div class="toggle-container">
-    <div class="toggle-btn active" id="btn-startup" onclick="switchTab('startup')">Starting From Scratch?</div>
-    <div class="toggle-btn" id="btn-operating" onclick="switchTab('operating')">Current Flock Setup</div>
-</div>
-
-<div class="card" id="calc-startup">
-    <h3>The Complete Build Sheet</h3>
-    <div class="input-grid">
-        <div class="form-group"><label>Flock Size:</label><input type="number" id="flockSizeStart" value="6"></div>
-        <div class="form-group"><label>Breed:</label><select id="breedSizeStart"><option value="standard">Standard</option><option value="bantam">Bantam</option></select></div>
-        <div class="form-group"><label>Coop Cost ($):</label><input type="number" id="coopTotal" value="500"></div>
-        <div class="form-group"><label>Fence Cost/Lin.Ft:</label><input type="number" id="fencePrice" value="3.50"></div>
+    <div class="utility-nav">
+        <a href="#login">Login</a>
+        <a href="#pro-signup" class="btn-pro">Subscribe to Pro</a>
     </div>
-    <button class="action-btn" onclick="calculateStartup()">Build My Blueprint</button>
-    <div id="results-startup" class="results-section">
-        <h3 style="text-align:center">Total Investment: $<span id="startTotal">0</span></h3>
-        <div class="data-grid">
-            <div class="data-box" style="border-left-color:var(--accent-red)"><h4>Minimum</h4>
-                <div class="result-row">Coop: <span><span id="minCoop">0</span>sqft</span> <a href="#" class="shop-btn">Shop Coop</a></div>
-                <div class="result-row">Fence: <span><span id="minFence">0</span>ft</span> <a href="#" class="shop-btn">Shop Fence</a></div>
-                <div class="result-row">Run: <span><span id="minRun">0</span>sqft</span> <span class="empty-space"></span></div>
-            </div>
-            <div class="data-box" style="border-left-color:var(--accent-green)"><h4>Thriving</h4>
-                <div class="result-row">Coop: <span><span id="optCoop">0</span>sqft</span> <a href="#" class="shop-btn">Shop Coop</a></div>
-                <div class="result-row">Fence: <span><span id="optFence">0</span>ft</span> <a href="#" class="shop-btn">Shop Fence</a></div>
-                <div class="result-row">Run: <span><span id="optRun">0</span>sqft</span> <span class="empty-space"></span></div>
-            </div>
-            <div class="data-box" style="border-left-color:var(--accent-blue)"><h4>Room for Expansion</h4>
-                <div class="result-row">Coop: <span><span id="expCoop">0</span>sqft</span> <a href="#" class="shop-btn">Shop Coop</a></div>
-                <div class="result-row">Fence: <span><span id="expFence">0</span>ft</span> <a href="#" class="shop-btn">Shop Fence</a></div>
-                <div class="result-row">Run: <span><span id="expRun">0</span>sqft</span> <span class="empty-space"></span></div>
-            </div>
+
+    <header>
+        <div class="masthead-logo">
+            <div class="logo-top"><span class="chicken">CHICKEN</span><span class="cost">COST</span></div>
+            <div class="logo-bottom"><span class="know">KNOW THE COST</span> <span class="raise">RAISE 'EM RIGHT</span></div>
         </div>
-        <button class="action-btn" style="background:var(--accent-blue)">Other things to consider for your build</button>
-    </div>
-</div>
+        <div class="date-issue">The Data-Driven Agriculture Journal</div>
+    </header>
 
-<div class="card" id="calc-operating" style="display:none">
-    <h3>Profit/Loss Diagnostic</h3>
-    <div class="input-grid">
-        <div class="form-group"><label>Total Hens:</label><input type="number" id="flockSizeOp" value="10"></div>
-        <div class="form-group"><label>Feed Price ($):</label><input type="number" id="feedPrice" value="24"></div>
-        <div class="form-group" style="grid-column: 1 / -1;"><label>Avg. Eggs/Hen/Week:</label><input type="number" id="eggsPerWeek" value="5"></div>
+    <div class="container">
+        <main>
+            <article class="feature-story">
+                <h1>Data-Driven Flock Optimization.</h1>
+                <p class="feature-lead">Profit margins are calculated before the birds arrive. If you rely on retail plastic brooders and unverified feed rations, <span class="imperative-statement">you are already operating at a loss.</span> You must treat your homestead like a commercial operation.</p>
+                
+                <div class="editorial-optin">
+                    <div class="optin-text">
+                        <h3>Subscribe to our newsletter</h3>
+                        <p>Join the Chicken Cost Family to dial in a solid plan for every aspect of your chicken raising journey !!!</p>
+                    </div>
+                    <form class="optin-form" action="YOUR_N8N_WEBHOOK" method="POST">
+                        <input type="text" name="firstName" placeholder="First Name" required>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                        <button type="submit" class="optin-btn">Subscribe</button>
+                    </form>
+                </div>
+            </article>
+
+            <section class="help-section">
+                <h2>I Need Help With:</h2>
+                <div class="help-grid">
+                    <div class="help-card">
+                        <h3>Coop Architecture</h3>
+                        <p>A coop requires exactly 4 square feet of interior space per bird. Ignore this metric, and overcrowding will lead to stress-induced cannibalism and total flock loss.</p>
+                        <a href="#pro-signup" class="help-upsell">Unlock Pro Schematics →</a>
+                    </div>
+                    <div class="help-card">
+                        <h3>Breed Selection</h3>
+                        <p>Large-combed Mediterranean breeds suffer severe frostbite in sub-zero winters. Select heavy-bodied Rose or Pea comb breeds to maintain egg production.</p>
+                        <a href="#pro-signup" class="help-upsell">Access Pro Climate Data →</a>
+                    </div>
+                    <div class="help-card">
+                        <h3>Feed Conversion Ratios</h3>
+                        <p>Open troughs waste 15% of your feed to lateral spillage and rodents. Switch to elevated PVC port feeders to immediately reduce your monthly operational overhead.</p>
+                        <a href="#pro-signup" class="help-upsell">Use Pro FCR Calculators →</a>
+                    </div>
+                    <div class="help-card">
+                        <h3>Predator Mitigation</h3>
+                        <p>Chicken wire is for containment, not protection. Raccoons easily tear through it. Use 1/2-inch welded hardware cloth secured with screws and fender washers.</p>
+                        <a href="#pro-signup" class="help-upsell">View Pro Dig-Proof Blueprints →</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <div class="subscription-tier">
+                <h3>USDA-Level Data</h3>
+                <p>Time to go pro. From the Chicken Cost AI terminal and wholesale feed alerts to the predictive margin calculators, and advanced infrastructure schematics, we have something for everyone. Don't forget to sign up for our newsletter.</p>
+                <a href="#pro-signup" class="sub-btn">Upgrade To Pro</a>
+            </div>
+
+            <div class="inline-calc" id="sidebarCalc">
+                <div class="calc-header">
+                    <h3>Margin Terminal</h3>
+                    <p>Select Operating Phase</p>
+                </div>
+                
+                <div class="calc-tabs">
+                    <button class="tab-btn active" onclick="switchCalcTab('setup', this)">Start Scratch</button>
+                    <button class="tab-btn" onclick="switchCalcTab('current', this)">Current Flock</button>
+                </div>
+
+                <div id="tab-setup" class="calc-tab-content active">
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Coop Structure ($) <span class="info-icon" data-info="Capital Expenditure (CapEx). The fixed, one-time cost of lumber, hardware cloth, and roofing to securely house your flock.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('coop')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="coopCost" placeholder="e.g. 850" step="1">
+                    </div>
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Brooder Box ($) <span class="info-icon" data-info="Initial cost for a radiant heat plate, bin, and starter supplies to raise day-old chicks indoors.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('brooder')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="brooderCost" placeholder="e.g. 150" step="1">
+                    </div>
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Flock Acquisition ($) <span class="info-icon" data-info="The total combined cost of purchasing all starter chicks or point-of-lay pullets.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('birds')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="birdCost" placeholder="e.g. 60" step="1">
+                    </div>
+                    <button onclick="calculateCapEx()" class="calc-action-btn">Calculate Initial Build</button>
+                    <div id="setupResult" class="calc-result"></div>
+                </div>
+
+                <div id="tab-current" class="calc-tab-content">
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Feed Bag Price ($) <span class="info-icon" data-info="The retail price you pay for one full bag of standard layer pellets.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('feed')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="feedCost" placeholder="e.g. 24.50" step="0.01">
+                    </div>
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Bag Weight (lbs) <span class="info-icon" data-info="Required to isolate the exact cost per pound. Usually 40 or 50 lbs.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('feed')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="bagWeight" placeholder="e.g. 50">
+                    </div>
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Daily Flock Intake <span class="info-icon" data-info="Total pounds of feed eaten by the whole flock daily. Baseline rule: 0.25 lbs per adult bird.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('feeders')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="dailyIntake" placeholder="e.g. 2.5" step="0.1">
+                    </div>
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Weekly Eggs Yield <span class="info-icon" data-info="Total eggs collected in 7 days. Used to calculate Feed Conversion Ratio (FCR) per dozen.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('yield')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="weeklyEggs" placeholder="e.g. 40" step="1">
+                    </div>
+                    <div class="calc-group">
+                        <div class="calc-label-wrapper">
+                            <label>Sale Price / Dozen ($) <span class="info-icon" data-info="The local market value of your eggs. Used to calculate your net operating margin.">?</span></label>
+                            <span class="cost-link" onclick="openAffiliateModal('packaging')">Not sure of cost?</span>
+                        </div>
+                        <input type="number" id="priceDozen" placeholder="e.g. 5.00" step="0.25">
+                    </div>
+                    <button onclick="calculateOpEx()" class="calc-action-btn">Calculate Operating Margin</button>
+                    <div id="currentResult" class="calc-result"></div>
+                </div>
+            </div>
+        </aside>
     </div>
-    <button class="action-btn" onclick="calculateOperating()">Run The Numbers</button>
-    <div id="results-operating" class="results-section">
-        <div id="plContainer" class="pl-box">
-            <h4 id="plHeadline" style="margin:0">Status</h4>
-            <div id="plAmount" style="font-size: 2.5rem; font-weight: bold; margin: 10px 0;">$0.00</div>
-            <div id="plCostPerEgg" style="font-size: 1rem; margin-bottom: 15px; font-weight:bold;">Cost/Egg: $0.00</div>
-            <button id="plButton" class="action-btn" style="margin:0; width:auto; padding: 10px 20px;"></button>
+
+    <footer>
+        <h2>Secure Your Margins.</h2>
+        <p>Subscribe to Chicken Cost Pro for complete access to advanced schematics, predictive AI, and wholesale data.</p>
+        <a href="#pro-signup" class="sub-btn">Upgrade To Pro</a>
+    </footer>
+
+    <div id="affiliateModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeAffiliateModal()">×</span>
+            <div class="modal-header">
+                <h3 id="modalTitle">Hardware Sourcing</h3>
+                <p id="modalDesc">Select the tier that aligns with your operational budget.</p>
+            </div>
+            <div class="tier-grid" id="tierGrid">
+                </div>
         </div>
     </div>
-</div>
 
-<div class="card">
-    <h3>Welcome to the Chicken Cost Family.</h3>
-    <p>We are glad you are here. Our mission is to empower you with the exact data and tools you need to be successful. From setting up your infrastructure right the first time to raising a healthy, productive flock.</p>
-    <p>At Chicken Cost, we don't just view cost as financial; it can also be due to such things as wasted time and effort, health loss, predator loss, and poor planning. We are here to help you avoid these pitfalls and ensure every one of your poultry endeavors is successful and profitable.</p>
-    <p><strong>PS:</strong> If you haven't already, don't forget to subscribe to our free newsletter!</p>
-</div>
-
-<div class="card">
-    <h3>Join the State of the Flock Newsletter</h3>
-    <form id="chicken-newsletter-form">
-        <div class="input-grid">
-            <div class="form-group"><label>Name:</label><input type="text" id="subscriber-name" name="name" required></div>
-            <div class="form-group"><label>ZIP Code:</label><input type="text" id="subscriber-zip" name="zip" required></div>
-        </div>
-        <div class="form-group"><label>Email:</label><input type="email" id="subscriber-email" name="email" required></div>
-        <button type="submit" class="action-btn" style="background:var(--accent-green)">Join the Chicken Cost Family</button>
-    </form>
-    <div id="form-message" style="display: none; margin-top: 15px; font-weight: bold; text-align: center;"></div>
+    <div class="ai-fab" onclick="toggleChat()">
+        <svg viewBox="0 0 24 24">
+            <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H5.17L4 17.17V4H20V16Z"></path>
+            <path d="M7 9H9V11H7V9ZM11 9H13V11H11V9ZM15 9H17V11H15V9Z"></path>
+        </svg>
     </div>
 
-<div class="ad-space">Sponsor Spotlight</div>
-<div class="ad-space">Google Ad Placement</div>
+    <div class="chat-widget" id="aiChat">
+        <div class="chat-header">
+            <span>Chicken Cost AI</span>
+            <span class="pro-badge">PRO FEATURE</span>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg msg-ai">This is the Chicken Cost terminal. Pro members can query USDA metrics, feed ratios, and diagnostic protocols here. Enter a basic query to test the system.</div>
+        </div>
+        <div class="chat-input-area" id="chatInputArea">
+            <input type="text" id="userInput" placeholder="Ask a diagnostic question...">
+            <button onclick="sendMessage()">Test</button>
+        </div>
+    </div>
 
-<footer>
-    <p>
-        <a href="#">Privacy Policy</a> | 
-        <a href="#">Terms of Conditions</a> | 
-        <a href="#">License</a> | 
-        <a href="#">Affiliate Disclaimer</a>
-    </p>
-    <p>&copy; 2026 Chicken Cost. All rights reserved.</p>
-</footer>
-
-<script>
-    function switchTab(tab) {
-        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('calc-operating').style.display = 'none'; document.getElementById('calc-startup').style.display = 'none';
-        document.getElementById('btn-' + tab).classList.add('active'); document.getElementById('calc-' + tab).style.display = 'block';
-    }
-    
-    function calculateStartup() {
-        const birds = parseInt(document.getElementById('flockSizeStart').value);
-        const coop = parseFloat(document.getElementById('coopTotal').value);
-        const fencePrice = parseFloat(document.getElementById('fencePrice').value);
-        
-        document.getElementById('minCoop').innerText = birds * 2; document.getElementById('minFence').innerText = Math.ceil(Math.sqrt(birds * 8) * 4); document.getElementById('minRun').innerText = birds * 8; 
-        document.getElementById('optCoop').innerText = birds * 4; document.getElementById('optFence').innerText = Math.ceil(Math.sqrt(birds * 10) * 4); document.getElementById('optRun').innerText = birds * 10; 
-        document.getElementById('expCoop').innerText = Math.ceil(birds * 1.5) * 4; document.getElementById('expFence').innerText = Math.ceil(Math.sqrt(Math.ceil(birds * 1.5) * 10) * 4); document.getElementById('expRun').innerText = Math.ceil(birds * 1.5) * 10; 
-        
-        document.getElementById('startTotal').innerText = (coop + (Math.ceil(Math.sqrt(birds * 10) * 4) * fencePrice)).toLocaleString();
-        document.getElementById('results-startup').style.display = 'block';
-    }
-    
-    function calculateOperating() {
-        const birds = parseInt(document.getElementById('flockSizeOp').value);
-        const feed = parseFloat(document.getElementById('feedPrice').value);
-        const eggsPerWeek = parseFloat(document.getElementById('eggsPerWeek').value);
-        
-        // Math for cost per egg & net profit
-        const totalEggsPerMonth = (birds * eggsPerWeek) * 4.33;
-        const feedCostPerMonth = (birds * 0.25 * 30 / 50) * feed;
-        const net = (totalEggsPerMonth / 12 * 4.50) - feedCostPerMonth; 
-        const costPerEgg = feedCostPerMonth / totalEggsPerMonth;
-        
-        const pl = document.getElementById('plContainer');
-        pl.className = 'pl-box ' + (net >= 0 ? 'profit' : 'loss');
-        
-        document.getElementById('plHeadline').innerText = net >= 0 ? "Operating at a Profit" : "Leaking Revenue";
-        document.getElementById('plAmount').innerText = (net >= 0 ? "+" : "") + "$" + net.toFixed(2);
-        document.getElementById('plCostPerEgg').innerText = "Cost per Egg: $" + costPerEgg.toFixed(2);
-        document.getElementById('plButton').innerText = net >= 0 ? "Ways to boost profit" : "Ways to stop the leak";
-        
-        document.getElementById('results-operating').style.display = 'block';
-    }
-
-    // --- NEW WEBHOOK INTERCEPTION SCRIPT ---
-    document.getElementById('chicken-newsletter-form').addEventListener('submit', function(e) {
-        e.preventDefault(); // Kills the default redirect
-        
-        const nameValue = document.getElementById('subscriber-name').value;
-        const zipValue = document.getElementById('subscriber-zip').value;
-        const emailValue = document.getElementById('subscriber-email').value;
-        const messageBox = document.getElementById('form-message');
-        
-        // Ships the full payload to your n8n engine invisibly
-        fetch('https://n8n.chickencost.com/webhook/chicken_membership_signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: nameValue, zip: zipValue, email: emailValue })
-        })
-        .then(response => {
-            if(response.ok) {
-                messageBox.textContent = 'Welcome to the Chicken Cost Family! Your email has been received.';
-                messageBox.style.color = 'var(--accent-green)';
-                messageBox.style.display = 'block';
-                document.getElementById('chicken-newsletter-form').reset();
-            } else {
-                messageBox.textContent = 'Server issue detected. Check your connection and try again.';
-                messageBox.style.color = 'var(--accent-red)';
-                messageBox.style.display = 'block';
+    <script>
+        /* DYNAMIC AFFILIATE MATRIX DATA */
+        const affiliateData = {
+            'coop': {
+                title: 'Coop Infrastructure',
+                desc: 'Select the build tier that matches your climate and predator density.',
+                tiers: [
+                    { name: 'Basic Needs', desc: 'Pre-fab structural kits. Gets the job done securely without overspending on aesthetics.', link: '#basic-coop' },
+                    { name: 'Thriving Flock', desc: 'Commercial-grade lumber and hardware cloth lists. Built for extreme durability and ease of cleaning.', link: '#better-coop' },
+                    { name: 'Future Expansion', desc: 'Over-engineered walk-in schematics. Maximum capacity hardware for growing operations.', link: '#best-coop' }
+                ]
+            },
+            'brooder': {
+                title: 'Brooder Environment',
+                desc: 'Scale your incubation cleanroom to prevent early mortality.',
+                tiers: [
+                    { name: 'Basic Needs', desc: 'Standard radiant heat plates and basic thermometer setups for small initial flocks.', link: '#basic-brooder' },
+                    { name: 'Thriving Flock', desc: 'Thermostatically controlled heating hubs with draft-free modular paneling.', link: '#better-brooder' },
+                    { name: 'Future Expansion', desc: 'Multi-tier commercial brooder batteries. Maximize floor space while raising continuous batches.', link: '#best-brooder' }
+                ]
+            },
+            'birds': {
+                title: 'Genetics & Acquisition',
+                desc: 'Invest in the right biology for your specific geographical zone.',
+                tiers: [
+                    { name: 'Basic Needs', desc: 'Standard hatchery assortments. Affordable entry-level birds for general backyard production.', link: '#basic-birds' },
+                    { name: 'Thriving Flock', desc: 'Climate-matched heritage breeds. Guaranteed hardiness and long-term foraging capabilities.', link: '#better-birds' },
+                    { name: 'Future Expansion', desc: 'High-yield commercial hybrids. Maximize daily egg mass with mathematically proven layers.', link: '#best-birds' }
+                ]
+            },
+            'feeders': {
+                title: 'Feed Delivery Systems',
+                desc: 'Stop funding local rodents. Secure your feed to drop your FCR.',
+                tiers: [
+                    { name: 'Basic Needs', desc: 'Suspended bucket port feeders. Instantly eliminates lateral ground spillage.', link: '#basic-feeder' },
+                    { name: 'Thriving Flock', desc: 'Galvanized mechanical treadle feeders. Opens only under the weight of an adult hen.', link: '#better-feeder' },
+                    { name: 'Future Expansion', desc: 'High-capacity, weatherproof silo systems holding 100+ lbs of feed for automated delivery.', link: '#best-feeder' }
+                ]
+            },
+            'feed': {
+                title: 'Nutrition & Rations',
+                desc: 'Fuel your biological engine with the correct protein density.',
+                tiers: [
+                    { name: 'Basic Needs', desc: 'Standard 16% layer crumbles. The baseline requirement for steady daily production.', link: '#basic-feed' },
+                    { name: 'Thriving Flock', desc: '18-20% high-protein pellets. Necessary for winter caloric burn and fast molt recovery.', link: '#better-feed' },
+                    { name: 'Future Expansion', desc: 'Bulk non-GMO wholesale pallets. Drop your cost-per-pound by buying commercial volume.', link: '#best-feed' }
+                ]
+            },
+            'packaging': {
+                title: 'Retail Packaging',
+                desc: 'Increase your perceived value to command a higher sale price.',
+                tiers: [
+                    { name: 'Basic Needs', desc: 'Standard blank pulp cartons. The most cost-effective way to move product locally.', link: '#basic-pack' },
+                    { name: 'Thriving Flock', desc: 'Custom stamped or labeled cartons. Build brand recognition at local farmers markets.', link: '#better-pack' },
+                    { name: 'Future Expansion', desc: 'Premium clear-plastic or stylized regional packaging for premium retail placement.', link: '#best-pack' }
+                ]
+            },
+            'yield': {
+                title: 'Yield Maximizers',
+                desc: 'Scale these biological upgrades to boost egg mass and slash feed consumption.',
+                tiers: [
+                    { name: 'Small Flock (1-10)', desc: 'Countertop feed fermentation kits. Drops FCR by 15% with zero mechanical maintenance.', link: '#basic-yield' },
+                    { name: 'Mid-Size (11-30)', desc: 'Automated Black Soldier Fly (BSFL) breeding bins. Replaces expensive commercial protein.', link: '#better-yield' },
+                    { name: 'Commercial (30+)', desc: 'High-capacity fodder sprouting racks. Maximum margin retention through living greens.', link: '#best-yield' }
+                ]
             }
-        })
-        .catch(error => {
-            console.error('Webhook Error:', error);
-            messageBox.textContent = 'Network error. Please try again.';
-            messageBox.style.color = 'var(--accent-red)';
-            messageBox.style.display = 'block';
+        };
+
+        /* MODAL LOGIC */
+        function openAffiliateModal(categoryKey) {
+            const data = affiliateData[categoryKey] || affiliateData['coop']; // Fallback
+            
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('modalDesc').innerText = data.desc;
+            
+            const grid = document.getElementById('tierGrid');
+            grid.innerHTML = ''; // Clear previous
+            
+            data.tiers.forEach(tier => {
+                const card = document.createElement('div');
+                card.className = 'tier-card';
+                card.innerHTML = `
+                    <h4>${tier.name}</h4>
+                    <p>${tier.desc}</p>
+                    <a href="${tier.link}" class="tier-btn">View Option</a>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('affiliateModal').style.display = 'flex';
+        }
+
+        function closeAffiliateModal() { document.getElementById('affiliateModal').style.display = 'none'; }
+        window.onclick = function(event) {
+            const modal = document.getElementById('affiliateModal');
+            if (event.target === modal) { modal.style.display = 'none'; }
+        }
+
+        /* CHAT LOGIC */
+        const chatWidget = document.getElementById('aiChat');
+        const chatBody = document.getElementById('chatBody');
+        const userInput = document.getElementById('userInput');
+        let isChatOpen = false;
+        let queryCount = 0;
+
+        function toggleChat() {
+            isChatOpen = !isChatOpen;
+            if(isChatOpen) { chatWidget.style.display = 'flex'; userInput.focus(); } 
+            else { chatWidget.style.display = 'none'; }
+        }
+
+        function sendMessage() {
+            const text = userInput.value.trim();
+            if(!text) return;
+            
+            const userDiv = document.createElement('div');
+            userDiv.className = 'chat-msg msg-user';
+            userDiv.innerText = text;
+            chatBody.appendChild(userDiv);
+            userInput.value = '';
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            setTimeout(() => {
+                const aiDiv = document.createElement('div');
+                aiDiv.className = 'chat-msg msg-ai';
+                
+                if (queryCount === 0) {
+                    aiDiv.innerHTML = "Query received. Calculating base response...<br><br><strong>Note:</strong> Detailed schematics, exact feed ratios, and continuous support require authorization. <a href='#pro-signup' style='color:#D90429; font-weight:bold;'>Log in or upgrade to Pro to proceed.</a>";
+                    queryCount++;
+                } else {
+                    aiDiv.innerHTML = "Unauthorized. Please <a href='#pro-signup' style='color:#D90429; font-weight:bold;'>upgrade to Chicken Cost Pro</a> to access the complete agricultural database and continue querying.";
+                }
+                chatBody.appendChild(aiDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 800);
+        }
+
+        userInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") { event.preventDefault(); sendMessage(); }
         });
-    });
-</script>
+
+        /* CALCULATOR LOGIC */
+        function switchCalcTab(tabId, btnElement) {
+            document.querySelectorAll('.calc-tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            btnElement.classList.add('active');
+            document.getElementById('setupResult').style.display = 'none';
+            document.getElementById('currentResult').style.display = 'none';
+        }
+
+        function calculateCapEx() {
+            const coop = parseFloat(document.getElementById('coopCost').value) || 0;
+            const brooder = parseFloat(document.getElementById('brooderCost').value) || 0;
+            const birds = parseFloat(document.getElementById('birdCost').value) || 0;
+            
+            const total = coop + brooder + birds;
+            const res = document.getElementById('setupResult');
+            
+            res.style.display = 'block';
+            res.innerHTML = `Total Setup Cost: <strong style="color:var(--cost-red)">$${total.toFixed(2)}</strong><span style="font-size: 0.8rem; color: #888; font-weight:normal;">This is fixed CapEx. Switch tabs to calculate daily operations.</span>`;
+        }
+
+        function calculateOpEx() {
+            const cost = parseFloat(document.getElementById('feedCost').value);
+            const weight = parseFloat(document.getElementById('bagWeight').value);
+            const intake = parseFloat(document.getElementById('dailyIntake').value);
+            const eggs = parseFloat(document.getElementById('weeklyEggs').value);
+            const price = parseFloat(document.getElementById('priceDozen').value);
+            
+            const res = document.getElementById('currentResult');
+
+            if (!cost || !weight || !intake || !eggs || !price) {
+                res.style.display = 'block';
+                res.innerHTML = `<span style="color:#D90429;">Error: Input all variables.</span>`;
+                return;
+            }
+
+            const costPerLb = cost / weight;
+            const monthlyFeedCost = (costPerLb * intake) * 30.4;
+            
+            const weeklyFeed = intake * 7;
+            const weeklyDozens = eggs / 12;
+            const fcr = weeklyFeed / weeklyDozens;
+
+            const monthlyRevenue = (weeklyDozens * 4.33) * price;
+            const netMargin = monthlyRevenue - monthlyFeedCost;
+
+            let marginDisplay = "";
+            if (netMargin >= 0) {
+                marginDisplay = `<span style="color:var(--profit-green); font-weight:bold;">PROFIT: +$${netMargin.toFixed(2)} / mo</span>`;
+            } else {
+                marginDisplay = `<span style="color:var(--cost-red); font-weight:bold;">LOSS: $${netMargin.toFixed(2)} / mo</span>`;
+            }
+
+            res.style.display = 'block';
+            res.innerHTML = `
+                Monthly Feed Cost: <strong>$${monthlyFeedCost.toFixed(2)}</strong>
+                <div style="border-top:1px solid #333; margin:10px 0; padding-top:10px;">
+                    Your FCR (Lbs Feed / Dozen): <strong style="color:var(--chicken-white);">${fcr.toFixed(2)} lbs</strong>
+                </div>
+                <div style="border-top:1px solid #333; margin:10px 0; padding-top:10px; font-size:1.2rem;">
+                    ${marginDisplay}
+                </div>
+                <div class="edutainment-blurb">
+                    <strong>Want to increase these margins?</strong> 
+                    Did you know supplementing with black soldier fly larvae or utilizing fermented feed systems can drop your FCR by up to 20% while boosting egg mass? 
+                    <br><br>
+                    <a href="#" onclick="openAffiliateModal('yield'); return false;" style="color:var(--cost-red); text-decoration:none; font-weight:bold;">View Recommended Upgrades ➔</a>
+                </div>
+            `;
+        }
+    </script>
 </body>
 </html>
